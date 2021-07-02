@@ -14,5 +14,6 @@ Things I still need to do:
   - Allow user to go to a previous chapter
   - Make the images cache before starting to read
   - Go back to chapter list from the reading page
-  - Change the current chapter list UI to a resycleview.    
+  - Change the current chapter list UI to a resycleview.
+  - Cache images before loading chapter    
     
