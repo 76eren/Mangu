@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity" android:id="@+id/current">
+        tools:context=".Activities.MainActivity" android:id="@+id/current">
     <ImageView
             android:layout_width="225dp"
             android:layout_height="326dp" app:srcCompat="@drawable/ic_launcher_background"

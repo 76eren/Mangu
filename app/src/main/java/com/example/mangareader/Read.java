@@ -16,20 +16,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.mangareader.mangakakalot.Activities.ReadActivity;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Read{
 
@@ -48,10 +43,10 @@ public class Read{
     public static LinkedHashMap<String,String> chaptersXurls;
 
     public void ImageShower() {
-        Log.d("lol", "calling fun");
+        Log.d("lol", images.get(index));
 
         progess.setText(index+1 +"/"+this.images.stream().count()); // This might be brtoken???
-        GlideUrl url = new GlideUrl(images.get(index), new LazyHeaders.Builder()
+        GlideUrl url = new GlideUrl(images.get(index).trim(), new LazyHeaders.Builder()
                 .addHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                 .addHeader("Referer", "https://mangakakalot.com/")
                 .build());
@@ -93,6 +88,7 @@ public class Read{
                     intent.putExtra("url", newUrl);
                     intent.putExtra("chapter", newChapter);
                     activity.startActivity(intent);
+
                 }
                 catch (Exception ex) {
                     Log.d("lol", ex.toString());
@@ -109,6 +105,8 @@ public class Read{
         }
 
     }
+
+
 
     // I decided to do it throught a function because it's less lines of code
     public void AssignData(Context context, ArrayList imgs, PhotoView tgt, TextView pgs) {

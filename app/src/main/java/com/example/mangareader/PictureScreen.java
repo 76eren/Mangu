@@ -3,11 +3,12 @@ package com.example.mangareader;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-import com.example.mangareader.mangakakalot.Activities.ChaptersMangakakalot;
+import com.example.mangareader.Activities.ChaptersActivity;
 
 
 import java.util.ArrayList;
@@ -32,6 +33,11 @@ public class PictureScreen {
         // - I don't know what happens when the array size is < 3
         */
         Activity activity = (Activity) context;
+
+        if (activity==null) {
+            Log.d("lol", "act is null");
+        }
+
         activity.runOnUiThread(() -> {
 
             previous.setVisibility(View.INVISIBLE);
@@ -93,19 +99,22 @@ public class PictureScreen {
 
         // Here we handle what happens next
         // The cmd command will tell us what function to call next
+        // We do the stuff with the intents
+        Intent intent = new Intent(context, ChaptersActivity.class);
+        intent.putExtra("url", urls.get(num));
+        intent.putExtra("img", images.get(num));
+
         switch (command) {
             case "mangakakalot_chapterList":
-                // We do the stuff with the intents
-                Intent intent = new Intent(context, ChaptersMangakakalot.class);
-                intent.putExtra("url", urls.get(num));
-                intent.putExtra("img", images.get(num));
-
-                Activity activity = (Activity) this.context;
-                context.startActivity(intent);
-
+                intent.putExtra("source", "mangakakalot");
                 break;
         }
+
+        Activity activity = (Activity) this.context;
+        context.startActivity(intent);
     }
+
+
     public void AssignContext (Context ctx) {
         this.context=ctx;
     }

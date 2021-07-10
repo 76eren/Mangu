@@ -25,6 +25,7 @@ public class SplashScreen {
             , "I'm generating a lot of buttons as we speak."
             , "How'd we end up here?"
             , "(っ◔◡◔)っ ♥ not you lol ♥"
+            , "You're very sus"
     };
 
     public static String returnQuote() {
