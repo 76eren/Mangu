@@ -15,10 +15,10 @@ import java.util.LinkedHashMap;
 
 public class Mangakakalot implements Sources {
 
+    Document doc;
 
     @Override
     public String getStory(String url) {
-        Document doc;
         try {
             doc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
@@ -28,7 +28,6 @@ public class Mangakakalot implements Sources {
             return "";
         }
 
-        sb.append(doc.html());
 
 
         // FUCK MANGAKAKLOT FOR PULLING THIS SHIT ON ME HONESTLY
@@ -59,7 +58,6 @@ public class Mangakakalot implements Sources {
             // Here we get all of our urls and shit
             // We can just re-use the document we created when getting the story
 
-            Document doc = Jsoup.parse(sb.toString());
             LinkedHashMap<String,String> NameUrl = new LinkedHashMap<>(); // name:url
             ArrayList<String> links = new ArrayList<>();
             ArrayList<String> names = new ArrayList<>();
