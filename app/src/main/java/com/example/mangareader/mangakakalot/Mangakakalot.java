@@ -50,6 +50,7 @@ public class Mangakakalot implements Sources {
         String story = StringEscapeUtils.unescapeHtml3(storyUnreadable); // using deprecated libraries is fun
 
         return story;
+
     }
 
     @Override
