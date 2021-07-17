@@ -9,15 +9,13 @@ Notes:
   
   
 Things I still need to do:
-  - Allow user to go to a previous chapter
-  - Make the images cache before starting to read
-  - Go back to chapter list from the reading page
   - Change the current chapter list UI to a resycleview.
-  - Cache images before loading chapter    
 
 
 Done:
   - Add an interface to do the sources stuff
   - Optimise code (No more making 69 different classes per source)
   - Fix a bug with certain manga hosted on a different site (mangakakalot specific)
-
+  - Cache images before loading chaptes (Not sure whether it works yet)
+  - Allow user to go to a previous chapter
+  - Make the back button go back to the previous activity instead of the main activity (this was an issue in the read activity)
