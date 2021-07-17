@@ -11,6 +11,7 @@ import android.os.Bundle;
 import com.example.mangareader.PictureScreen;
 import com.example.mangareader.R;
 import com.example.mangareader.Settings;
+import com.example.mangareader.SourceHandlers.ObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.mangakakalot.Mangakakalot;
 
@@ -66,8 +67,13 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
+            // We also want to assign the sources object statically to the
+            // Object holder class so we can use it in different activities
+            ObjectHolder.sources = sources;
 
-            sources.GetLinks(input.getText().toString());
+
+
+            sources.CollectDataPicScreen(input.getText().toString());
             if (sources.images.isEmpty()) {
                 return;
             }

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -14,11 +15,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.bumptech.glide.Glide;
+import com.example.mangareader.SourceHandlers.ObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.SplashScreen;
 import com.example.mangareader.R; // Not importing this will break the whole thingy lol
 import com.example.mangareader.Read;
-import com.example.mangareader.mangakakalot.Mangakakalot;
 
 import java.util.LinkedHashMap;
 
@@ -47,9 +48,7 @@ public class ChaptersActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
         storyParamsWrap.setMargins(5,10,5,10);
-        story.setOnClickListener(v -> {
-            story.setLayoutParams(storyParamsWrap);
-        });
+        story.setOnClickListener(v -> story.setLayoutParams(storyParamsWrap));
 
         // First we retrieve the url
         Intent intent = getIntent();
@@ -59,9 +58,8 @@ public class ChaptersActivity extends AppCompatActivity {
 
 
         // We put this on a different thread to speed things up
-        new Thread(() -> runOnUiThread(() -> {
-            Glide.with(this).load(imageUrl).into(cover);
-        })).start();
+        new Thread(() -> runOnUiThread(() -> Glide.with(this).load(imageUrl).into(cover))).start();
+
 
 
         new Thread(() -> {
@@ -71,19 +69,22 @@ public class ChaptersActivity extends AppCompatActivity {
             LinkedHashMap<String,String> Stalin;
 
 
-            Sources source;
-            switch (src) {
-                case "mangakakalot":
-                    source = new Mangakakalot();
-                    break;
-
-                default:
-                    source = new Mangakakalot();
-                    break;
-            }
+            Sources source = ObjectHolder.sources; // We assigned this in the main activity
 
             mangaStory = source.getStory(chapterUrl);
+
             Stalin = source.GetChapters(chapterUrl);
+
+
+            // this'll only trigger when an error occures
+            // Instead of making the app kill itself
+            // We'll just load the main activity
+            // Maybe notify the user that an error occured???
+            if (Stalin == null) {
+                Log.d("lol", "An error occured whilst trying to load the list with chapters");
+                Intent d = new Intent(this, MainActivity.class);
+                startActivity(d);
+            }
 
             Read.chaptersXurls = Stalin; // So we assign it statically which I am not a big fan of tbh.
 
@@ -111,22 +112,18 @@ public class ChaptersActivity extends AppCompatActivity {
                 params.setMargins(5,10,5,10);
                 button.setLayoutParams(params);
 
-                LinkedHashMap<String, String> finalStalin = Stalin;
                 button.setOnClickListener(v -> {
                     // Now we have to save our choice and go to the next chapter
-                    String url = finalStalin.get(key); // our url
+                    String url = Stalin.get(key); // our url
                     Intent readIntent = new Intent(this, ReadActivity.class);
                     readIntent.putExtra("url", url);
                     readIntent.putExtra("chapter", key);
                     readIntent.putExtra("source", src);
                     startActivity(readIntent);
 
-                    return;
                 });
 
-                runOnUiThread(() -> {
-                    layout.addView(button);
-                });
+                runOnUiThread(() -> layout.addView(button));
             }
 
             String finalMangaStory = mangaStory;
