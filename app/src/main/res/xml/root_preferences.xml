@@ -1,0 +1,28 @@
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+            app:title="Main settings">
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="Cache images before reading (hella unstable)" android:key="preference_Cache"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Mangakakalot settings">
+
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="Use server two" android:key="preference_ServerMangakakalot"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Select source">
+
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:title="Mangakakalot" android:key="preference_source_mangakakalot"/>
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:title="Mangadex" android:key="preference_source_mangadex"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

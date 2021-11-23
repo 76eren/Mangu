@@ -1,0 +1,349 @@
+package com.example.mangareader.Sources;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import androidx.appcompat.widget.SwitchCompat;
+import com.example.mangareader.Activities.ReadActivity;
+import com.example.mangareader.Settings;
+import com.example.mangareader.SourceHandlers.Sources;
+import com.example.mangareader.ValueHolders.ReadValueHolder;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
+import org.jsoup.select.Elements;
+import com.example.mangareader.R;
+
+
+
+import java.util.*;
+
+public class Mangakakalot implements Sources {
+    //public Context context;
+
+
+    // THIS IS FOR THE MAIN ACTIVITY
+    // GETS THE INFO FOR THE PICTURE SCREEN
+    @Override
+    public ArrayList<ValuesForCollectDataPicScreen> CollectDataPicScreen(String manga) {
+
+
+        manga = manga.replace(" ", "_");
+        String url = "https://mangakakalot.com/search/story/"+manga;
+        Document doc;
+        try {
+            doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
+                    .get();
+        }
+        catch (Exception ex) {
+            doc = null;
+            return null;
+        }
+
+        Elements elems = doc.getElementsByClass("panel_story_list");
+        ArrayList<ValuesForCollectDataPicScreen> objectsPicScreen = new ArrayList<>();
+        if (elems.first() != null){
+            for (Element i : elems.first().children()) {
+                Elements x = i.getElementsByClass("story_item");
+                Elements y = x.select("a");
+                Elements z = y.select("img");
+
+                String img = z.attr("src"); // A link to the sussy baka image
+                String link = y.attr("href"); // A link to the sussy baka chapter list
+                String name = z.attr("alt"); // The manga's sussy baka name
+
+                // Now we need to add our stuff to the arrays
+
+                ValuesForCollectDataPicScreen object = new ValuesForCollectDataPicScreen();
+                object.image = img;
+                object.name = name;
+                object.url = link;
+
+                objectsPicScreen.add(object);
+
+
+            }
+
+            return objectsPicScreen;
+
+
+        }
+
+        return null;
+    }
+
+
+    Document doc;
+    @Override
+    public String getStory(String url) {
+        try {
+            doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
+                    .get();
+
+            // FUCK MANGAKAKLOT FOR PULLING THIS SHIT ON ME HONESTLY
+            // MANGAKAKLOT USES MULTIPLE WEBSITES
+
+            Elements x = null;
+            if (url.toLowerCase().contains("readmanganato.com")) {
+                x = doc.getElementsByClass("panel-story-info-description"); // This also contains data we don't need
+            }
+            else if (url.toLowerCase().contains("mangakakalot.com")) {
+                x = doc.select("div#noidungm");
+            }
+
+            // I stole this from somewhere on stackoverflow
+
+            Document document = Jsoup.parse(x.html());
+            document.outputSettings(new Document.OutputSettings().prettyPrint(false)); //makes html() preserve linebreaks and spacing
+            document.select("br").append("\\n");
+            document.select("p").prepend("\\n\\n");
+            String s = document.html().replaceAll("\\\\n", "\n");
+            String storyUnreadable =  Jsoup.clean(s, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
+
+            return StringEscapeUtils.unescapeHtml3(storyUnreadable); // Using deprecated libraries? Couldn't be me.
+
+        }
+        catch (Exception ex) {
+            return "No story";
+        }
+    }
+
+    // Collects data for the chapter list
+    // We collect: chapter name + it's url
+    @Override
+    public ArrayList<ValuesForChapters> GetChapters(String url) {
+            try {
+                ArrayList<ValuesForChapters> data = new ArrayList<>();
+                //LinkedHashMap<String,String> NameUrl = new LinkedHashMap<>(); // name:url
+                ArrayList<String> links = new ArrayList<>();
+                ArrayList<String> names = new ArrayList<>();
+
+                Log.d("lol", "Scraping referer urls");
+
+                Elements ul = null;
+                if (url.toLowerCase().contains("readmanganato.com")) {
+                    ul = doc.getElementsByClass("row-content-chapter");
+                }
+                else if (url.toLowerCase().contains("mangakakalot.com")) {
+                    ul = doc.getElementsByClass("chapter-list");
+                }
+
+                for (Element i : ul.first().children()) {
+                    String title = "";
+                    String link = "";
+
+                    Elements li;
+                    if (url.toLowerCase().contains("readmanganato.com")) {
+                        li = i.getElementsByClass("chapter-name text-nowrap");
+                        title = li.attr("title"); // This is the chapter title
+                        link = li.attr("href"); // This is the url
+                    }
+
+                    else if (url.toLowerCase().contains("mangakakalot.com")) {
+                        li = i.getElementsByClass("row");
+                        title = li.text();
+                        Elements p = li.select("a");
+                        link = p.attr("href");
+                    }
+
+                    // We now have to edit the string so only the chapter shows
+                    StringBuilder sb = new StringBuilder();
+                    int index=0;
+                    String oldTitle = title;
+                    boolean get=false;
+
+                    // This wants to make me kms
+                    int amount = 0;
+                    for (String p : title.split("\\s+")) {
+                        if (p.equalsIgnoreCase("chapter")) {
+                            amount++;
+                        }
+                    }
+                    if (amount <= 1) {
+                        get=true;
+                    }
+
+                    for (String x : title.split("\\s+")) {
+                        if (x.equalsIgnoreCase("chapter")) {
+                            if (get) {
+                                try {
+                                    // We remove some clutter form the title
+                                    title = title.replace(":", ""); // This will fix things like "chapter 6:" 6: != double but 6 is
+
+
+                                    // We want to check whether x in chapter x is a number or not
+                                    // We can do this by converting it to a double and trying to make it shot out an error
+                                    Double.parseDouble(title.split("\\s+")[index+1]); // this is here to shoot out an error
+
+
+                                    sb.append(x);
+                                    sb.append(" ");
+                                    sb.append(title.split("\\s+")[index+1]);
+                                    title=sb.toString();
+                                }
+                                catch (Exception ex) {
+                                    title = oldTitle;
+                                }
+
+                                // These two lines may break shit.
+                                if (title.toLowerCase().contains("chapter")) {
+                                    title = title.replace(':', ' ');
+                                }
+                                break;
+                            }
+                            else {
+                                get=true;
+                            }
+                        }
+                        index++;
+                    }
+                    // Adds our data to the arraylist
+                    names.add(title);
+                    links.add(link);
+                }
+
+                // Now that we have the names and links
+                // We need reverse it and add the outputs to a linkedhashmap
+                Collections.reverse(names);
+                Collections.reverse(links);
+
+                for (int i = 0; i < names.size();i++) {
+                    //NameUrl.put(names.get(i), links.get(i));
+                    ValuesForChapters valuesForChapters = new ValuesForChapters();
+                    valuesForChapters.name = names.get(i);
+                    valuesForChapters.url = links.get(i);
+                    valuesForChapters.volume = ""; // We don't need the volume on mangakakalot
+                    data.add(valuesForChapters);
+                }
+
+                return data;
+            }
+            catch (Exception error) {
+                Log.d("idioot", error.toString());
+                return new ArrayList<ValuesForChapters>(); // We return an empty hashmap - previously null
+            }
+
+    }
+
+
+    // THis part is in charge of getting the manga images
+    // Mangakakalot has two servers
+
+    @Override
+    public ArrayList<String> GetImages(ValuesForChapters object, Context context) {
+        Document doc;
+
+        String url = object.url;
+        try {
+            Settings settings = new Settings();
+            Boolean server_two = settings.ReturnValueBoolean(context, "preference_ServerMangakakalot", false);
+
+            if (!server_two) {
+                doc = Jsoup.connect(url)
+                        .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
+                        .get();
+            }
+            else {
+                String CookieSiteLocation;
+
+                // To get to server two, we need certain cookies
+                // There are two cookie sites based on whether the url is mangakakalot or readmanganato
+                if (url.toLowerCase().contains("readmanganato")) {
+                    CookieSiteLocation = "https://readmanganato.com/content_server_s2";
+                }
+                else {
+                    CookieSiteLocation = "https://mangakakalot.com/change_content_s2";
+                }
+
+                // This'll get us the neccessary cookies.
+                Connection.Response res = Jsoup.connect(CookieSiteLocation)
+                        .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
+                        .method(Connection.Method.GET)
+                        .execute();
+
+                Map<String,String> coookies = res.cookies(); // The cookies (what a surprise)
+
+                doc = Jsoup.connect(url)
+                        .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
+                        .cookies(coookies)
+                        .get();
+            }
+
+            // Here we do the webscraping
+            ArrayList<String> images = new ArrayList<>();
+            Elements ImagesHtml = doc.getElementsByClass("container-chapter-reader");
+            for (Element i : ImagesHtml.first().children()) {
+                Elements imgTag = i.select("img");
+                String img = imgTag.attr("src");
+                images.add(img);
+            }
+            return images;
+
+        }
+        catch (Exception ex) {
+            Log.d("lol", ex.toString());
+            return null;
+        }
+
+
+    }
+
+    @Override
+    public HashMap<String,String> GetRequestData(String url) {
+        try {
+            doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
+                    .get();
+        }
+        catch (Exception ex) {
+            return null;
+        }
+
+        HashMap<String,String> reqData = new HashMap<>();
+
+        String referer = "";
+        if (url.toLowerCase().contains("readmanganato.com")) {
+            referer = "https://readmanganato.com/";
+            reqData.put("Host", "s71.mkklcdnv6tempv2.com");
+
+        }
+        else if (url.toLowerCase().contains("mangakakalot.com")) {
+            referer = "https://mangakakalot.com/";
+            reqData.put("Host", "avt.mkklcdnv6temp.com");
+        }
+        reqData.put("Referer", referer);
+        reqData.put("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0");
+
+        return reqData;
+    }
+
+    @Override
+    public void PrepareReadChapter(ReadActivity readActivity) {
+        // We do the epic code here for our not so epic switch
+        SwitchCompat toggle = readActivity.findViewById(R.id.switchServer);
+        toggle.setVisibility(View.VISIBLE);
+
+
+        Settings settings = new Settings();
+        Boolean server = settings.ReturnValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot", false);
+        toggle.setChecked(server); // true or false
+        toggle.setOnClickListener(v -> {
+            if (toggle.isChecked()) {
+                settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot", true);
+            }
+            else {
+                settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot", false);
+            }
+            readActivity.read.LoadChapter(ReadValueHolder.currentChapter);
+
+        });
+    }
+
+
+
+}
