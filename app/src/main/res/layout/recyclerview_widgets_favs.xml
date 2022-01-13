@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp" tools:ignore="ExtraText" android:orientation="vertical">
+
+
+    <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:cardCornerRadius="8dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            android:id="@+id/card_favs"
+            android:visibility="visible" android:layout_weight="1">
+
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="178dp">
+
+            <ImageView
+                    android:id="@+id/card_favs_image"
+                    android:layout_width="141dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:padding="5dp"
+                    android:layout_marginTop="0dp" android:layout_marginStart="0dp" android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="0dp" app:srcCompat="@drawable/ic_launcher_background"/>
+
+            <TextView
+                    android:id="@+id/card_favs_text"
+                    android:layout_width="241dp"
+                    android:layout_height="142dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="26dp"
+                    android:layout_toEndOf="@+id/card_favs_image"
+                    android:drawablePadding="2dp"
+                    android:textColor="#979797" android:tag="bn" android:textStyle="bold" android:gravity="center"
+                    android:layout_alignParentTop="true" android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"/>
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView><![CDATA[
+
+
+
+
+
+
+
+
+    />
+
+
+
+
+
+
+]]>
+</LinearLayout>
