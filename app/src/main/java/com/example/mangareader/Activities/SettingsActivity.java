@@ -45,10 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
                     .commit();
         }
 
-        // LOL THIS CODE IS FUCKED
-        // PRESSING THE TOGGLE BUTTON DOESNT WORK
-        // BUT SWIPING FROM LEFT TO RIGHT DOES
-        // IDK WHAT IS HAPPENING BUT THEN AGAIN WHEN DO I KNOW WHAT IS HAPPENING
+        
         drawerLayout = findViewById(R.id.my_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
