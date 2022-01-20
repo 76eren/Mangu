@@ -31,7 +31,7 @@ public class Favourites {
     }
 
     public static void RemoveFromFavourites(Context context, FavouriteItem favouriteItem) {
-        // THIS FUN IS BROKEN LOL
+
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
