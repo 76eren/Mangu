@@ -72,9 +72,6 @@ public class Read {
 
     public static void LoadImage(String url, PhotoView photoView, HashMap<String,String> reqData, Context context) {
 
-        Log.d("lol", "fkjsejfslkjg");
-        Log.d("lol", reqData.get("Referer"));
-        Log.d("lol", url);
         GlideUrl glideUrl;
         if (reqData != null) {
             // This sets the correct request data, so we can access the image.
