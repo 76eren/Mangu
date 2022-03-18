@@ -89,6 +89,23 @@ public class SettingsActivity extends AppCompatActivity {
 
             SwitchPreference preference_mangakakalot_showButon = getPreferenceScreen().findPreference("preference_mangakakalot_showButon");
 
+            CheckBoxPreference click = getPreferenceScreen().findPreference("preference_readmode_click");
+            CheckBoxPreference scroll = getPreferenceScreen().findPreference("preference_readmode_scroll");
+
+            SwitchPreference preference_merge_manga_favourites = getPreferenceScreen().findPreference("preference_merge_manga_favourites");
+
+
+
+            preference_merge_manga_favourites.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (preference_merge_manga_favourites.isChecked()) {
+                    preference_merge_manga_favourites.setChecked(false);
+                }
+                else {
+                    preference_merge_manga_favourites.setChecked(true);
+                }
+                return false;
+            });
+
             preference_ServerMangakakalot.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (preference_ServerMangakakalot.isChecked()){
                     preference_ServerMangakakalot.setChecked(false);
@@ -202,6 +219,35 @@ public class SettingsActivity extends AppCompatActivity {
                 return false;
 
 
+            });
+
+
+            // -----------------------------------------------  READ MODE  --------------------------------------
+            click.setOnPreferenceClickListener(preference -> {
+                scroll.setChecked(false);
+                click.setChecked(true);
+                settings.AssignValueString(activity, "read_mode", "click");
+                return false;
+            });
+
+            scroll.setOnPreferenceClickListener(preference -> {
+                scroll.setChecked(true);
+                click.setChecked(false);
+                settings.AssignValueString(activity, "read_mode", "scroll");
+
+                return false;
+            });
+
+
+            SwitchPreference preference_hardware_acceleration = getPreferenceScreen().findPreference("preference_hardware_acceleration");
+            preference_hardware_acceleration.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (preference_hardware_acceleration.isChecked()) {
+                    preference_hardware_acceleration.setChecked(false);
+                }
+                else {
+                    preference_hardware_acceleration.setChecked(true);
+                }
+                return false;
             });
 
         }

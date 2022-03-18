@@ -58,9 +58,9 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        // What the fuck????
 
         Data data = mData.get(position);
-
         // ----------------------------------------------------------------------------------------------------------------------
         // Images
         holder.star.setVisibility(View.GONE);
@@ -69,16 +69,16 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
 
         if (data.data.extraData.equals("poster")) {
             holder.myImageView.setVisibility(View.VISIBLE);
-            Glide.with(this.ctx).load(data.data.image).into(holder.myImageView);
+            Glide.with(this.ctx).load(data.data.imageUrl).into(holder.myImageView);
         }
 
         if (data.data.image.equals("the_fucking_star")) {
             holder.star.setVisibility(View.VISIBLE);
 
             holder.star.setOnClickListener(v -> {
-                String x = data.data.extraData;
-                String url = x.split("_")[0];
-                String img = x.split("_")[1];
+
+                String url = data.data.mangaUrl;
+                String img = data.data.imageUrl;
 
                 // adds or removes from favourites
                 Log.d("lol", "manganame is "+data.data.name);

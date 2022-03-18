@@ -5,19 +5,23 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.mangareader.R;
-import com.example.mangareader.Read;
+import com.example.mangareader.Read.Read;
+import com.example.mangareader.Read.ReadClick;
 import com.example.mangareader.ListTracker;
+import com.example.mangareader.Read.ReadScroll;
+import com.example.mangareader.Read.Readmodes;
 import com.example.mangareader.Settings;
 import com.example.mangareader.ValueHolders.DesignValueHolder;
 import com.example.mangareader.ValueHolders.ObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
-import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,20 +29,27 @@ import java.util.HashMap;
 
 public class ReadActivity extends AppCompatActivity {
 
-    public final Read read = new Read();
     public Sources source;
+    public Readmodes read;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         overridePendingTransition(0,0);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Ehhhh I want to die
         ListTracker.AddToList(this, ReadValueHolder.currentChapter.url, "History");
-        Log.d("dick", ReadValueHolder.currentChapter.url);
+
+        Settings settings = new Settings();
+        if (!settings.ReturnValueBoolean(this, "preference_hardware_acceleration", false)) {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+        }
+
+
 
         setContentView(R.layout.activity_read);
         source = ObjectHolder.sources;
@@ -51,23 +62,20 @@ public class ReadActivity extends AppCompatActivity {
         nextClick.setBackgroundColor(Color.TRANSPARENT);
         nextClick.setAlpha(x);
 
+        switch (settings.ReturnValueString(this, "read_mode", "click")) {
+            case "click":
+                read = new ReadClick();
+                break;
 
-        final Boolean[] canClick = {true};
-        prevClick.setOnClickListener(v -> {
-            if (canClick[0]) {
-                canClick[0] = false;
-                read.Swipe(-1);
-                canClick[0] = true;
-            }
-        });
+            case "scroll":
+                read = new ReadScroll();
+                break;
 
-        nextClick.setOnClickListener(v -> {
-            if (canClick[0]) {
-                canClick[0] = false;
-                read.Swipe(1);
-                canClick[0] = true;
-            }
-        });
+            default:
+                new ReadClick();
+                break;
+
+        }
 
 
         source.PrepareReadChapter(this); // Prepares our shit
@@ -76,22 +84,17 @@ public class ReadActivity extends AppCompatActivity {
         // INSTEAD OF DOING IT ALL OVERT AGIAN
         new Thread(() -> {
 
-            PhotoView photoView = findViewById(R.id.photo_view);
-
             TextView progress = findViewById(R.id.progress);
 
             // Allows hiding the progress bar
-            progress.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (progress.getAlpha() == 0) {
-                        progress.setAlpha(DesignValueHolder.ProgressBarAlphaWhenEnabled);
-                    }
-                    else {
-                        progress.setAlpha(0);
-                    }
-
+            progress.setOnClickListener(view -> {
+                if (progress.getAlpha() == 0) {
+                    progress.setAlpha(DesignValueHolder.ProgressBarAlphaWhenEnabled);
                 }
+                else {
+                    progress.setAlpha(0);
+                }
+
             });
 
             String chapterUrl = ReadValueHolder.currentChapter.url;
@@ -116,24 +119,23 @@ public class ReadActivity extends AppCompatActivity {
             imgs.removeAll(Collections.singleton(""));
 
             HashMap<String,String> reqData = source.GetRequestData(chapterUrl);
-            read.AssignData(this,imgs,photoView,progress,source, reqData); // We assign our context to read
+            read.Start(this, imgs, source, reqData); // We assign our context to read
 
             // Caching
-            Settings settings = new Settings();
             Boolean shouldCache = settings.ReturnValueBoolean(this, "preference_Cache", false);
 
             if (shouldCache) {
                 Log.d("lol", "caching");
                 runOnUiThread(() -> cacheTV.setVisibility(View.VISIBLE));
-                read.Cache();
+                Read.Cache(this, imgs, reqData);
 
-                read.LoadGlide();
+                read.LoadImage();
             }
             else  {
                 Log.d("lol", "not caching");
                 runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
                 // We start our shit
-                read.LoadGlide();
+                read.LoadImage();
             }
 
 

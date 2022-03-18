@@ -12,5 +12,6 @@ public class FavouriteItem {
         this.url = url;
         this.image = image;
         this.mangaName = mangaName;
+
     }
 }

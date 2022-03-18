@@ -4,8 +4,35 @@
     <PreferenceCategory
             app:title="Main settings">
         <SwitchPreference
+                android:defaultValue="true"
+                android:title="Merge manga's from different sources in favourites"
+                android:key="preference_merge_manga_favourites"/>
+        <SwitchPreference
                 android:defaultValue="false"
                 android:title="Cache images before reading (hella unstable)" android:key="preference_Cache"/>
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="Switch preference" android:key="switch_preference_1"/>
+        <PreferenceCategory
+                android:title="Read mode">
+
+            <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:title="Click" android:key="preference_readmode_click"/>
+            <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:title="[BETA] scroll" android:key="preference_readmode_scroll"/>
+        </PreferenceCategory>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Select source">
+
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:title="Mangakakalot" android:key="preference_source_mangakakalot"/>
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:title="Mangadex" android:key="preference_source_mangadex"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Mangakakalot settings">
@@ -20,19 +47,9 @@
     <PreferenceCategory
             android:title="Mangadex settings">
         <SwitchPreference
-                android:defaultValue="true"
-                android:title="Filter out all non-English languages"
-                android:key="mangadex_preference_languages"/>
-    </PreferenceCategory>
-    <PreferenceCategory
-            android:title="Select source">
-
-        <CheckBoxPreference
-                android:defaultValue="true"
-                android:title="Mangakakalot" android:key="preference_source_mangakakalot"/>
-        <CheckBoxPreference
                 android:defaultValue="false"
-                android:title="Mangadex" android:key="preference_source_mangadex"/>
+                android:title="Stop hiding non-English chapters"
+                android:key="mangadex_preference_languages"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="App theme (reload app to take effect)">
@@ -46,6 +63,14 @@
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:title="Light mode" android:key="preference_theme_light"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="[DANGER ZONE]">
+
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="Disable hardware acceleration. This is not neccesary unless the app is crashing when reading a manga (that contains VERY large images). "
+                android:key="preference_hardware_acceleration"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

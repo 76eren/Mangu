@@ -78,14 +78,17 @@ public class ChaptersActivity extends AppCompatActivity {
             ReadValueHolder.ChaptersActivityData = dataChapters; // LOL imagine assigning values statically lol
 
 
+            // This is future me writing this
+            // I hate myself for writing this
+            // I am so sorry
             List<RviewAdapterChapterlist.Data> data = new ArrayList<>();
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass(finalMangaName, "", "the_fucking_star", null, finalMangaUrl +"_"+ finalImageUrl, this)));
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", "", finalImageUrl, null, "poster", this)));
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", mangaStory, "", null, "Clickable", this)));
+            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass(finalMangaName, "", "the_fucking_star", null, "", this, finalMangaUrl, finalImageUrl)));
+            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", "", "", null, "poster", this, finalMangaUrl, finalImageUrl)));
+            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", mangaStory, "", null, "Clickable", this, finalMangaUrl, finalImageUrl)));
 
             for (Sources.ValuesForChapters i : dataChapters) {
                 url = i.url;
-                data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", "", "", i, "url", this)));
+                data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", "", "", i, "url", this, finalMangaUrl, finalImageUrl)));
 
             }
 

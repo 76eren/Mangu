@@ -2,6 +2,7 @@ package com.example.mangareader.Favourites;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import androidx.preference.PreferenceManager;
 import com.google.gson.*;
 import java.util.*;
@@ -16,7 +17,7 @@ public class Favourites {
             Gson gson = new Gson();
 
             // we get our current favourite items
-            Set<String> favs = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
+            LinkedHashSet<String> favs = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
             // We create a FavouriteItem object and convert it to a json
             String json = gson.toJson(favouriteItem);
@@ -24,6 +25,7 @@ public class Favourites {
             favs.add(json);
 
             // We push our set to the sharedprefs
+
             editor.putStringSet("Favourites", favs);
             editor.apply();
         }
@@ -38,7 +40,7 @@ public class Favourites {
         Gson gson = new Gson();
 
         // Our set containing strings
-        Set<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
+        LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
         // We remove the object from the Set
         favsSetStrings.remove(gson.toJson(favouriteItem));
@@ -56,7 +58,7 @@ public class Favourites {
         Gson gson = new Gson();
 
         // Our set containing strings
-        Set<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
+        LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
         // We create an identical object bla bla bla
 
@@ -70,14 +72,14 @@ public class Favourites {
 
     }
 
-    public static Set<FavouriteItem> GetFavourites (Context context) {
+    public static LinkedHashSet<FavouriteItem> GetFavourites (Context context) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         // This is our hashset with Strings
-        Set<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
+        LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
         // Now we need to convert it to a hashset with Objects
-        Set<FavouriteItem> setObjects = new LinkedHashSet<>();
+        LinkedHashSet<FavouriteItem> setObjects = new LinkedHashSet<>();
         Gson gson = new Gson();
         for (String i : favsSetStrings) {
             FavouriteItem favouriteItem = gson.fromJson(i, FavouriteItem.class);

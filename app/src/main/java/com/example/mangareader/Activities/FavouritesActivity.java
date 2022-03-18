@@ -13,11 +13,13 @@ import com.example.mangareader.Favourites.FavouriteItem;
 import com.example.mangareader.Favourites.Favourites;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.RviewAdapterFavourites;
+import com.example.mangareader.Settings;
 import com.example.mangareader.ValueHolders.ObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -58,7 +60,7 @@ public class FavouritesActivity extends AppCompatActivity {
 
 
         List<RviewAdapterFavourites.Data> data = new ArrayList<>();
-        Set<FavouriteItem> set = Favourites.GetFavourites(this);
+        LinkedHashSet<FavouriteItem> set = Favourites.GetFavourites(this);
 
 
 
@@ -70,11 +72,20 @@ public class FavouritesActivity extends AppCompatActivity {
             }
         }
 
-
+        Settings settings = new Settings();
         for (FavouriteItem i : set) {
-            if (i.source.equals(ObjectHolder.sources.getClass().getName())) {
+
+            if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) {   // Checks whether we want to merge all sources or not
+                // Does not merge all sources together
+                if (i.source.equals(ObjectHolder.sources.getClass().getName())) {
+                    data.add(new RviewAdapterFavourites.Data(this, i));
+                }
+            }
+            else {
+                // Merges all sources together
                 data.add(new RviewAdapterFavourites.Data(this, i));
             }
+
 
         }
 
