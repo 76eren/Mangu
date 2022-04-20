@@ -19,10 +19,13 @@ import com.example.mangareader.ValueHolders.DesignValueHolder;
 import com.example.mangareader.ValueHolders.ObjectHolder;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
+import static java.time.Instant.now;
 
 public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterChapterlist.ViewHolder> {
 
@@ -82,26 +85,8 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
 
                 // adds or removes from favourites
                 Log.d("lol", "manganame is "+data.data.name);
-                FavouriteItem favouriteItem = new FavouriteItem(ObjectHolder.sources.getClass().getName(), url, img, data.data.name);
+                FavouriteItem favouriteItem = new FavouriteItem(ObjectHolder.sources.getClass().getName(), url, img, data.data.name, (int) now().getEpochSecond());
                 Favourites.checkWhatNeedsToHappen(data.data.context, favouriteItem);
-
-
-                // Does the toast thingy
-                Set<FavouriteItem> newHistory = Favourites.GetFavourites(data.data.context);
-                boolean found = false;
-                for (FavouriteItem i : newHistory) {
-                    if (Objects.equals(i.source, favouriteItem.source) && Objects.equals(i.url, favouriteItem.url) && Objects.equals(i.image, favouriteItem.image)) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found) {
-                    Toast.makeText(data.data.context,"Added manga to favourites",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(data.data.context,"Removed manga from favourites",Toast.LENGTH_SHORT).show();
-                }
 
             });
         }

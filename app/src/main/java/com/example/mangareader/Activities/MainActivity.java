@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         overridePendingTransition(0,0); // fuck that animation
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 

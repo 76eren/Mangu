@@ -41,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         overridePendingTransition(0,0); // fuck that animation
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // drawer layout instance to toggle the menu icon to open

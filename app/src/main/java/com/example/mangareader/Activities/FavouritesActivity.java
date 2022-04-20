@@ -1,6 +1,7 @@
 package com.example.mangareader.Activities;
 
 import android.content.pm.ActivityInfo;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -18,10 +19,8 @@ import com.example.mangareader.ValueHolders.ObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
 
 public class FavouritesActivity extends AppCompatActivity {
 
@@ -35,8 +34,6 @@ public class FavouritesActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         overridePendingTransition(0,0);
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 
         // drawer layout instance to toggle the menu icon to open
         // drawer and back button to close drawer
@@ -60,21 +57,31 @@ public class FavouritesActivity extends AppCompatActivity {
 
 
         List<RviewAdapterFavourites.Data> data = new ArrayList<>();
+
         LinkedHashSet<FavouriteItem> set = Favourites.GetFavourites(this);
 
+        // We sort the set with favourites however we want
+        Settings settings = new Settings();
+        ArrayList<FavouriteItem> sortedFavourites = new ArrayList<>(set);
 
+        switch (settings.ReturnValueString(this, "preference_favourites_sort", "preference_favourites_sort_date")) {
+            case "preference_favourites_sort_date_down":
+                sortedFavourites.sort(Comparator.comparingInt(FavouriteItem::returnDate));
+                break;
 
-        // Here we attempt give the manga a missing name tag that will let the user know that a name is missing.
-        // This should only happen if the user converts from an old build to a newer one (a build without the feature to a build with the feature)
-        for (FavouriteItem i : set) {
-            if (i.mangaName == null || i.mangaName.equals("")) {
-                i.mangaName = "[missing name]";
-            }
+            case "preference_favourites_sort_date_up":
+                sortedFavourites.sort(Comparator.comparingInt(FavouriteItem::returnDate));
+                Collections.reverse(sortedFavourites);
+                break;
+
+            case "preference_favourites_sort_alphabet":
+                    sortedFavourites.sort(Comparator.comparing(FavouriteItem::returnName));
+                break;
         }
 
-        Settings settings = new Settings();
-        for (FavouriteItem i : set) {
 
+
+        for (FavouriteItem i : sortedFavourites) {
             if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) {   // Checks whether we want to merge all sources or not
                 // Does not merge all sources together
                 if (i.source.equals(ObjectHolder.sources.getClass().getName())) {
@@ -85,8 +92,6 @@ public class FavouritesActivity extends AppCompatActivity {
                 // Merges all sources together
                 data.add(new RviewAdapterFavourites.Data(this, i));
             }
-
-
         }
 
 

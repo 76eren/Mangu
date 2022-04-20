@@ -18,6 +18,7 @@ import com.example.mangareader.Sources.Mangakakalot;
 import com.example.mangareader.ValueHolders.ObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;
+import org.jetbrains.annotations.NotNull;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -31,7 +32,6 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings_activity);
 
         overridePendingTransition(0,0);
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
@@ -79,23 +79,7 @@ public class SettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
 
-            SwitchPreference preference_ServerMangakakalot = getPreferenceScreen().findPreference("preference_ServerMangakakalot");
-            SwitchPreference preference_cache = getPreferenceScreen().findPreference("preference_Cache");
-
-            CheckBoxPreference mangakakalot = getPreferenceScreen().findPreference("preference_source_mangakakalot");
-            CheckBoxPreference mangadex = getPreferenceScreen().findPreference("preference_source_mangadex");
-
-            SwitchPreference mangadex_preference_languages = getPreferenceScreen().findPreference("mangadex_preference_languages");
-
-            SwitchPreference preference_mangakakalot_showButon = getPreferenceScreen().findPreference("preference_mangakakalot_showButon");
-
-            CheckBoxPreference click = getPreferenceScreen().findPreference("preference_readmode_click");
-            CheckBoxPreference scroll = getPreferenceScreen().findPreference("preference_readmode_scroll");
-
             SwitchPreference preference_merge_manga_favourites = getPreferenceScreen().findPreference("preference_merge_manga_favourites");
-
-
-
             preference_merge_manga_favourites.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (preference_merge_manga_favourites.isChecked()) {
                     preference_merge_manga_favourites.setChecked(false);
@@ -106,6 +90,8 @@ public class SettingsActivity extends AppCompatActivity {
                 return false;
             });
 
+
+            SwitchPreference preference_ServerMangakakalot = getPreferenceScreen().findPreference("preference_ServerMangakakalot");
             preference_ServerMangakakalot.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (preference_ServerMangakakalot.isChecked()){
                     preference_ServerMangakakalot.setChecked(false);
@@ -116,6 +102,7 @@ public class SettingsActivity extends AppCompatActivity {
                 return false;
             });
 
+            SwitchPreference preference_mangakakalot_showButon = getPreferenceScreen().findPreference("preference_mangakakalot_showButon");
             preference_mangakakalot_showButon.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (preference_mangakakalot_showButon.isChecked()){
                     preference_mangakakalot_showButon.setChecked(false);
@@ -127,6 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
 
+            SwitchPreference preference_cache = getPreferenceScreen().findPreference("preference_Cache");
             preference_cache.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (preference_cache.isChecked()){
                     preference_cache.setChecked(false);
@@ -143,6 +131,8 @@ public class SettingsActivity extends AppCompatActivity {
             // -------------- Sources -----------------
             // Surely there is a better way of doing this
             Settings settings = new Settings();
+            CheckBoxPreference mangakakalot = getPreferenceScreen().findPreference("preference_source_mangakakalot");
+            CheckBoxPreference mangadex = getPreferenceScreen().findPreference("preference_source_mangadex");
             mangakakalot.setOnPreferenceClickListener(preference -> {
                 mangadex.setChecked(false);
                 mangakakalot.setChecked(true);
@@ -207,6 +197,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
             // ------------------------------- MANGADEX LANGUAGES ---------------------------------
+            SwitchPreference mangadex_preference_languages = getPreferenceScreen().findPreference("mangadex_preference_languages");
             mangadex_preference_languages.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (mangadex_preference_languages.isChecked()){
                     mangadex_preference_languages.setChecked(false);
@@ -223,6 +214,8 @@ public class SettingsActivity extends AppCompatActivity {
 
 
             // -----------------------------------------------  READ MODE  --------------------------------------
+            CheckBoxPreference click = getPreferenceScreen().findPreference("preference_readmode_click");
+            CheckBoxPreference scroll = getPreferenceScreen().findPreference("preference_readmode_scroll");
             click.setOnPreferenceClickListener(preference -> {
                 scroll.setChecked(false);
                 click.setChecked(true);
@@ -249,6 +242,41 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 return false;
             });
+
+
+            // -----------------------------------------------------------------
+            // FAVOURITES SORTING
+            CheckBoxPreference alphabet = getPreferenceScreen().findPreference("preference_favourites_sort_alphabet");
+            CheckBoxPreference preference_favourites_sort_date_down = getPreferenceScreen().findPreference("preference_favourites_sort_date_down");
+            CheckBoxPreference preference_favourites_sort_date_up = getPreferenceScreen().findPreference("preference_favourites_sort_date_up");
+
+            alphabet.setOnPreferenceClickListener(preference -> {
+                preference_favourites_sort_date_down.setChecked(false);
+                preference_favourites_sort_date_up.setChecked(false);
+                alphabet.setChecked(true);
+
+                settings.AssignValueString(activity, "preference_favourites_sort", "preference_favourites_sort_alphabet");
+                return false;
+            });
+
+            preference_favourites_sort_date_down.setOnPreferenceClickListener(preference -> {
+                preference_favourites_sort_date_down.setChecked(true);
+                preference_favourites_sort_date_up.setChecked(false);
+                alphabet.setChecked(false);
+                settings.AssignValueString(activity, "preference_favourites_sort", "preference_favourites_sort_date_down");
+
+                return false;
+            });
+
+            preference_favourites_sort_date_up.setOnPreferenceClickListener(preference -> {
+                preference_favourites_sort_date_up.setChecked(true);
+                alphabet.setChecked(false);
+                preference_favourites_sort_date_down.setChecked(false);
+
+                settings.AssignValueString(activity, "preference_favourites_sort", "preference_favourites_sort_date_up");
+                return false;
+            });
+
 
         }
     }

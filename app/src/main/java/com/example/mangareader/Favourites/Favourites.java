@@ -1,8 +1,10 @@
+
 package com.example.mangareader.Favourites;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.preference.PreferenceManager;
 import com.google.gson.*;
 import java.util.*;
@@ -42,8 +44,20 @@ public class Favourites {
         // Our set containing strings
         LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
-        // We remove the object from the Set
-        favsSetStrings.remove(gson.toJson(favouriteItem));
+        // I can't just remove the already existing object because not all values are the same
+        // e.g the time value will always be different because the time we're calling this function is different from the time the manga was added
+        // Instead we can just check for urls
+        // Not all values are the same so we cannot just make an identical object and remove the identical object from the String array
+        // it is a bit annoying but hey it is what it is....
+
+        // Also I am dumb
+
+        for (String i : favsSetStrings) {
+            if (gson.fromJson(i, FavouriteItem.class).url.equals(favouriteItem.url)) {
+                favsSetStrings.remove(i);
+                break;
+            }
+        }
 
         // We push it to the sharedpreferences
         editor.putStringSet("Favourites", favsSetStrings);
@@ -60,13 +74,28 @@ public class Favourites {
         // Our set containing strings
         LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
-        // We create an identical object bla bla bla
+        boolean found = false;
 
-        if (favsSetStrings.contains(gson.toJson(favouriteItem))) {
-            RemoveFromFavourites(context, favouriteItem);
+        for (String i : favsSetStrings) {
+            // We compare URLs to check what needs to happen
+            FavouriteItem y = gson.fromJson(i, FavouriteItem.class);
+
+            if (favouriteItem.url.equals(y.url)) {
+                found=true;
+                break;
+            }
         }
+
+        if (found) {
+            RemoveFromFavourites(context, favouriteItem);
+            Toast.makeText(context, "Removed manga from favourites",Toast.LENGTH_SHORT).show();
+
+        }
+
         else {
             AddToFavourites(context, favouriteItem);
+            Toast.makeText(context, "Added manga to favourites",Toast.LENGTH_SHORT).show();
+
         }
 
 
@@ -91,5 +120,3 @@ public class Favourites {
 
     }
 }
-
-

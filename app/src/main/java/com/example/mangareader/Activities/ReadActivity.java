@@ -37,7 +37,6 @@ public class ReadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         overridePendingTransition(0,0);
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Ehhhh I want to die
         ListTracker.AddToList(this, ReadValueHolder.currentChapter.url, "History");

@@ -4,15 +4,8 @@
     <PreferenceCategory
             app:title="Main settings">
         <SwitchPreference
-                android:defaultValue="true"
-                android:title="Merge manga's from different sources in favourites"
-                android:key="preference_merge_manga_favourites"/>
-        <SwitchPreference
                 android:defaultValue="false"
                 android:title="Cache images before reading (hella unstable)" android:key="preference_Cache"/>
-        <SwitchPreference
-                android:defaultValue="false"
-                android:title="Switch preference" android:key="switch_preference_1"/>
         <PreferenceCategory
                 android:title="Read mode">
 
@@ -33,6 +26,27 @@
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:title="Mangadex" android:key="preference_source_mangadex"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Favourites">
+
+        <SwitchPreference
+                android:defaultValue="true"
+                android:title="Merge manga's from different sources in favourites"
+                android:key="preference_merge_manga_favourites"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Favourites item sorting">
+
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:title="Sort by date (ascending)" android:key="preference_favourites_sort_date_down"/>
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:title="Sort by date (descending)" android:key="preference_favourites_sort_date_up"/>
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:title="Sort alphabetical (a-z)" android:key="preference_favourites_sort_alphabet"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Mangakakalot settings">
