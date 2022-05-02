@@ -3,7 +3,6 @@ package com.example.mangareader.Favourites;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.preference.PreferenceManager;
 import com.google.gson.*;

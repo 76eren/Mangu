@@ -2,7 +2,6 @@ package com.example.mangareader.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,10 +14,9 @@ import com.example.mangareader.R;
 import com.example.mangareader.Settings;
 import com.example.mangareader.Sources.Mangadex;
 import com.example.mangareader.Sources.Mangakakalot;
-import com.example.mangareader.ValueHolders.ObjectHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;
-import org.jetbrains.annotations.NotNull;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -139,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
                 settings.AssignValueString(activity, "source", "mangakakalot");
 
 
-                ObjectHolder.sources = new Mangakakalot();
+                SourceObjectHolder.sources = new Mangakakalot();
 
                 return false;
             });
@@ -150,7 +148,7 @@ public class SettingsActivity extends AppCompatActivity {
                 settings.AssignValueString(activity, "source", "mangadex");
 
 
-                ObjectHolder.sources = new Mangadex();
+                SourceObjectHolder.sources = new Mangadex();
                 return false;
             });
 

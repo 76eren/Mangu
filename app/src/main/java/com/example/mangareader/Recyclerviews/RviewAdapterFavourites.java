@@ -15,7 +15,7 @@ import com.example.mangareader.Activities.ChaptersActivity;
 import com.example.mangareader.Favourites.FavouriteItem;
 import com.example.mangareader.R;
 import com.example.mangareader.SourceHandlers.Sources;
-import com.example.mangareader.ValueHolders.ObjectHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
                 c = Class.forName(data.favouriteItem.source);
                 Object obj = c.newInstance();
                 Sources source = Sources.class.cast(obj);
-                ObjectHolder.sources = source;
+                SourceObjectHolder.sources = source;
             }
             catch (Exception ex) {
                 // I dont't think our program is going to like kill itself if this here errors out

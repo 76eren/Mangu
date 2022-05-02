@@ -6,13 +6,6 @@ package com.example.mangareader.Read;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -20,19 +13,12 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.example.mangareader.ListTracker;
 import com.example.mangareader.R;
-import com.example.mangareader.Settings;
-import com.example.mangareader.SourceHandlers.Sources;
-import com.example.mangareader.ValueHolders.ReadValueHolder;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
-
-import static com.example.mangareader.ValueHolders.ObjectHolder.sources;
 
 public class Read {
 

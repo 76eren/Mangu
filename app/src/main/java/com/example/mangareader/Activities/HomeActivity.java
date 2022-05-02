@@ -1,12 +1,9 @@
 package com.example.mangareader.Activities;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,9 +16,7 @@ import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.RviewAdapterHome;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
-import com.example.mangareader.Sources.Mangadex;
-import com.example.mangareader.Sources.Mangakakalot;
-import com.example.mangareader.ValueHolders.ObjectHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;
 
@@ -78,28 +73,8 @@ public class HomeActivity extends AppCompatActivity {
         Menu menu = navigationView.getMenu();
         navigation.ItemClickSetup(this, menu);
 
-
-
-
-        // We first assign our right source
         Settings settings = new Settings();
-        String src = settings.ReturnValueString(this, "source", "mangakakalot");
 
-        switch (src) {
-            case "mangakakalot":
-                ObjectHolder.sources = new Mangakakalot();
-
-                break;
-
-            case "mangadex":
-                ObjectHolder.sources = new Mangadex();
-                break;
-
-
-            default:
-                ObjectHolder.sources = new Mangadex();
-                break;
-        }
 
         // We set the correct theme
         // This is so fucking lazy
@@ -122,8 +97,9 @@ public class HomeActivity extends AppCompatActivity {
                 break;
         }
 
+
         // Now we get all of the data for the activity
-        Sources source = ObjectHolder.sources;
+        Sources source = SourceObjectHolder.getSources(this); // This both sets and gets the source
 
         Context context = this;
         new Thread(() -> {
@@ -154,7 +130,6 @@ public class HomeActivity extends AppCompatActivity {
                 ArrayList<HomeMangaClass> popular = homeData.get("popular");
 
                 if (popular != null) {
-                    Log.d("lol", "yes");
                     List<RviewAdapterHome.Data> dataPopular = new ArrayList<>();
                     for (HomeMangaClass i : popular) {
                         dataPopular.add(new RviewAdapterHome.Data(context, i));

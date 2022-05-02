@@ -2,7 +2,6 @@ package com.example.mangareader.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.Recyclerviews.RviewAdapterChapterlist;
 import com.example.mangareader.Recyclerviews.RviewChapterlistDataClass;
-import com.example.mangareader.ValueHolders.ObjectHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.SplashScreen;
 import com.example.mangareader.R;
@@ -40,6 +39,7 @@ public class ChaptersActivity extends AppCompatActivity {
         // This is one of my attempts on fixing it
         // Not sure whether this works or not
         // The code is kinda a mess rn but it's for a greater cause
+        // EDIT 02-05-2022: this does not work and doesn't fix anything but I cba changing it.
         String mangaUrl = "";
         String imageUrl = "";
         String mangaName = "";
@@ -69,7 +69,7 @@ public class ChaptersActivity extends AppCompatActivity {
         String finalImageUrl = imageUrl;
 
         new Thread(() -> {
-            Sources sources = ObjectHolder.sources;
+            Sources sources = SourceObjectHolder.getSources(this);
             String mangaStory;
 
             mangaStory = sources.getStory(finalMangaUrl);

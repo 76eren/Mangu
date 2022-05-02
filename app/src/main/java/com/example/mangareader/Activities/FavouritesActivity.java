@@ -1,7 +1,5 @@
 package com.example.mangareader.Activities;
 
-import android.content.pm.ActivityInfo;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -15,11 +13,10 @@ import com.example.mangareader.Favourites.Favourites;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.RviewAdapterFavourites;
 import com.example.mangareader.Settings;
-import com.example.mangareader.ValueHolders.ObjectHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;
 
-import java.time.Instant;
 import java.util.*;
 
 public class FavouritesActivity extends AppCompatActivity {
@@ -84,7 +81,7 @@ public class FavouritesActivity extends AppCompatActivity {
         for (FavouriteItem i : sortedFavourites) {
             if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) {   // Checks whether we want to merge all sources or not
                 // Does not merge all sources together
-                if (i.source.equals(ObjectHolder.sources.getClass().getName())) {
+                if (i.source.equals(SourceObjectHolder.getSources(this).getClass().getName())) {
                     data.add(new RviewAdapterFavourites.Data(this, i));
                 }
             }

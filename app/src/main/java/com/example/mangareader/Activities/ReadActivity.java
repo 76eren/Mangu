@@ -1,11 +1,9 @@
 package com.example.mangareader.Activities;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,13 +17,14 @@ import com.example.mangareader.Read.ReadScroll;
 import com.example.mangareader.Read.Readmodes;
 import com.example.mangareader.Settings;
 import com.example.mangareader.ValueHolders.DesignValueHolder;
-import com.example.mangareader.ValueHolders.ObjectHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ReadActivity extends AppCompatActivity {
 
@@ -38,8 +37,8 @@ public class ReadActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         overridePendingTransition(0,0);
 
-        // Ehhhh I want to die
-        ListTracker.AddToList(this, ReadValueHolder.currentChapter.url, "History");
+
+        ListTracker.AddToList(this, ReadValueHolder.getCurrentChapter(this).url, "History");
 
         Settings settings = new Settings();
         if (!settings.ReturnValueBoolean(this, "preference_hardware_acceleration", false)) {
@@ -49,9 +48,11 @@ public class ReadActivity extends AppCompatActivity {
         }
 
 
-
         setContentView(R.layout.activity_read);
-        source = ObjectHolder.sources;
+
+
+        source = SourceObjectHolder.getSources(this);
+
 
         Button prevClick = findViewById(R.id.prevPage);
         prevClick.setBackgroundColor(Color.TRANSPARENT);
@@ -96,7 +97,7 @@ public class ReadActivity extends AppCompatActivity {
 
             });
 
-            String chapterUrl = ReadValueHolder.currentChapter.url;
+            String chapterUrl = ReadValueHolder.getCurrentChapter(this).url;
 
             // THIS DONT BELONG HERE IDIOT BAKA
             TextView cacheTV = findViewById(R.id.cache);
@@ -104,12 +105,13 @@ public class ReadActivity extends AppCompatActivity {
 
 
             ArrayList<String> imgs;
-            imgs = this.source.GetImages(ReadValueHolder.currentChapter, this); // I am not really a big fan of calling ReadValueHolder rather than having a local variable. It's whatever though
+            imgs = SourceObjectHolder.getSources(this).GetImages(ReadValueHolder.getCurrentChapter(this), this); // I am not really a big fan of calling ReadValueHolder rather than having a local variable. It's whatever though
 
+            // This usually runs after inactivity.....
             if (imgs == null) {
-                Log.d("lol", "An error occured whilst trying to load the list with chapters");
-                Intent d = new Intent(this, MainActivity.class);
-                startActivity(d);
+                Intent intent = new Intent(this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 return;
             }
 
@@ -124,14 +126,12 @@ public class ReadActivity extends AppCompatActivity {
             Boolean shouldCache = settings.ReturnValueBoolean(this, "preference_Cache", false);
 
             if (shouldCache) {
-                Log.d("lol", "caching");
                 runOnUiThread(() -> cacheTV.setVisibility(View.VISIBLE));
                 Read.Cache(this, imgs, reqData);
 
                 read.LoadImage();
             }
             else  {
-                Log.d("lol", "not caching");
                 runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
                 // We start our shit
                 read.LoadImage();

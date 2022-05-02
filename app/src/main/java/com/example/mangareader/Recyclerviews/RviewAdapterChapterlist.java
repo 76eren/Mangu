@@ -1,5 +1,6 @@
 package com.example.mangareader.Recyclerviews;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -16,14 +17,11 @@ import com.example.mangareader.Favourites.Favourites;
 import com.example.mangareader.R;
 import com.example.mangareader.ListTracker;
 import com.example.mangareader.ValueHolders.DesignValueHolder;
-import com.example.mangareader.ValueHolders.ObjectHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import static java.time.Instant.now;
 
@@ -84,8 +82,8 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
                 String img = data.data.imageUrl;
 
                 // adds or removes from favourites
-                Log.d("lol", "manganame is "+data.data.name);
-                FavouriteItem favouriteItem = new FavouriteItem(ObjectHolder.sources.getClass().getName(), url, img, data.data.name, (int) now().getEpochSecond());
+                Activity activity = (Activity) data.data.context;
+                FavouriteItem favouriteItem = new FavouriteItem(SourceObjectHolder.getSources(activity).getClass().getName(), url, img, data.data.name, (int) now().getEpochSecond());
                 Favourites.checkWhatNeedsToHappen(data.data.context, favouriteItem);
 
             });
@@ -138,7 +136,6 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
                 // This is kinda broken atm
                 holder.myButton.setOnLongClickListener(v -> {
                     ListTracker.ChangeStatus(data.data.context, data.data.btn.url, "History");
-                    Log.d("lol", data.data.btn.url);
 
                     ArrayList<String> updatedHistory = ListTracker.GetFromList(data.data.context, "History");
                     for (String i : updatedHistory) {

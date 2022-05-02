@@ -1,23 +1,15 @@
 package com.example.mangareader.Activities;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.RviewAdapterSearch;
-import com.example.mangareader.Settings;
-import com.example.mangareader.Sources.Mangadex;
-import com.example.mangareader.Sources.Mangakakalot;
-import com.example.mangareader.ValueHolders.ObjectHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
 
 
@@ -76,9 +68,10 @@ public class MainActivity extends AppCompatActivity {
         search.setOnEditorActionListener((textView, i, keyEvent) -> {
             new Thread(() -> {
                 List<RviewAdapterSearch.Data> data = new ArrayList<>();
-                ArrayList<Sources.SearchValues> searchResults = ObjectHolder.sources.CollectDataPicScreen(search.getText().toString());
+                ArrayList<Sources.SearchValues> searchResults = SourceObjectHolder.getSources(this).CollectDataPicScreen(search.getText().toString());
 
-                if (searchResults != null) { // prevents a dirty little nullpointerexception
+                if (searchResults != null) {
+                    // prevents a dirty little nullpointerexception
                     for (Sources.SearchValues i1 : searchResults) {
                         data.add(new RviewAdapterSearch.Data(context, i1));
                     }

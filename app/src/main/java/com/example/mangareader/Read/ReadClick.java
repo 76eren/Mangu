@@ -1,26 +1,21 @@
 package com.example.mangareader.Read;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaders;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.mangareader.ListTracker;
 import com.example.mangareader.R;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.*;
 
-import static com.example.mangareader.ValueHolders.ObjectHolder.sources;
+
 
 public class ReadClick implements Readmodes{
     private Data data;
@@ -53,7 +48,7 @@ public class ReadClick implements Readmodes{
             Read.LoadImage(data.images.get(page), photoView, this.data.reqData, this.data.activity);
         });
 
-        this.progress.setText(this.page+1 + "/"+ this.data.images.size() + " - "+ ReadValueHolder.currentChapter.name);
+        this.progress.setText(this.page+1 + "/"+ this.data.images.size() + " - "+ ReadValueHolder.getCurrentChapter(this.data.activity).name);
     }
 
     @Override
@@ -98,7 +93,8 @@ public class ReadClick implements Readmodes{
         ReadValueHolder.currentChapter = newChapter;
 
         new Thread(() -> {
-            ArrayList<String> images = sources.GetImages(newChapter, this.data.activity);
+
+            ArrayList<String> images = SourceObjectHolder.getSources(this.data.activity).GetImages(newChapter, this.data.activity);
             images.removeAll(Collections.singleton(null));
             images.removeAll(Collections.singleton(""));
             // We want to edit a few values

@@ -1,27 +1,22 @@
 package com.example.mangareader.Read;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.ListTracker;
 import com.example.mangareader.R;
-import com.example.mangareader.Recyclerviews.RviewAdapterHome;
 import com.example.mangareader.Recyclerviews.RviewAdapterReadScroll;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.example.mangareader.ValueHolders.ObjectHolder.sources;
 
 public class ReadScroll implements Readmodes{
     private Data data;
@@ -47,7 +42,7 @@ public class ReadScroll implements Readmodes{
     public void LoadImage() {
 
         TextView uwu = this.data.activity.findViewById(R.id.progress);
-        this.data.activity.runOnUiThread(() -> uwu.setText(ReadValueHolder.currentChapter.name));
+        this.data.activity.runOnUiThread(() -> uwu.setText(ReadValueHolder.getCurrentChapter(this.data.activity).name));
 
         List<RviewAdapterReadScroll.Data> data = new ArrayList<>();
         data.add(new RviewAdapterReadScroll.Data(this.data.activity, "", new HashMap<>(), "Previous chapter", this));
@@ -96,6 +91,7 @@ public class ReadScroll implements Readmodes{
         ReadValueHolder.currentChapter = newChapter;
 
         new Thread(() -> {
+            Sources sources = SourceObjectHolder.getSources(this.data.activity);
             ArrayList<String> images = sources.GetImages(newChapter, this.data.activity);
             images.removeAll(Collections.singleton(null));
             images.removeAll(Collections.singleton(""));
