@@ -3,7 +3,6 @@ package com.example.mangareader.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -24,7 +23,6 @@ import com.example.mangareader.ValueHolders.ReadValueHolder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class ReadActivity extends AppCompatActivity {
 
@@ -41,8 +39,11 @@ public class ReadActivity extends AppCompatActivity {
         ListTracker.AddToList(this, ReadValueHolder.getCurrentChapter(this).url, "History");
 
         Settings settings = new Settings();
+
         if (!settings.ReturnValueBoolean(this, "preference_hardware_acceleration", false)) {
             getWindow().setFlags(
+                    // I have hardware acceleration turned off by default for this activity
+                    // This'll enable it when the setting allows us to
                     WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                     WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         }
@@ -74,7 +75,6 @@ public class ReadActivity extends AppCompatActivity {
             default:
                 new ReadClick();
                 break;
-
         }
 
 

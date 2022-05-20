@@ -55,6 +55,8 @@ public class ReadScroll implements Readmodes{
         this.data.activity.runOnUiThread(() -> {
 
             RecyclerView recyclerView = this.data.activity.findViewById(R.id.recyclerview_read);
+            recyclerView.setHasFixedSize(true);
+
             RviewAdapterReadScroll adapter = new RviewAdapterReadScroll(this.data.activity, data, "imageview");
             recyclerView.setAdapter(adapter);
 

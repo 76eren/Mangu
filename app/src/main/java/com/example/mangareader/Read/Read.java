@@ -1,4 +1,4 @@
-// This script is just a collection of functions used by the read activity and the readmdodes
+// This script is just a collection of functions used by the read activity and the readmodes
 // The purpose of this script is so don't have to use the same code in 69 different classes
 // but instead can just call this global class with a bunch of static methods
 
@@ -12,13 +12,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.example.mangareader.R;
 import com.github.chrisbanes.photoview.PhotoView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
 
 public class Read {
 
@@ -58,7 +57,6 @@ public class Read {
 
     public static void LoadImage(String url, PhotoView photoView, HashMap<String,String> reqData, Context context) {
 
-
         GlideUrl glideUrl;
         if (reqData != null) {
             // This sets the correct request data, so we can access the image.
@@ -72,12 +70,22 @@ public class Read {
 
         }
 
-        // Sheesh
         Glide.with(context)
                 .load(glideUrl)
                 .timeout(0)
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) // Fixes an issue with the image resizing when using it from cache
+                .placeholder(R.drawable.ic_launcher_background) // Pretty good to have a backup in case everything blows up don't you think?
+
+                // Fixes an issue with the image resizing when using it from cache
+                // Update: apparently this breaks shit so I disabled it.
+                //.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+
+                .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(photoView);
+
+
+
+
+
     }
 }
