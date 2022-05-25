@@ -85,10 +85,8 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
                 Activity activity = (Activity) data.data.context;
                 FavouriteItem favouriteItem = new FavouriteItem(SourceObjectHolder.getSources(activity).getClass().getName(), url, img, data.data.name, (int) now().getEpochSecond());
                 Favourites.checkWhatNeedsToHappen(data.data.context, favouriteItem);
-
             });
         }
-
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------------
         // Textview

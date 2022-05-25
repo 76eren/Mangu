@@ -35,11 +35,7 @@ public class ChaptersActivity extends AppCompatActivity {
         // First we retrieve the url
         Intent intent = getIntent();
 
-        // I'm having trouble with app crashes after inactivity
-        // This is one of my attempts on fixing it
-        // Not sure whether this works or not
-        // The code is kinda a mess rn but it's for a greater cause
-        // EDIT 02-05-2022: this does not work and doesn't fix anything but I cba changing it.
+
         String mangaUrl = "";
         String imageUrl = "";
         String mangaName = "";
@@ -100,8 +96,6 @@ public class ChaptersActivity extends AppCompatActivity {
 
                 Splashscreen.setVisibility(View.INVISIBLE);
             });
-
-
 
         }).start();
 

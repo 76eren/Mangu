@@ -46,9 +46,10 @@ public class ReadClick implements Readmodes{
         Log.d("lol", data.images.get(page).trim());
         this.data.activity.runOnUiThread(() -> {
             Read.LoadImage(data.images.get(page), photoView, this.data.reqData, this.data.activity);
+            this.progress.setText(this.page+1 + "/"+ this.data.images.size() + " - "+ ReadValueHolder.getCurrentChapter(this.data.activity).name);
         });
 
-        this.progress.setText(this.page+1 + "/"+ this.data.images.size() + " - "+ ReadValueHolder.getCurrentChapter(this.data.activity).name);
+
     }
 
     @Override
