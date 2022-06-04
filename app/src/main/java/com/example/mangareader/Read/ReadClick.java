@@ -1,10 +1,14 @@
 package com.example.mangareader.Read;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.mangareader.ListTracker;
 import com.example.mangareader.R;
 import com.example.mangareader.Settings;
@@ -25,8 +29,18 @@ public class ReadClick implements Readmodes{
     private TextView progress;
 
     @Override
+    public void inflate(Activity activity) {
+        LayoutInflater inflater = (LayoutInflater) activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View vieww = inflater.inflate(R.layout.readclick, null);
+        ConstraintLayout constraintLayout = activity.findViewById(R.id.layout_readactivity);
+        constraintLayout.addView(vieww);
+    }
+
+    @Override
     public void Start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
         this.data = new Data(activity, images, sources, reqData);
+
+
         this.photoView = activity.findViewById(R.id.photo_view);
 
         Button next = activity.findViewById(R.id.nextPage);
@@ -37,8 +51,14 @@ public class ReadClick implements Readmodes{
         next.setOnClickListener(view -> ChangePages(1));
         previous.setOnClickListener(view -> ChangePages(-1));
 
-        // Disables widgets we don't need
-        this.data.activity.runOnUiThread(() ->this.data.activity.findViewById(R.id.recyclerview_read).setVisibility(View.GONE));
+        // I'm pretty sure this has no use but I am too scared to remove it
+        previous.setBackgroundColor(Color.TRANSPARENT);
+        float x = 0;
+        previous.setAlpha(x);
+        next.setBackgroundColor(Color.TRANSPARENT);
+        next.setAlpha(x);
+
+
     }
 
     @Override

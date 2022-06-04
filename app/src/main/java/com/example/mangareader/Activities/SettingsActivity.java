@@ -279,11 +279,6 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
     // Its kinda important we do this
     @Override
     public void onBackPressed() {

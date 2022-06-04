@@ -30,7 +30,6 @@ public class ChaptersActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         overridePendingTransition(0,0);
-        //this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // First we retrieve the url
         Intent intent = getIntent();
@@ -75,8 +74,7 @@ public class ChaptersActivity extends AppCompatActivity {
 
 
             // This is future me writing this
-            // I hate myself for writing this
-            // I am so sorry
+            // I am so sorry for what I have done
             List<RviewAdapterChapterlist.Data> data = new ArrayList<>();
             data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass(finalMangaName, "", "the_fucking_star", null, "", this, finalMangaUrl, finalImageUrl)));
             data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", "", "", null, "poster", this, finalMangaUrl, finalImageUrl)));

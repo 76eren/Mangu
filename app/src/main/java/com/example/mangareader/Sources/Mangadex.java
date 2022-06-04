@@ -4,17 +4,18 @@ import android.content.Context;
 import android.util.Log;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.Home.HomeMangaClass;
+import com.example.mangareader.ListTracker;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.google.gson.JsonIOException;
+import okhttp3.*;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Mangadex implements Sources {
     @Override
@@ -211,7 +212,7 @@ public class Mangadex implements Sources {
 
     @Override
     public ArrayList<String> GetImages(ValuesForChapters object, Context context) {
-        String weird_ass_id = object.url.split("/")[4]; // Yes I really am doing it this way. I shouldn't fucking need to do it this way...
+        String weird_ass_id = object.url.split("/")[4]; // Yes I really am doing it this way. I shouldn't need to do it this way...
 
         String apiPage = "https://api.mangadex.org/at-home/server/"+weird_ass_id;
 
@@ -266,113 +267,327 @@ public class Mangadex implements Sources {
         return reqData;
     }
 
-
     @Override
     public void PrepareReadChapter(ReadActivity readActivity) {
         // We don't really need to do anything so we can just leave this empty
     }
 
+    /*
+    / I've been having a lot of trouble with mangadex
+    / Basically getting all of the data from the API is HELL
+    / It's just a very slow process because you have to get multiple APIs for all the necessary data
+    / Things I have implemented to make everything faster:
+    / I am so tired right now.
+    /   - I added a cache that remember all of the manga that have been on the home screen before
+    /   - I added an allow and deny list that remembers which manga have been blocked because they have no chapters
+    /   - I added threading
+    */
     @Override
-    public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity() {
+    public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) throws InterruptedException {
+
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
 
 
-        String URL_SEASONAL = "https://api.mangadex.org/manga?limit=100&offset=0&includes[]=cover_art&includes[]=author&includes[]=artist&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&order[relevance]=desc&ids[]=f721d5ed-7667-4ff5-8a2f-5e46afaea7d6&ids[]=26937e2f-de0e-498f-9295-7eed381b88b3&ids[]=7e2933d2-8587-4c0f-b69c-4233864b96a8&ids[]=151d1758-f871-46ac-8edc-75ab69b688fe&ids[]=b6b87e4d-c1cc-4d0b-8588-df715dd98624&ids[]=563355c9-65cc-4011-8665-15bdc013d00a&ids[]=975f3334-8395-4393-84a2-50fcaccbcdc0&ids[]=24c0f6c0-ec09-4b83-ab52-a855283bb6e3&ids[]=e3d2897c-ca52-4675-ae0b-0af1bfe534dd&ids[]=4e166e00-a9b3-4f17-8075-441b9745715a&ids[]=4c05b1b4-7da6-4e7a-ae39-5cc2363093f0&ids[]=55a96d76-10a2-4c4b-bc60-3a4aa8325e50&ids[]=aa6c76f7-5f5f-46b6-a800-911145f81b9b&ids[]=c8aebcc7-678e-4682-a727-48febbc325fd&ids[]=70fe972b-3c88-4165-b9a5-3db96d6d2c14&ids[]=1ef6ddce-7930-45ae-a335-9a45604b99f7&ids[]=62608082-d81d-4513-af7d-ae3ffe2423d2&ids[]=770c61b9-0ef2-460b-8c25-c10ab23349ce&ids[]=7433b48f-0bb1-4b72-b88d-07b2939db1ff&ids[]=b603c211-d1f9-4145-a2ac-04dcd5f06329&ids[]=10227f74-9134-4262-b01d-8966bc149c4d&ids[]=308f0355-fedb-4861-a4e0-56fe35ae61d3&ids[]=789642f8-ca89-4e4e-8f7b-eee4d17ea08b&ids[]=248525ed-ad1c-4ddc-a834-5d6ce66a3ad2&ids[]=e1d8b192-fa28-4651-bdaf-d4e0d4418ea8&ids[]=dc34064e-3cd4-48c4-9ec5-550845b96ffb&ids[]=6e445564-d9a8-4862-bff1-f4d6be6dba2c&ids[]=808fdeae-5ea2-4839-8f95-8183dfdddddc&ids[]=b30540c7-bde6-4279-9645-a3eddc5c9e97&ids[]=5ce0d9df-a3cc-421e-bc33-796869b6b9f7&ids[]=304ceac3-8cdb-4fe7-acf7-2b6ff7a60613";
-        String URL_LATEST = "https://api.mangadex.org/manga?includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic&ids[]=7960b151-f8a2-4143-bfa7-81e870e0f6a4&ids[]=d86c90aa-7cfb-455a-99f7-37ad6d6a6eb2&ids[]=d7037b2a-874a-4360-8a7b-07f2899152fd&ids[]=885286e9-451e-4def-86f0-9ae0965813ad&ids[]=c5d2eec8-7ed0-4d7d-b54c-b686f30cdcd5&ids[]=425f2ccf-581f-42cf-aed3-c3312fcde926&ids[]=5c9716ba-acdf-4592-bade-c2f1e1a74eae&ids[]=55c89489-90bd-4f14-8340-82bceea97752&ids[]=caae74bc-c055-4f25-883d-102141eeae62&ids[]=b2e70386-d645-4fea-b8d2-e9749ca2f196&ids[]=d2df017b-c003-4de6-9625-4f1fba7aef97&ids[]=cb00804f-49a7-41ad-bc4f-11054c72ead1&ids[]=5678f637-db18-4d81-b416-e871513fc598&ids[]=fbfa798a-5172-4397-b8bd-a5bb0b6f15e9&ids[]=308c43cf-1e52-4e3d-a048-56524aab1b27&ids[]=edaae213-67c7-4a6c-ad5f-141001891741&ids[]=b3a38ab3-2509-4a4c-a4b4-5c9f2e2db0ab&ids[]=6fe280d6-d419-4aae-ba2c-cb3df5ef8da7&ids[]=cc21c9a8-3c44-421d-94a3-10e0b82fdfd3&ids[]=87ffa375-bd2c-49ba-ba0c-6d78ea07c342&ids[]=60449946-9a58-4274-a566-fbe4235414aa&ids[]=683a613e-8aa0-4b98-9a62-4138463d6a49&ids[]=5209fe10-4a14-403f-8837-2ccf8cced253&ids[]=94891715-a109-4f5e-81ef-2bed5fb5bb19&ids[]=8a38a197-949e-4f83-90cd-5ee6b9ed36d3&ids[]=68b03ba8-bf66-436b-88d0-bb8c88114fe8&limit=100";
-        String body;
-        ArrayList<HomeMangaClass> seasonal = new ArrayList<>();
-        ArrayList<HomeMangaClass> latest = new ArrayList<>();
+        String URL_SEASONAL = "https://api.mangadex.org/list/1f43956d-9fe6-478e-9805-aa75ec0ac45e?includes[]=user"; // This might mess up
+        String URL_LATEST =   "https://api.mangadex.org/chapter?limit=100&offset=0&includes[]=user&includes[]=scanlation_group&includes[]=manga&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&order[readableAt]=desc";
+
+        final String[] body = new String[1];
 
         OkHttpClient client = new OkHttpClient();
-        Request request = null;
+        Request request;
 
-        // I fucking hate how I decided to approach this situation
-        // We can use the same code for the latest and the popular (seasonal)
-        // Theres definitely a better way of doing this though...
-        for (int q = 0; q < 2; q++) {
-            if (q == 0) {
-                request = new Request.Builder()
-                        .url(URL_SEASONAL)
-                        .build();
-            }
+        ArrayList<HomeMangaClass> seasonalObjects = new ArrayList<>();
+        ArrayList<HomeMangaClass> latestObjects = new ArrayList<>();
 
-            if (q == 1){
-                request = new Request.Builder()
-                        .url(URL_LATEST)
-                        .build();
-            }
 
-            try (Response response = client.newCall(request).execute()) {
-                body =  response.body().string();
-            }
-            catch (Exception ex) {
-                return null;
-            }
+        // Gets the popular/seasonal manga
+        request = new Request.Builder()
+                .url(URL_SEASONAL)
+                .build();
 
-            // Gets all of the data
-            try {
-                JSONObject jsonObject = new JSONObject(body);
-                JSONArray dataArray = jsonObject.getJSONArray("data");
+        client = new OkHttpClient();
+        Thread t1 = null;
+        Thread t2 = null;
 
-                for (int i = 0; i < dataArray.length(); i++) {
-                    JSONObject x = dataArray.getJSONObject(i);
-                    JSONObject attributes = x.getJSONObject("attributes");
-                    JSONObject title = attributes.getJSONObject("title");
 
-                    String name;
-                    if (!title.has("en")) {
-                        if (title.has("ja")) {
-                            name = title.getString("ja");
-                        }
-                        else {
-                            continue;
-                        }
+
+        try (Response response = client.newCall(request).execute()) {
+            body[0] =  response.body().string();
+
+            JSONObject jsonObject = new JSONObject(body[0]);
+            JSONObject data1 = jsonObject.getJSONObject("data");
+
+            JSONArray relationships = data1.getJSONArray("relationships");
+            for (int i = 0; i < relationships.length(); i++) {
+                int finalI = i;
+                t1 = new Thread(() -> {
+                    JSONObject number = null;
+                    String id = null;
+                    try {
+                        number = relationships.getJSONObject(finalI);
+                        id = number.getString("id");
+
                     }
-                    else {
-                        name = title.getString("en"); // THIS IS THE TITLE OF THE MANGA
+                    catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
 
-                    String id = x.getString("id");
-                    String mangaUrl = "https://mangadex.org/title/"+id; // THE URL TO THE MANGA CHAPTER LIST
+                    String seasonal_url = "https://mangadex.org/title/"+id;
 
-                    JSONArray relationships = x.getJSONArray("relationships");
+                    GetDataHomeActivityImageAndTitle x = GetImageAndTitle(id, seasonal_url, context);
 
-                    String image = "";
-                    for (int y = 0; y < relationships.length(); y++) {
-                        JSONObject z = relationships.getJSONObject(y);
-                        String type = z.getString("type");
-                        if (type.equals("cover_art")) {
-                            JSONObject attributes_two = z.getJSONObject("attributes");
-
-                            String filename = attributes_two.getString("fileName");
-                            image = "https://uploads.mangadex.org/covers/"+id+"/"+filename; // THE URL TO THE IMAGE
-                            break;
-                        }
+                    if (x != null) {
+                        seasonalObjects.add(new HomeMangaClass(x.title, seasonal_url, x.image));
                     }
-
-                    if (q == 0) {
-                        seasonal.add(new HomeMangaClass(name, mangaUrl, image));
-                    }
-                    if (q == 1) {
-                        latest.add(new HomeMangaClass(name, mangaUrl, image));
-                    }
-                }
-
-                if (q == 0) {
-                    data.put("popular", seasonal); // This isn't misleading or anything
-                }
-                if (q == 1) {
-                    data.put("latest", latest);
-                }
+                });
+                t1.start();
             }
-            catch (Exception ex) {
-                Log.d("lol", ex.toString());
-                return null;
-            }
-
+        }
+        catch (Exception exception) {
+            Log.d("lol", exception.toString());
+            return null;
         }
 
 
+    // --------------------------------------------------------------- NOW WE GET THE LATEST MANGA -------------------------------------------------------------------------------------
+        ArrayList<String> ids = new ArrayList<>();
+
+        client = new OkHttpClient();
+
+        request = new Request.Builder()
+                .url(URL_LATEST)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            body[0] =  response.body().string();
+            JSONObject jsonObject = new JSONObject(body[0]);
+            JSONArray data_array = jsonObject.getJSONArray("data");
+
+            for (int i = 0; i < data_array.length(); i++) {
+                try {
+                    int finalI = i;
+                    t2 = new Thread(() -> {
+                        try {
+                            JSONObject number = data_array.getJSONObject(finalI);
+                            JSONArray relationships = number.getJSONArray("relationships");
+                            JSONObject one = relationships.getJSONObject(1);
+                            String id = one.getString("id");
+
+                            if (!ids.contains(id)) {
+                                ids.add(id);
+                                String latestUrl = "https://mangadex.org/title/"+id;
+
+                                GetDataHomeActivityImageAndTitle x = GetImageAndTitle(id, latestUrl, context);
+                                if (x != null) {
+                                    latestObjects.add(new HomeMangaClass(x.title, latestUrl, x.image));
+                                }
+                            }
+                        }
+
+                        catch (Exception ex) {
+                            Log.d("lol", ex.toString());
+                        }
+
+                    });
+                    t2.start();
+                }
+                catch (Exception ignored) {
+
+                }
+            }
+        }
+        catch (Exception ex) {
+            return null;
+        }
+
+
+
+        t1.join();
+        t2.join();
+
+        data.put("popular", seasonalObjects);
+        data.put("latest", latestObjects);
+
         return data;
     }
+
+
+    // I am absolutely NOT happy with the way this is working right now
+    // I really really with to change this in the future but for now this will suffice
+    GetDataHomeActivityImageAndTitle GetImageAndTitle(String id, String url, Context context) {
+
+        Settings settings = new Settings();
+        boolean mangadex_preference_languages = settings.ReturnValueBoolean(context, "mangadex_preference_languages", false);
+
+        ArrayList<String> stuff = new ArrayList<>();
+
+        if (mangadex_preference_languages) {
+            stuff = ListTracker.GetFromList(context, "home_mangadex_cache_multilingual");
+        }
+
+        else {
+            stuff = ListTracker.GetFromList(context, "home_mangadex_cache_english");
+        }
+
+        for (String i : stuff) {
+            try {
+                JSONObject manga = new JSONObject(i);
+
+                if (manga.getString("url").equals(url)) {
+                    Log.d("lol", "Getting manga from database");
+                    return new GetDataHomeActivityImageAndTitle(manga.getString("name"), manga.getString("image"));
+                }
+            }
+
+            catch (Exception exception) {
+                Log.d("lol", exception.toString());
+            }
+        }
+
+        String newUrl = "https://api.mangadex.org/manga/"+id+"?includes[]=artist&includes[]=author&includes[]=cover_art";
+
+        Request request = new Request.Builder()
+                .url(newUrl)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        String body;
+        try (Response response = client.newCall(request).execute()) {
+            body =  response.body().string();
+
+            JSONObject jsonObject = new JSONObject(body);
+            if (jsonObject.has("data")) {
+                JSONObject data1 = jsonObject.getJSONObject("data");
+                JSONObject attributes = data1.getJSONObject("attributes");
+                JSONObject titlee = attributes.getJSONObject("title");
+                String title = "[Unknown title]";
+                if (titlee.has("en")) {
+                    title = titlee.getString("en");
+                }
+                else{
+                    if (titlee.has("ja")) {
+                        title = titlee.getString("ja");
+                    }
+                }
+
+                JSONArray relationships2 = data1.getJSONArray("relationships");
+                JSONObject two = relationships2.getJSONObject(2);
+                attributes = two.getJSONObject("attributes");
+
+                //------------------------------------------------------------------------------------------------------------------------------------------------
+                // Let me explain what is going on here
+                // On mangadex some of the mangas might be empty (I don't know why), they do not contain any chapters
+                // We can hide these "faulty" manga by getting the chapter list and checking the amount of chapters (we check if its bigger than 0)
+                // The problem is that this is a very very slow process
+                // So I came up with the idea to remember which manga are faulty and which are not
+                // We also want to differenciate between the English manga and the non-English manga (see settings)
+                // On top of that we want to keep a cache of manga we have already seen so next time we can zoom through the whole process.
+                // -------------------------------------------------------------------------------------------------------------------------------------------------
+                if (attributes.has("fileName")) {
+
+                    ArrayList<String> allowList;
+                    ArrayList<String> denyList;
+
+                    if (mangadex_preference_languages) {
+                        allowList = ListTracker.GetFromList(context, "allowList_multilingual_mangadex");
+                        denyList = ListTracker.GetFromList(context, "denyList_multilingual_mangadex");
+                    }
+
+                    else {
+                        allowList = ListTracker.GetFromList(context, "allowList_english_mangadex");
+                        denyList = ListTracker.GetFromList(context, "denyList_english_mangadex");
+                    }
+
+
+                    if (allowList.contains(url)) {
+                        String imageUrl = "https://mangadex.org/covers/"+id+"/"+ attributes.getString("fileName");
+
+                        AddMangaToListtracker(mangadex_preference_languages, context, title, id, imageUrl);
+
+                        return new GetDataHomeActivityImageAndTitle(title, imageUrl);
+                    }
+
+                    else {
+                        if (!denyList.contains(url)) {
+                            ArrayList<ValuesForChapters> y = GetChapters(url, context);
+                            if (y.size() != 0) { // Makes sure there is nothing empty but makes the whole process A LOT slower.
+                                String imageUrl = "https://mangadex.org/covers/"+id+"/"+ attributes.getString("fileName");
+
+
+                                if (mangadex_preference_languages) {
+                                    AddMangaToListtracker(true, context, title, id, imageUrl);
+
+                                    ListTracker.AddToList(context, url, "allowList_multilingual_mangadex");
+
+                                }
+
+                                else {
+                                    ListTracker.AddToList(context, url, "allowList_english_mangadex");
+                                    AddMangaToListtracker(false, context, title, id, imageUrl);
+
+                                }
+
+                                return new GetDataHomeActivityImageAndTitle(title, imageUrl);
+
+                            }
+                            else {
+                                if (mangadex_preference_languages) {
+                                    ListTracker.AddToList(context, url, "denyList_multilingual_mangadex");
+                                }
+
+                                else {
+                                    ListTracker.AddToList(context, url, "denyList_english_mangadex");
+
+                                }
+
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        catch (Exception ex) {
+            return null;
+        }
+
+        return null;
+    }
+
+    static class GetDataHomeActivityImageAndTitle {
+        String image;
+        String title;
+
+        GetDataHomeActivityImageAndTitle(String title, String image) {
+            this.image = image;
+            this.title=title;
+        }
+    }
+
+    void AddMangaToListtracker(boolean mangadex_preference_languages, Context context, String title, String id, String imageUrl) {
+        try {
+            if (mangadex_preference_languages) {
+                String jsonString = new JSONObject()
+                        .put("name", title)
+                        .put("url", "https://mangadex.org/title/"+id)
+                        .put("image", imageUrl)
+                        .toString();
+                ListTracker.AddToList(context, jsonString, "home_mangadex_cache_multilingual");
+            }
+
+            else {
+                String jsonString = new JSONObject()
+                        .put("name", title)
+                        .put("url", "https://mangadex.org/title/"+id)
+                        .put("image", imageUrl)
+                        .toString();
+                ListTracker.AddToList(context, jsonString, "home_mangadex_cache_english");
+            }
+        }
+        catch (Exception ex) {
+            Log.d("lol", ex.toString());
+        }
+
+    }
+
 }

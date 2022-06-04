@@ -59,7 +59,7 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // What the fuck????
+        // What the fuck have I done????
 
         Data data = mData.get(position);
         // ----------------------------------------------------------------------------------------------------------------------

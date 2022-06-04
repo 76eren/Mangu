@@ -10,6 +10,7 @@ import java.util.*;
 
 public class Favourites {
     public static void AddToFavourites(Context context, FavouriteItem favouriteItem) {
+
         if (favouriteItem.url != null) {
             SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = sharedpreferences.edit();

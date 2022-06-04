@@ -20,7 +20,7 @@ public interface Sources {
      String getStory(String url);
 
      class ValuesForChapters {
-          // Some of these data aren't neccesary for each source
+          // Some of these data aren't necessary for each source
           // In that case we can just leave theme empty
 
           public String url = "";
@@ -39,6 +39,6 @@ public interface Sources {
 
 
 
-     HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity();
+     HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) throws InterruptedException;
 
 }

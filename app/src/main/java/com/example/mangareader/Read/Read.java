@@ -22,9 +22,8 @@ import java.util.Objects;
 public class Read {
 
     public static void Cache(Activity activity, ArrayList<String> images, HashMap<String, String> reqData) {
-        // This function should cache all of the images right before the reading starts
-        // This function isn't working correctly right now
-        // I am not even sure whether this is the right way to do caching or not
+        // This function should cache all the images right before the reading starts
+        // I have no idea whether this even works or not
 
         TextView cacheStatusUpdate = activity.findViewById(R.id.cache);
 
@@ -76,7 +75,7 @@ public class Read {
                 .placeholder(R.drawable.ic_launcher_background) // Pretty good to have a backup in case everything blows up don't you think?
 
                 // Fixes an issue with the image resizing when using it from cache
-                // Update: apparently this breaks shit so I disabled it.
+                // Update: apparently this breaks stuff so I disabled it.
                 //.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
 
                 .fitCenter()

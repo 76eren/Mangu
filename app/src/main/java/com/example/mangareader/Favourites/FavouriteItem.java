@@ -16,7 +16,7 @@ public class FavouriteItem {
         this.date = date;
     }
 
-    // Needed for sorting UwU
+    // These functions are needed for the sorting
     public int returnDate() {
         return this.date;
     }

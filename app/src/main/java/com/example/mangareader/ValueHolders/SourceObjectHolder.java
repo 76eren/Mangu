@@ -15,10 +15,10 @@ public class SourceObjectHolder {
 
         }
         else {
-            // Pain, suffering, torture, agony, java, discomfort, struggle, affliction
             Settings settings = new Settings();
-            String src = settings.ReturnValueString(activity, "source", "mangakakalot");
+            String src = settings.ReturnValueString(activity, "source", "mangadex");
 
+            // The default value MUST reflect the default value of the root proferences!!!!
             switch (src) {
                 case "mangakakalot":
                     SourceObjectHolder.sources = new Mangakakalot();

@@ -32,17 +32,14 @@ public class FavouritesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         overridePendingTransition(0,0);
 
-        // drawer layout instance to toggle the menu icon to open
-        // drawer and back button to close drawer
+
         drawerLayout = findViewById(R.id.my_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
-        // pass the Open and Close toggle for the drawer layout listener
-        // to toggle the button
+
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        // to make the Navigation drawer icon always appear on the action bar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -61,7 +58,7 @@ public class FavouritesActivity extends AppCompatActivity {
         Settings settings = new Settings();
         ArrayList<FavouriteItem> sortedFavourites = new ArrayList<>(set);
 
-        switch (settings.ReturnValueString(this, "preference_favourites_sort", "preference_favourites_sort_date")) {
+        switch (settings.ReturnValueString(this, "preference_favourites_sort", "preference_favourites_sort_date_up")) {
             case "preference_favourites_sort_date_down":
                 sortedFavourites.sort(Comparator.comparingInt(FavouriteItem::returnDate));
                 break;
@@ -72,11 +69,10 @@ public class FavouritesActivity extends AppCompatActivity {
                 break;
 
             case "preference_favourites_sort_alphabet":
-                    sortedFavourites.sort(Comparator.comparing(FavouriteItem::returnName));
+                sortedFavourites.sort(Comparator.comparing(FavouriteItem::returnName));
                 break;
+
         }
-
-
 
         for (FavouriteItem i : sortedFavourites) {
             if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) {   // Checks whether we want to merge all sources or not
@@ -102,11 +98,6 @@ public class FavouritesActivity extends AppCompatActivity {
 
     }
 
-    // override the onOptionsItemSelected()
-    // function to implement
-    // the item click listener callback
-    // to open and close the navigation
-    // drawer when the icon is clicked
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 

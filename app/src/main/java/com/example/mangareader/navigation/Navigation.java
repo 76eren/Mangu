@@ -16,7 +16,6 @@ public class Navigation {
 
         MenuItem settings = menu.findItem(R.id.nav_settings);
         settings.setOnMenuItemClickListener(item -> {
-            // We go to a new activity of course
             Intent intent = new Intent(activity, SettingsActivity.class);
 
             activity.startActivity(intent);
@@ -26,7 +25,6 @@ public class Navigation {
 
         MenuItem favourites = menu.findItem(R.id.nav_favourites);
         favourites.setOnMenuItemClickListener(item -> {
-            // We go to a new activity of course
             Intent intent = new Intent(activity, FavouritesActivity.class);
             activity.startActivity(intent);
 
@@ -35,7 +33,6 @@ public class Navigation {
 
         MenuItem search = menu.findItem(R.id.nav_search);
         search.setOnMenuItemClickListener(item -> {
-            // We go to a new activity of course
             Intent intent = new Intent(activity, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             activity.startActivity(intent);

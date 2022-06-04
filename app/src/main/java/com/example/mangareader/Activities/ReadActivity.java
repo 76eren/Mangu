@@ -55,15 +55,8 @@ public class ReadActivity extends AppCompatActivity {
         source = SourceObjectHolder.getSources(this);
 
 
-        Button prevClick = findViewById(R.id.prevPage);
-        prevClick.setBackgroundColor(Color.TRANSPARENT);
-        float x = 0;
-        prevClick.setAlpha(x);
-        Button nextClick = findViewById(R.id.nextPage);
-        nextClick.setBackgroundColor(Color.TRANSPARENT);
-        nextClick.setAlpha(x);
-
-        switch (settings.ReturnValueString(this, "read_mode", "click")) {
+        // The default value MUST reflect the default value of the root proferences!!!!
+        switch (settings.ReturnValueString(this, "read_mode", "scroll")) {
             case "click":
                 read = new ReadClick();
                 break;
@@ -77,13 +70,14 @@ public class ReadActivity extends AppCompatActivity {
                 break;
         }
 
+        read.inflate(this);
 
-        source.PrepareReadChapter(this); // Prepares our shit
+
+        source.PrepareReadChapter(this); // Prepares the readchapter
 
         // MAKE THIS CALL ALREADY EXISTING FUNCTIONS IN THE READ CLASS
-        // INSTEAD OF DOING IT ALL OVERT AGIAN
+        // INSTEAD OF DOING IT ALL OVERT AGAIN
         new Thread(() -> {
-
             TextView progress = findViewById(R.id.progress);
 
             // Allows hiding the progress bar
@@ -99,7 +93,7 @@ public class ReadActivity extends AppCompatActivity {
 
             String chapterUrl = ReadValueHolder.getCurrentChapter(this).url;
 
-            // THIS DONT BELONG HERE IDIOT BAKA
+            // THIS DOESN'T BELONG HERE
             TextView cacheTV = findViewById(R.id.cache);
             cacheTV.setVisibility(View.INVISIBLE);
 
@@ -133,7 +127,6 @@ public class ReadActivity extends AppCompatActivity {
             }
             else  {
                 runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
-                // We start our shit
                 read.LoadImage();
             }
 

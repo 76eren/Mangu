@@ -1,8 +1,11 @@
 package com.example.mangareader.Read;
 
 import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.ListTracker;
 import com.example.mangareader.R;
@@ -20,21 +23,27 @@ import java.util.List;
 
 public class ReadScroll implements Readmodes{
     private Data data;
-    private boolean canSwitchTop = false;
-    private boolean canSwitchBottom = false;
+
+
+    @Override
+    public void inflate(Activity activity) {
+        activity.runOnUiThread(() -> {
+
+
+            LayoutInflater inflater = (LayoutInflater) activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.readscroll, null);
+            ConstraintLayout constraintLayout = activity.findViewById(R.id.layout_readactivity);
+            constraintLayout.addView(view);
+
+
+        });
+    }
 
     @Override
     public void Start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
         this.data = new Data(activity, images, sources, reqData);
 
-        // Disables the unnecessary widgets
-        // Honestly I probably should've made a separate layout for each readmode but whatever this works too I guess
-        this.data.activity.runOnUiThread(() -> {
-            this.data.activity.findViewById(R.id.prevPage).setVisibility(View.GONE);
-            this.data.activity.findViewById(R.id.nextPage).setVisibility(View.GONE);
-            this.data.activity.findViewById(R.id.photo_view).setVisibility(View.GONE);
 
-        });
 
     }
 

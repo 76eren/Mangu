@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,9 +41,6 @@ public class HomeActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        // drawer layout instance to toggle the menu icon to open
-        // drawer and back button to close drawer
-
         drawerLayout = findViewById(R.id.my_drawer_layout);
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,
@@ -54,12 +53,9 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-        // pass the Open and Close toggle for the drawer layout listener
-        // to toggle the button
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        // to make the Navigation drawer icon always appear on the action bar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }        actionBarDrawerToggle.syncState();
@@ -74,10 +70,16 @@ public class HomeActivity extends AppCompatActivity {
         navigation.ItemClickSetup(this, menu);
 
         Settings settings = new Settings();
+        TextView waitTV = findViewById(R.id.waitTV);
+        TextView PopularManga = findViewById(R.id.PopularManga);
+        TextView LatestManga = findViewById(R.id.LatestManga);
+
+        PopularManga.setVisibility(View.INVISIBLE);
+        LatestManga.setVisibility(View.INVISIBLE);
 
 
         // We set the correct theme
-        // This is so fucking lazy
+        // This is very lazy
         String theme = settings.ReturnValueString(this, "theme", "default");
         switch (theme) {
             case "default":
@@ -101,9 +103,23 @@ public class HomeActivity extends AppCompatActivity {
         // Now we get all of the data for the activity
         Sources source = SourceObjectHolder.getSources(this); // This both sets and gets the source
 
+        // This shouldn't be here.
+        if (source.getClass().getName().equals("com.example.mangareader.Sources.Mangadex")) {
+            waitTV.setText("Loading the home screen. This may take a while the first time");
+        }
+
+
         Context context = this;
         new Thread(() -> {
-            HashMap<String, ArrayList<HomeMangaClass>> homeData = source.GetDataHomeActivity();
+            HashMap<String, ArrayList<HomeMangaClass>> homeData = null;
+
+            try {
+                homeData = source.GetDataHomeActivity(this);
+            }
+            catch (InterruptedException e) {
+                homeData = null;
+            }
+
             if (homeData != null) {
                 ArrayList<HomeMangaClass> latest = homeData.get("latest");
 
@@ -140,12 +156,16 @@ public class HomeActivity extends AppCompatActivity {
                         RviewAdapterHome adapter = new RviewAdapterHome(context, dataPopular, "imageview");
                         recyclerView.setAdapter(adapter);
 
+
+                        PopularManga.setVisibility(View.VISIBLE);
+                        LatestManga.setVisibility(View.VISIBLE);
+                        waitTV.setVisibility(View.GONE);
+
+
                     });
                 }
 
             }
-
-
 
 
         }).start();

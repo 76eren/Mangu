@@ -57,7 +57,7 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
             intent.putExtra("mangaName", data.favouriteItem.mangaName);
 
             // Sets the correct source
-            // This is unncecesary if we have to merge manga option turned off by the way
+            // This is unnecessary if we have to merge manga option turned off by the way
             try {
                 Class c;
                 c = Class.forName(data.favouriteItem.source);

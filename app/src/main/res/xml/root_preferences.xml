@@ -10,10 +10,10 @@
                 android:title="Read mode">
 
             <CheckBoxPreference
-                    android:defaultValue="true"
+                    android:defaultValue="false"
                     android:title="Click" android:key="preference_readmode_click"/>
             <CheckBoxPreference
-                    android:defaultValue="false"
+                    android:defaultValue="true"
                     android:title="[BETA] scroll" android:key="preference_readmode_scroll"/>
         </PreferenceCategory>
     </PreferenceCategory>
@@ -21,10 +21,10 @@
             android:title="Select source">
 
         <CheckBoxPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:title="Mangakakalot" android:key="preference_source_mangakakalot"/>
         <CheckBoxPreference
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="Mangadex" android:key="preference_source_mangadex"/>
     </PreferenceCategory>
     <PreferenceCategory
@@ -39,10 +39,10 @@
             android:title="Favourites item sorting">
 
         <CheckBoxPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:title="Sort by date (ascending)" android:key="preference_favourites_sort_date_down"/>
         <CheckBoxPreference
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="Sort by date (descending)" android:key="preference_favourites_sort_date_up"/>
         <CheckBoxPreference
                 android:defaultValue="false"
@@ -55,7 +55,7 @@
                 android:defaultValue="false"
                 android:title="Use server two" android:key="preference_ServerMangakakalot"/>
         <SwitchPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:title="Show server switch button when reading" android:key="preference_mangakakalot_showButon"/>
     </PreferenceCategory>
     <PreferenceCategory
@@ -83,7 +83,7 @@
 
         <SwitchPreference
                 android:defaultValue="false"
-                android:title="Disable hardware acceleration. This is not neccesary unless the app is crashing when reading a manga (that contains VERY large images). "
+                android:title="[DEPRECIATED] \nDisable hardware acceleration. This is not neccesary unless the app is crashing when reading a manga (that contains VERY large images). "
                 android:key="preference_hardware_acceleration"/>
     </PreferenceCategory>
 

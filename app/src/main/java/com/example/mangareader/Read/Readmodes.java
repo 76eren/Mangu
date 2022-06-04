@@ -24,6 +24,9 @@ public interface Readmodes {
 
 
     }
+
+    void inflate(Activity activity); // Inflates the necessary widgets from a xml file
+
     void Start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData);
 
 

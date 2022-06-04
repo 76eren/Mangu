@@ -1,10 +1,13 @@
 package com.example.mangareader.Sources;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.Home.HomeMangaClass;
 import com.example.mangareader.Settings;
@@ -52,9 +55,9 @@ public class Mangakakalot implements Sources {
                 Elements y = x.select("a");
                 Elements z = y.select("img");
 
-                String img = z.attr("src"); // A link to the sussy baka image
-                String link = y.attr("href"); // A link to the sussy baka chapter list
-                String name = z.attr("alt"); // The manga's sussy baka name
+                String img = z.attr("src"); // A link to the image
+                String link = y.attr("href"); // A link to the chapter list
+                String name = z.attr("alt"); // The manga's name
 
                 // Now we need to add our stuff to the arrays
 
@@ -64,7 +67,6 @@ public class Mangakakalot implements Sources {
                 object.url = link;
 
                 objectsPicScreen.add(object);
-
 
             }
 
@@ -85,9 +87,7 @@ public class Mangakakalot implements Sources {
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                     .get();
 
-            // FUCK MANGAKAKLOT FOR PULLING THIS SHIT ON ME HONESTLY
             // MANGAKAKLOT USES MULTIPLE WEBSITES
-
             Elements x = null;
             if (url.toLowerCase().contains("readmanganato.com")) {
                 x = doc.getElementsByClass("panel-story-info-description"); // This also contains data we don't need
@@ -220,7 +220,6 @@ public class Mangakakalot implements Sources {
                 Collections.reverse(links);
 
                 for (int i = 0; i < names.size();i++) {
-                    //NameUrl.put(names.get(i), links.get(i));
                     ValuesForChapters valuesForChapters = new ValuesForChapters();
                     valuesForChapters.name = names.get(i);
                     valuesForChapters.url = links.get(i);
@@ -230,7 +229,7 @@ public class Mangakakalot implements Sources {
                 return data;
             }
             catch (Exception error) {
-                return new ArrayList<ValuesForChapters>(); // We return an empty hashmap - previously null
+                return new ArrayList<ValuesForChapters>();
             }
 
     }
@@ -238,7 +237,6 @@ public class Mangakakalot implements Sources {
 
     // THis part is in charge of getting the manga images
     // Mangakakalot has two servers
-
     @Override
     public ArrayList<String> GetImages(ValuesForChapters object, Context context) {
         Document doc;
@@ -330,8 +328,16 @@ public class Mangakakalot implements Sources {
     public void PrepareReadChapter(ReadActivity readActivity) {
         Settings settings = new Settings();
         if (!settings.ReturnValueBoolean(readActivity.getApplicationContext(), "preference_mangakakalot_showButon", false)) {
+            Log.d("lol", "NOPE");
             return;
         }
+
+        // We inflate the button
+        LayoutInflater inflater = (LayoutInflater) readActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View vieww = inflater.inflate(R.layout.switch_server, null);
+        ConstraintLayout constraintLayout = readActivity.findViewById(R.id.layout_readactivity);
+        constraintLayout.addView(vieww);
+
 
         // We do the epic code here for our not so epic switch
         SwitchCompat toggle = readActivity.findViewById(R.id.switchServer);
@@ -356,7 +362,7 @@ public class Mangakakalot implements Sources {
     }
 
     @Override
-    public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity() {
+    public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) {
         String URL = "https://mangakakalot.com/"; // We want to scrape directly from mangakakalot
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
 
