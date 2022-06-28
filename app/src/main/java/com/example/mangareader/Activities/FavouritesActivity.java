@@ -30,12 +30,10 @@ public class FavouritesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_favourites);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        overridePendingTransition(0,0);
-
+        overridePendingTransition(0, 0);
 
         drawerLayout = findViewById(R.id.my_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -48,7 +46,6 @@ public class FavouritesActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navMenu);
         Menu menu = navigationView.getMenu();
         navigation.ItemClickSetup(this, menu);
-
 
         List<RviewAdapterFavourites.Data> data = new ArrayList<>();
 
@@ -75,26 +72,22 @@ public class FavouritesActivity extends AppCompatActivity {
         }
 
         for (FavouriteItem i : sortedFavourites) {
-            if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) {   // Checks whether we want to merge all sources or not
+            if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) { // Checks whether we
+                // want to merge all
+                // sources or not
                 // Does not merge all sources together
                 if (i.source.equals(SourceObjectHolder.getSources(this).getClass().getName())) {
                     data.add(new RviewAdapterFavourites.Data(this, i));
                 }
-            }
-            else {
+            } else {
                 // Merges all sources together
                 data.add(new RviewAdapterFavourites.Data(this, i));
             }
         }
 
-
-
         RecyclerView recyclerView = findViewById(R.id.rview);
         RviewAdapterFavourites adapter = new RviewAdapterFavourites(this, data, "imageview");
         recyclerView.setAdapter(adapter);
-
-
-
 
     }
 

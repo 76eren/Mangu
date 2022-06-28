@@ -25,7 +25,7 @@ public interface Sources {
 
           public String url = "";
           public String name = "";
-          public HashMap<String,String> extraData = new HashMap<>();
+          public HashMap<String, String> extraData = new HashMap<>();
 
      }
 
@@ -33,11 +33,9 @@ public interface Sources {
 
      ArrayList<String> GetImages(ValuesForChapters object, Context context);
 
-     HashMap<String,String> GetRequestData(String url);
+     HashMap<String, String> GetRequestData(String url);
 
      void PrepareReadChapter(ReadActivity readActivity);
-
-
 
      HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) throws InterruptedException;
 

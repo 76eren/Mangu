@@ -19,9 +19,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.*;
 
-
-
-public class ReadClick implements Readmodes{
+public class ReadClick implements Readmodes {
     private Data data;
     private PhotoView photoView;
     int page = 0;
@@ -30,7 +28,8 @@ public class ReadClick implements Readmodes{
 
     @Override
     public void inflate(Activity activity) {
-        LayoutInflater inflater = (LayoutInflater) activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) activity.getApplicationContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View vieww = inflater.inflate(R.layout.readclick, null);
         ConstraintLayout constraintLayout = activity.findViewById(R.id.layout_readactivity);
         constraintLayout.addView(vieww);
@@ -39,7 +38,6 @@ public class ReadClick implements Readmodes{
     @Override
     public void Start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
         this.data = new Data(activity, images, sources, reqData);
-
 
         this.photoView = activity.findViewById(R.id.photo_view);
 
@@ -58,7 +56,6 @@ public class ReadClick implements Readmodes{
         next.setBackgroundColor(Color.TRANSPARENT);
         next.setAlpha(x);
 
-
     }
 
     @Override
@@ -66,9 +63,9 @@ public class ReadClick implements Readmodes{
         Log.d("lol", data.images.get(page).trim());
         this.data.activity.runOnUiThread(() -> {
             Read.LoadImage(data.images.get(page), photoView, this.data.reqData, this.data.activity);
-            this.progress.setText(this.page+1 + "/"+ this.data.images.size() + " - "+ ReadValueHolder.getCurrentChapter(this.data.activity).name);
+            this.progress.setText(this.page + 1 + "/" + this.data.images.size() + " - "
+                    + ReadValueHolder.getCurrentChapter(this.data.activity).name);
         });
-
 
     }
 
@@ -88,7 +85,6 @@ public class ReadClick implements Readmodes{
             return;
         }
 
-
         LoadImage();
     }
 
@@ -103,10 +99,9 @@ public class ReadClick implements Readmodes{
                 break;
             }
         }
-        if (direction == 1 && index+1 != ReadValueHolder.ChaptersActivityData.size()) {
+        if (direction == 1 && index + 1 != ReadValueHolder.ChaptersActivityData.size()) {
             index++;
-        }
-        else if (direction == -1 && index-1 > -1) {
+        } else if (direction == -1 && index - 1 > -1) {
             index--;
         }
 
@@ -115,12 +110,13 @@ public class ReadClick implements Readmodes{
 
         new Thread(() -> {
 
-            ArrayList<String> images = SourceObjectHolder.getSources(this.data.activity).GetImages(newChapter, this.data.activity);
+            ArrayList<String> images = SourceObjectHolder.getSources(this.data.activity).GetImages(newChapter,
+                    this.data.activity);
             images.removeAll(Collections.singleton(null));
             images.removeAll(Collections.singleton(""));
             // We want to edit a few values
             this.data.images = images;
-            this.page=0;
+            this.page = 0;
 
             // Adds our chapter to the history
             ListTracker.AddToList(this.data.activity, ReadValueHolder.currentChapter.url, "History");
@@ -132,10 +128,8 @@ public class ReadClick implements Readmodes{
 
             LoadImage();
 
-
         }).start();
 
     }
-
 
 }

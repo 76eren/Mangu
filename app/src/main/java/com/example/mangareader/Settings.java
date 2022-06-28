@@ -12,6 +12,7 @@ public class Settings {
         return sharedpreferences.getString(value, defaultVal);
 
     }
+
     public void AssignValueString(Context context, String key, String value) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -25,6 +26,7 @@ public class Settings {
         return sharedpreferences.getBoolean(value, defaultVal);
 
     }
+
     public void AssignValueBoolean(Context context, String key, Boolean value) {
 
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -32,10 +34,6 @@ public class Settings {
         editor.putBoolean(key, value);
         editor.apply();
 
-
     }
-
-
-
 
 }

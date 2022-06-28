@@ -33,8 +33,7 @@ public class ReadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        overridePendingTransition(0,0);
-
+        overridePendingTransition(0, 0);
 
         ListTracker.AddToList(this, ReadValueHolder.getCurrentChapter(this).url, "History");
 
@@ -48,12 +47,9 @@ public class ReadActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         }
 
-
         setContentView(R.layout.activity_read);
 
-
         source = SourceObjectHolder.getSources(this);
-
 
         // The default value MUST reflect the default value of the root proferences!!!!
         switch (settings.ReturnValueString(this, "read_mode", "scroll")) {
@@ -72,7 +68,6 @@ public class ReadActivity extends AppCompatActivity {
 
         read.inflate(this);
 
-
         source.PrepareReadChapter(this); // Prepares the readchapter
 
         // MAKE THIS CALL ALREADY EXISTING FUNCTIONS IN THE READ CLASS
@@ -84,8 +79,7 @@ public class ReadActivity extends AppCompatActivity {
             progress.setOnClickListener(view -> {
                 if (progress.getAlpha() == 0) {
                     progress.setAlpha(DesignValueHolder.ProgressBarAlphaWhenEnabled);
-                }
-                else {
+                } else {
                     progress.setAlpha(0);
                 }
 
@@ -97,9 +91,25 @@ public class ReadActivity extends AppCompatActivity {
             TextView cacheTV = findViewById(R.id.cache);
             cacheTV.setVisibility(View.INVISIBLE);
 
-
             ArrayList<String> imgs;
-            imgs = SourceObjectHolder.getSources(this).GetImages(ReadValueHolder.getCurrentChapter(this), this); // I am not really a big fan of calling ReadValueHolder rather than having a local variable. It's whatever though
+            imgs = SourceObjectHolder.getSources(this).GetImages(ReadValueHolder.getCurrentChapter(this), this); // I am
+            // not
+            // really
+            // a
+            // big
+            // fan
+            // of
+            // calling
+            // ReadValueHolder
+            // rather
+            // than
+            // having
+            // a
+            // local
+            // variable.
+            // It's
+            // whatever
+            // though
 
             // This usually runs after inactivity.....
             if (imgs == null) {
@@ -109,11 +119,10 @@ public class ReadActivity extends AppCompatActivity {
                 return;
             }
 
-
             imgs.removeAll(Collections.singleton(null));
             imgs.removeAll(Collections.singleton(""));
 
-            HashMap<String,String> reqData = source.GetRequestData(chapterUrl);
+            HashMap<String, String> reqData = source.GetRequestData(chapterUrl);
             read.Start(this, imgs, source, reqData); // We assign our context to read
 
             // Caching
@@ -124,13 +133,10 @@ public class ReadActivity extends AppCompatActivity {
                 Read.Cache(this, imgs, reqData);
 
                 read.LoadImage();
-            }
-            else  {
+            } else {
                 runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
                 read.LoadImage();
             }
-
-
 
         }).start();
 

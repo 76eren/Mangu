@@ -19,12 +19,11 @@ import com.example.mangareader.ValueHolders.SourceObjectHolder;
 
 import java.util.List;
 
-public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFavourites.ViewHolder>{
+public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFavourites.ViewHolder> {
 
     private final List<RviewAdapterFavourites.Data> mData;
     private final LayoutInflater mInflater;
     private RviewAdapterFavourites.ItemClickListener mClickListener;
-
 
     // data is passed into the constructor
     public RviewAdapterFavourites(Context context, List<RviewAdapterFavourites.Data> data, String type) {
@@ -41,7 +40,6 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
 
         return new RviewAdapterFavourites.ViewHolder(view);
     }
-
 
     @Override
     public void onBindViewHolder(RviewAdapterFavourites.ViewHolder holder, int position) {
@@ -64,28 +62,24 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
                 Object obj = c.newInstance();
                 Sources source = Sources.class.cast(obj);
                 SourceObjectHolder.sources = source;
-            }
-            catch (Exception ex) {
-                // I dont't think our program is going to like kill itself if this here errors out
+            } catch (Exception ex) {
+                // I dont't think our program is going to like kill itself if this here errors
+                // out
                 // This shouldn't throw an error though
                 Log.d("lol", ex.toString());
             }
 
             data.context.startActivity(intent);
 
-
-
         });
 
     }
-
 
     // total number of rows
     @Override
     public int getItemCount() {
         return mData.size();
     }
-
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -105,7 +99,8 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -120,10 +115,9 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
 
         public Data(Context context, FavouriteItem favouriteItem) {
             this.context = context;
-            this.favouriteItem=favouriteItem;
+            this.favouriteItem = favouriteItem;
         }
 
     }
-
 
 }

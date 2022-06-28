@@ -13,14 +13,15 @@ public class RviewChapterlistDataClass {
     public String mangaUrl;
     public String imageUrl;
 
-    public RviewChapterlistDataClass(String name, String tv, String image, Sources.ValuesForChapters btn, String extraData, Context context, String mangaUrl, String imageUrl) {
+    public RviewChapterlistDataClass(String name, String tv, String image, Sources.ValuesForChapters btn,
+                                     String extraData, Context context, String mangaUrl, String imageUrl) {
         this.name = name;
         this.tv = tv;
         this.image = image;
         this.btn = btn;
         this.extraData = extraData;
         this.context = context;
-        this.mangaUrl=mangaUrl;
-        this.imageUrl=imageUrl;
+        this.mangaUrl = mangaUrl;
+        this.imageUrl = imageUrl;
     }
 }

@@ -14,8 +14,4 @@ public class DesignValueHolder {
     // Readactivity
     public static float ProgressBarAlphaWhenEnabled = 0.8f;
 
-
-
-
-
 }

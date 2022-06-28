@@ -24,18 +24,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterReadScroll.ViewHolder>{
+public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterReadScroll.ViewHolder> {
     private final List<Data> mData;
     private final LayoutInflater mInflater;
     private RviewAdapterFavourites.ItemClickListener mClickListener;
-
 
     // data is passed into the constructor
     public RviewAdapterReadScroll(Context context, List<RviewAdapterReadScroll.Data> mData, String type) {
         this.mData = mData;
         this.mInflater = LayoutInflater.from(context);
     }
-
 
     // inflates the row layout from xml when needed
     @Override
@@ -55,8 +53,7 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
             holder.photoView.setVisibility(View.VISIBLE);
             Read.LoadImage(data.url, holder.photoView, data.reqData, data.context);
 
-        }
-        else {
+        } else {
             holder.button.setVisibility(View.VISIBLE);
             holder.button.setText(data.button);
             holder.button.setOnClickListener(view -> {
@@ -94,7 +91,8 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -106,22 +104,18 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
     public static class Data {
         Context context;
         String url;
-        HashMap<String,String> reqData;
+        HashMap<String, String> reqData;
         String button;
         ReadScroll readScroll;
 
-
-
-        public Data(Context context, String url, HashMap<String,String> reqData, String buton, ReadScroll readScroll) {
+        public Data(Context context, String url, HashMap<String, String> reqData, String buton, ReadScroll readScroll) {
             this.context = context;
             this.url = url;
-            this.reqData=reqData;
-            this.button=buton;
-            this.readScroll=readScroll;
+            this.reqData = reqData;
+            this.button = buton;
+            this.readScroll = readScroll;
         }
 
-
     }
-
 
 }

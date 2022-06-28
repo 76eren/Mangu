@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class HomeActivity extends AppCompatActivity {
 
     public DrawerLayout drawerLayout;
@@ -37,7 +36,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -48,19 +47,15 @@ public class HomeActivity extends AppCompatActivity {
                 R.string.nav_open,
                 R.string.nav_close);
 
-
         actionBarDrawerToggle.syncState();
-
-
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }        actionBarDrawerToggle.syncState();
-
-
+        }
+        actionBarDrawerToggle.syncState();
 
         Navigation navigation = new Navigation();
         actionBarDrawerToggle.syncState();
@@ -76,7 +71,6 @@ public class HomeActivity extends AppCompatActivity {
 
         PopularManga.setVisibility(View.INVISIBLE);
         LatestManga.setVisibility(View.INVISIBLE);
-
 
         // We set the correct theme
         // This is very lazy
@@ -99,7 +93,6 @@ public class HomeActivity extends AppCompatActivity {
                 break;
         }
 
-
         // Now we get all of the data for the activity
         Sources source = SourceObjectHolder.getSources(this); // This both sets and gets the source
 
@@ -108,15 +101,13 @@ public class HomeActivity extends AppCompatActivity {
             waitTV.setText("Loading the home screen. This may take a while the first time");
         }
 
-
         Context context = this;
         new Thread(() -> {
             HashMap<String, ArrayList<HomeMangaClass>> homeData = null;
 
             try {
                 homeData = source.GetDataHomeActivity(this);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 homeData = null;
             }
 
@@ -138,7 +129,6 @@ public class HomeActivity extends AppCompatActivity {
                         RviewAdapterHome adapter = new RviewAdapterHome(context, data, "imageview");
                         recyclerView.setAdapter(adapter);
 
-
                     });
                 }
 
@@ -156,20 +146,16 @@ public class HomeActivity extends AppCompatActivity {
                         RviewAdapterHome adapter = new RviewAdapterHome(context, dataPopular, "imageview");
                         recyclerView.setAdapter(adapter);
 
-
                         PopularManga.setVisibility(View.VISIBLE);
                         LatestManga.setVisibility(View.VISIBLE);
                         waitTV.setVisibility(View.GONE);
-
 
                     });
                 }
 
             }
 
-
         }).start();
-
 
     }
 
@@ -181,7 +167,5 @@ public class HomeActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }

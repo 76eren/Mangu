@@ -19,7 +19,8 @@ public class Favourites {
             Gson gson = new Gson();
 
             // we get our current favourite items
-            LinkedHashSet<String> favs = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
+            LinkedHashSet<String> favs = new LinkedHashSet<>(
+                    sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
             // We create a FavouriteItem object and convert it to a json
             String json = gson.toJson(favouriteItem);
@@ -42,12 +43,16 @@ public class Favourites {
         Gson gson = new Gson();
 
         // Our set containing strings
-        LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
+        LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(
+                sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
-        // I can't just remove the already existing object because not all values are the same
-        // e.g the time value will always be different because the time we're calling this function is different from the time the manga was added
+        // I can't just remove the already existing object because not all values are
+        // the same
+        // e.g the time value will always be different because the time we're calling
+        // this function is different from the time the manga was added
         // Instead we can just check for urls
-        // Not all values are the same so we cannot just make an identical object and remove the identical object from the String array
+        // Not all values are the same so we cannot just make an identical object and
+        // remove the identical object from the String array
         // it is a bit annoying but hey it is what it is....
 
         // Also I am dumb
@@ -63,7 +68,6 @@ public class Favourites {
         editor.putStringSet("Favourites", favsSetStrings);
         editor.apply();
 
-
     }
 
     public static void checkWhatNeedsToHappen(Context context, FavouriteItem favouriteItem) {
@@ -72,7 +76,8 @@ public class Favourites {
         Gson gson = new Gson();
 
         // Our set containing strings
-        LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
+        LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(
+                sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
         boolean found = false;
 
@@ -81,31 +86,31 @@ public class Favourites {
             FavouriteItem y = gson.fromJson(i, FavouriteItem.class);
 
             if (favouriteItem.url.equals(y.url)) {
-                found=true;
+                found = true;
                 break;
             }
         }
 
         if (found) {
             RemoveFromFavourites(context, favouriteItem);
-            Toast.makeText(context, "Removed manga from favourites",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Removed manga from favourites", Toast.LENGTH_SHORT).show();
 
         }
 
         else {
             AddToFavourites(context, favouriteItem);
-            Toast.makeText(context, "Added manga to favourites",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Added manga to favourites", Toast.LENGTH_SHORT).show();
 
         }
 
-
     }
 
-    public static LinkedHashSet<FavouriteItem> GetFavourites (Context context) {
+    public static LinkedHashSet<FavouriteItem> GetFavourites(Context context) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         // This is our hashset with Strings
-        LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
+        LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(
+                sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
         // Now we need to convert it to a hashset with Objects
         LinkedHashSet<FavouriteItem> setObjects = new LinkedHashSet<>();
@@ -116,7 +121,6 @@ public class Favourites {
         }
 
         return setObjects;
-
 
     }
 }

@@ -1,6 +1,5 @@
 package com.example.mangareader.Favourites;
 
-
 public class FavouriteItem {
     public String source;
     public String url = "";
@@ -24,6 +23,5 @@ public class FavouriteItem {
     public String returnName() {
         return this.mangaName;
     }
-
 
 }

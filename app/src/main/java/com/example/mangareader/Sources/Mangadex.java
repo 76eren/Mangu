@@ -23,7 +23,7 @@ public class Mangadex implements Sources {
             String body;
             OkHttpClient client = new OkHttpClient();
             try (Response response = client.newCall(request).execute()) {
-                body =  response.body().string();
+                body = response.body().string();
                 return body;
             }
         }
@@ -35,19 +35,19 @@ public class Mangadex implements Sources {
 
     }
 
-
     @Override
     public ArrayList<SearchValues> CollectDataPicScreen(String manga) {
         // We first need to call the API
         OkHttpClient client = new OkHttpClient();
         try {
-            String URL = "https://api.mangadex.org/manga?title="+manga+"&includes[]=cover_art&order[relevance]=desc";
+            String URL = "https://api.mangadex.org/manga?title=" + manga
+                    + "&includes[]=cover_art&order[relevance]=desc";
 
             String body = GetBody(URL);
 
-
             if (!"".equals(body) && body != null) {
-                // We'll store the objects with data inside this arraylist and return it later on
+                // We'll store the objects with data inside this arraylist and return it later
+                // on
                 ArrayList<SearchValues> values = new ArrayList<>();
 
                 JSONObject jsonObject = new JSONObject(body);
@@ -57,7 +57,7 @@ public class Mangadex implements Sources {
                     try {
                         JSONObject ob = jsonArray.getJSONObject(i);
                         String id = ob.getString("id");
-                        String url = "https://mangadex.org/title/"+id; // ADD THIS
+                        String url = "https://mangadex.org/title/" + id; // ADD THIS
 
                         JSONObject x = ob.getJSONObject("attributes");
                         JSONObject y = x.getJSONObject("title");
@@ -69,7 +69,7 @@ public class Mangadex implements Sources {
                         JSONObject two = relationships.getJSONObject(2);
                         JSONObject attributes = two.getJSONObject("attributes");
                         String fileName = attributes.getString("fileName");
-                        String image = "https://uploads.mangadex.org/covers/"+id+"/"+fileName;
+                        String image = "https://uploads.mangadex.org/covers/" + id + "/" + fileName;
 
                         SearchValues obbie = new SearchValues();
                         obbie.name = title;
@@ -94,7 +94,6 @@ public class Mangadex implements Sources {
         catch (Exception ignored) {
         }
 
-
         return null;
     }
 
@@ -102,7 +101,8 @@ public class Mangadex implements Sources {
     public String getStory(String url) {
         // An example:
         // https://api.mangadex.org/manga/7bcdff73-7d1a-4c88-8501-58b027e1632c?includes[]=artist&includes[]=author&includes[]=cover_art
-        String apiPage = "https://api.mangadex.org/manga/"+url.split("title/")[1]+"?includes[]=artist&includes[]=author&includes[]=cover_art";
+        String apiPage = "https://api.mangadex.org/manga/" + url.split("title/")[1]
+                + "?includes[]=artist&includes[]=author&includes[]=cover_art";
 
         String body = GetBody(apiPage);
 
@@ -117,13 +117,11 @@ public class Mangadex implements Sources {
             JSONObject description = attributes.getJSONObject("description");
             return description.getString("en");
 
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "Nothing";
         }
 
     }
-
 
     private ArrayList<String> GetApiPageForChapters(String url, Context context) {
         String id = url.split("title/")[1];
@@ -133,7 +131,7 @@ public class Mangadex implements Sources {
 
         String initialPage = "";
         if (allow_multiple_languages) {
-            initialPage = "https://api.mangadex.org/manga/"+id+"/feed?limit=500" +
+            initialPage = "https://api.mangadex.org/manga/" + id + "/feed?limit=500" +
                     "&includes[]=scanlation_group" +
                     "&includes[]=user" +
                     "&order[volume]=asc" +
@@ -143,9 +141,8 @@ public class Mangadex implements Sources {
                     "&contentRating[]=suggestive" +
                     "&contentRating[]=erotica" +
                     "&contentRating[]=pornographic";
-        }
-        else {
-            initialPage = "https://api.mangadex.org/manga/"+id+"/feed?limit=500" +
+        } else {
+            initialPage = "https://api.mangadex.org/manga/" + id + "/feed?limit=500" +
                     "&includes[]=scanlation_group" +
                     "&includes[]=user" +
                     "&order[volume]=asc" +
@@ -158,16 +155,14 @@ public class Mangadex implements Sources {
                     "&translatedLanguage[]=en";
         }
 
-
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(initialPage)
                 .build();
         String body;
         try (Response response = client.newCall(request).execute()) {
-            body =  response.body().string();
-        }
-        catch (Exception ex) {
+            body = response.body().string();
+        } catch (Exception ex) {
             Log.d("lol", ex.toString());
             return null;
         }
@@ -176,13 +171,13 @@ public class Mangadex implements Sources {
 
             try {
                 JSONObject jsonObject = new JSONObject(body);
-                double total  = jsonObject.getDouble("total");
+                double total = jsonObject.getDouble("total");
 
                 if (total > 500) {
                     double amount = Math.ceil(total / 500);
                     for (int i = 0; i < amount; i++) {
                         StringBuilder page = new StringBuilder();
-                        page.append("https://api.mangadex.org/manga/"+id+"/feed?limit=500" +
+                        page.append("https://api.mangadex.org/manga/" + id + "/feed?limit=500" +
                                 "&includes[]=scanlation_group" +
                                 "&includes[]=user" +
                                 "&order[volume]=asc" +
@@ -213,9 +208,8 @@ public class Mangadex implements Sources {
         return links;
     }
 
-
     @Override
-    public ArrayList<ValuesForChapters> GetChapters(String url, Context context){
+    public ArrayList<ValuesForChapters> GetChapters(String url, Context context) {
 
         ArrayList<String> api_pages = GetApiPageForChapters(url, context);
         ArrayList<ValuesForChapters> data = new ArrayList<>();
@@ -224,14 +218,13 @@ public class Mangadex implements Sources {
 
                 String body = GetBody(apiPage);
 
-
                 Settings settings = new Settings();
-                Boolean allow_multiple_languages = settings.ReturnValueBoolean(context, "mangadex_preference_languages", false);
+                Boolean allow_multiple_languages = settings.ReturnValueBoolean(context, "mangadex_preference_languages",
+                        false);
 
                 if (!"".equals(body) && body != null) {
                     try {
                         JSONObject jsonObject = new JSONObject(body);
-
 
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -242,47 +235,40 @@ public class Mangadex implements Sources {
                             ValuesForChapters valuesForChapters = new ValuesForChapters();
 
                             if (allow_multiple_languages) {
-                                valuesForChapters.name = "["+attributes.getString("translatedLanguage")+"]"+ " Chapter "+attributes.getString("chapter");
-                            }
-                            else {
-                                valuesForChapters.name = "Chapter "+attributes.getString("chapter");
+                                valuesForChapters.name = "[" + attributes.getString("translatedLanguage") + "]"
+                                        + " Chapter " + attributes.getString("chapter");
+                            } else {
+                                valuesForChapters.name = "Chapter " + attributes.getString("chapter");
                             }
 
-                            valuesForChapters.url = "https://mangadex.org/chapter/"+ob.getString("id");
-
+                            valuesForChapters.url = "https://mangadex.org/chapter/" + ob.getString("id");
 
                             // Fixing bugs? No couldn't be me. I work around these things
                             if (!attributes.getString("chapter").toLowerCase(Locale.ROOT).equals("null")) {
                                 data.add(valuesForChapters);
                             }
                         }
-                    }
-                    catch (Exception ex) {
+                    } catch (Exception ex) {
                         Log.d("lol", ex.toString());
 
                     }
                 }
             }
 
-
-        }
-        else {
+        } else {
             return null;
         }
 
-
-
-
         return data;
-
 
     }
 
     @Override
     public ArrayList<String> GetImages(ValuesForChapters object, Context context) {
-        String weird_ass_id = object.url.split("/")[4]; // Yes I really am doing it this way. I shouldn't need to do it this way...
+        String weird_ass_id = object.url.split("/")[4]; // Yes I really am doing it this way. I shouldn't need to do it
+        // this way...
 
-        String apiPage = "https://api.mangadex.org/at-home/server/"+weird_ass_id;
+        String apiPage = "https://api.mangadex.org/at-home/server/" + weird_ass_id;
 
         String body = GetBody(apiPage);
 
@@ -297,10 +283,11 @@ public class Mangadex implements Sources {
             JSONArray data = chapter.getJSONArray("data");
             ArrayList<String> images = new ArrayList<>();
             for (int i = 0; i < data.length(); i++) {
-                // This is what the url should look like: https://uploads.mangadex.org/data/1e092cc6e1300bcf18dd5a5f5c8c1f56/x3-abccc0fe61f05aa5e3dca13515f14dc8291d63e7a4a6e6e59294dab7813dac42.jpg
+                // This is what the url should look like:
+                // https://uploads.mangadex.org/data/1e092cc6e1300bcf18dd5a5f5c8c1f56/x3-abccc0fe61f05aa5e3dca13515f14dc8291d63e7a4a6e6e59294dab7813dac42.jpg
 
                 String url_last_part = data.getString(i);
-                String url = "https://uploads.mangadex.org/data/"+hash+"/"+url_last_part;
+                String url = "https://uploads.mangadex.org/data/" + hash + "/" + url_last_part;
                 Log.d("lol", url);
                 images.add(url);
 
@@ -308,22 +295,19 @@ public class Mangadex implements Sources {
 
             return images;
 
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.d("lol", ex.toString());
         }
-
 
         return null;
     }
 
     @Override
     public HashMap<String, String> GetRequestData(String url) {
-        HashMap<String,String> reqData = new HashMap<>();
+        HashMap<String, String> reqData = new HashMap<>();
         reqData.put("host", "uploads.mangadex.org");
         reqData.put("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0");
         reqData.put("Referer", "");
-
 
         return reqData;
     }
@@ -334,23 +318,28 @@ public class Mangadex implements Sources {
     }
 
     /*
-    / I've been having a lot of trouble with mangadex
-    / Basically getting all of the data from the API is HELL
-    / It's just a very slow process because you have to get multiple APIs for all the necessary data
-    / Things I have implemented to make everything faster:
-    / I am so tired right now.
-    /   - I added a cache that remember all of the manga that have been on the home screen before
-    /   - I added an allow and deny list that remembers which manga have been blocked because they have no chapters
-    /   - I added threading
-    */
+     * / I've been having a lot of trouble with mangadex
+     * / Basically getting all of the data from the API is HELL
+     * / It's just a very slow process because you have to get multiple APIs for all
+     * the necessary data
+     * / Things I have implemented to make everything faster:
+     * / I am so tired right now.
+     * / - I added a cache that remember all of the manga that have been on the home
+     * screen before
+     * / - I added an allow and deny list that remembers which manga have been
+     * blocked because they have no chapters
+     * / - I added threading
+     */
     @Override
     public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) throws InterruptedException {
 
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
 
-
-        String URL_SEASONAL = "https://api.mangadex.org/list/1f43956d-9fe6-478e-9805-aa75ec0ac45e?includes[]=user"; // This might mess up
-        String URL_LATEST =   "https://api.mangadex.org/chapter?limit=100&offset=0&includes[]=user&includes[]=scanlation_group&includes[]=manga&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&order[readableAt]=desc";
+        String URL_SEASONAL = "https://api.mangadex.org/list/1f43956d-9fe6-478e-9805-aa75ec0ac45e?includes[]=user"; // This
+        // might
+        // mess
+        // up
+        String URL_LATEST = "https://api.mangadex.org/chapter?limit=100&offset=0&includes[]=user&includes[]=scanlation_group&includes[]=manga&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&order[readableAt]=desc";
 
         final String[] body = new String[1];
 
@@ -359,7 +348,6 @@ public class Mangadex implements Sources {
 
         ArrayList<HomeMangaClass> seasonalObjects = new ArrayList<>();
         ArrayList<HomeMangaClass> latestObjects = new ArrayList<>();
-
 
         // Gets the popular/seasonal manga
         request = new Request.Builder()
@@ -370,10 +358,8 @@ public class Mangadex implements Sources {
         Thread t1 = null;
         Thread t2 = null;
 
-
-
         try (Response response = client.newCall(request).execute()) {
-            body[0] =  response.body().string();
+            body[0] = response.body().string();
 
             JSONObject jsonObject = new JSONObject(body[0]);
             JSONObject data1 = jsonObject.getJSONObject("data");
@@ -388,12 +374,11 @@ public class Mangadex implements Sources {
                         number = relationships.getJSONObject(finalI);
                         id = number.getString("id");
 
-                    }
-                    catch (JSONException e) {
+                    } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
 
-                    String seasonal_url = "https://mangadex.org/title/"+id;
+                    String seasonal_url = "https://mangadex.org/title/" + id;
 
                     GetDataHomeActivityImageAndTitle x = GetImageAndTitle(id, seasonal_url, context);
 
@@ -403,14 +388,14 @@ public class Mangadex implements Sources {
                 });
                 t1.start();
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             Log.d("lol", exception.toString());
             return null;
         }
 
-
-    // --------------------------------------------------------------- NOW WE GET THE LATEST MANGA -------------------------------------------------------------------------------------
+        // --------------------------------------------------------------- NOW WE GET
+        // THE LATEST MANGA
+        // -------------------------------------------------------------------------------------
         ArrayList<String> ids = new ArrayList<>();
 
         client = new OkHttpClient();
@@ -419,7 +404,7 @@ public class Mangadex implements Sources {
                 .url(URL_LATEST)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            body[0] =  response.body().string();
+            body[0] = response.body().string();
             JSONObject jsonObject = new JSONObject(body[0]);
             JSONArray data_array = jsonObject.getJSONArray("data");
 
@@ -435,7 +420,7 @@ public class Mangadex implements Sources {
 
                             if (!ids.contains(id)) {
                                 ids.add(id);
-                                String latestUrl = "https://mangadex.org/title/"+id;
+                                String latestUrl = "https://mangadex.org/title/" + id;
 
                                 GetDataHomeActivityImageAndTitle x = GetImageAndTitle(id, latestUrl, context);
                                 if (x != null) {
@@ -450,16 +435,13 @@ public class Mangadex implements Sources {
 
                     });
                     t2.start();
-                }
-                catch (Exception ignored) {
+                } catch (Exception ignored) {
 
                 }
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
-
 
         t1.join();
         t2.join();
@@ -470,13 +452,14 @@ public class Mangadex implements Sources {
         return data;
     }
 
-
     // I am absolutely NOT happy with the way this is working right now
-    // I really really with to change this in the future but for now this will suffice
+    // I really really with to change this in the future but for now this will
+    // suffice
     GetDataHomeActivityImageAndTitle GetImageAndTitle(String id, String url, Context context) {
 
         Settings settings = new Settings();
-        boolean mangadex_preference_languages = settings.ReturnValueBoolean(context, "mangadex_preference_languages", false);
+        boolean mangadex_preference_languages = settings.ReturnValueBoolean(context, "mangadex_preference_languages",
+                false);
 
         ArrayList<String> stuff = new ArrayList<>();
 
@@ -502,7 +485,8 @@ public class Mangadex implements Sources {
             }
         }
 
-        String newUrl = "https://api.mangadex.org/manga/"+id+"?includes[]=artist&includes[]=author&includes[]=cover_art";
+        String newUrl = "https://api.mangadex.org/manga/" + id
+                + "?includes[]=artist&includes[]=author&includes[]=cover_art";
 
         Request request = new Request.Builder()
                 .url(newUrl)
@@ -511,7 +495,7 @@ public class Mangadex implements Sources {
         OkHttpClient client = new OkHttpClient();
         String body;
         try (Response response = client.newCall(request).execute()) {
-            body =  response.body().string();
+            body = response.body().string();
 
             JSONObject jsonObject = new JSONObject(body);
             if (jsonObject.has("data")) {
@@ -521,8 +505,7 @@ public class Mangadex implements Sources {
                 String title = "[Unknown title]";
                 if (titlee.has("en")) {
                     title = titlee.getString("en");
-                }
-                else{
+                } else {
                     if (titlee.has("ja")) {
                         title = titlee.getString("ja");
                     }
@@ -532,14 +515,19 @@ public class Mangadex implements Sources {
                 JSONObject two = relationships2.getJSONObject(2);
                 attributes = two.getJSONObject("attributes");
 
-                //------------------------------------------------------------------------------------------------------------------------------------------------
+                // ------------------------------------------------------------------------------------------------------------------------------------------------
                 // Let me explain what is going on here
-                // On mangadex some of the mangas might be empty (I don't know why), they do not contain any chapters
-                // We can hide these "faulty" manga by getting the chapter list and checking the amount of chapters (we check if it's bigger than 0)
+                // On mangadex some of the mangas might be empty (I don't know why), they do not
+                // contain any chapters
+                // We can hide these "faulty" manga by getting the chapter list and checking the
+                // amount of chapters (we check if it's bigger than 0)
                 // The problem is that this is a very very slow process
-                // So I came up with the idea to remember which manga are faulty and which are not
-                // We also want to differentiate between the English manga and the non-English manga (see settings)
-                // On top of that we want to keep a cache of manga we have already seen so next time we can zoom through the whole process.
+                // So I came up with the idea to remember which manga are faulty and which are
+                // not
+                // We also want to differentiate between the English manga and the non-English
+                // manga (see settings)
+                // On top of that we want to keep a cache of manga we have already seen so next
+                // time we can zoom through the whole process.
                 // -------------------------------------------------------------------------------------------------------------------------------------------------
                 if (attributes.has("fileName")) {
 
@@ -556,9 +544,8 @@ public class Mangadex implements Sources {
                         denyList = ListTracker.GetFromList(context, "denyList_english_mangadex");
                     }
 
-
                     if (allowList.contains(url)) {
-                        String imageUrl = "https://mangadex.org/covers/"+id+"/"+ attributes.getString("fileName");
+                        String imageUrl = "https://mangadex.org/covers/" + id + "/" + attributes.getString("fileName");
 
                         AddMangaToListtracker(mangadex_preference_languages, context, title, id, imageUrl);
 
@@ -568,9 +555,10 @@ public class Mangadex implements Sources {
                     else {
                         if (!denyList.contains(url)) {
                             ArrayList<ValuesForChapters> y = GetChapters(url, context);
-                            if (y.size() != 0) { // Makes sure there is nothing empty but makes the whole process A LOT slower.
-                                String imageUrl = "https://mangadex.org/covers/"+id+"/"+ attributes.getString("fileName");
-
+                            if (y.size() != 0) { // Makes sure there is nothing empty but makes the whole process A LOT
+                                // slower.
+                                String imageUrl = "https://mangadex.org/covers/" + id + "/"
+                                        + attributes.getString("fileName");
 
                                 if (mangadex_preference_languages) {
                                     AddMangaToListtracker(true, context, title, id, imageUrl);
@@ -587,8 +575,7 @@ public class Mangadex implements Sources {
 
                                 return new GetDataHomeActivityImageAndTitle(title, imageUrl);
 
-                            }
-                            else {
+                            } else {
                                 if (mangadex_preference_languages) {
                                     ListTracker.AddToList(context, url, "denyList_multilingual_mangadex");
                                 }
@@ -619,15 +606,16 @@ public class Mangadex implements Sources {
 
         GetDataHomeActivityImageAndTitle(String title, String image) {
             this.image = image;
-            this.title=title;
+            this.title = title;
         }
     }
 
-    void AddMangaToListtracker(boolean mangadex_preference_languages, Context context, String title, String id, String imageUrl) {
+    void AddMangaToListtracker(boolean mangadex_preference_languages, Context context, String title, String id,
+                               String imageUrl) {
         try {
             String jsonString = new JSONObject()
                     .put("name", title)
-                    .put("url", "https://mangadex.org/title/"+id)
+                    .put("url", "https://mangadex.org/title/" + id)
                     .put("image", imageUrl)
                     .toString();
 
@@ -638,13 +626,10 @@ public class Mangadex implements Sources {
             else {
                 ListTracker.AddToList(context, jsonString, "home_mangadex_cache_english");
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.d("lol", ex.toString());
         }
 
     }
 
 }
-
-

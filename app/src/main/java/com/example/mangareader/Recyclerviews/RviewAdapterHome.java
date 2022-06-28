@@ -25,13 +25,11 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
     private final LayoutInflater mInflater;
     private RviewAdapterFavourites.ItemClickListener mClickListener;
 
-
     // data is passed into the constructor
     public RviewAdapterHome(Context context, List<RviewAdapterHome.Data> mData, String type) {
         this.mData = mData;
         this.mInflater = LayoutInflater.from(context);
     }
-
 
     // inflates the row layout from xml when needed
     @NonNull
@@ -56,7 +54,6 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
             data.context.startActivity(intent);
         });
 
-
     }
 
     // total number of rows
@@ -80,7 +77,8 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -92,8 +90,6 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
     public static class Data {
         Context context;
         HomeMangaClass homeMangaClassObject;
-
-
 
         public Data(Context context, HomeMangaClass homeMangaClassObject) {
             this.context = context;

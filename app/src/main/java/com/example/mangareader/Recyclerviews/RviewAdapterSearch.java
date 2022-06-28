@@ -23,7 +23,6 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
     private final LayoutInflater mInflater;
     private RviewAdapterFavourites.ItemClickListener mClickListener;
 
-
     // data is passed into the constructor
     public RviewAdapterSearch(Context context, List<RviewAdapterSearch.Data> data, String type) {
         this.mInflater = LayoutInflater.from(context);
@@ -40,11 +39,9 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
         return new RviewAdapterSearch.ViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(RviewAdapterSearch.ViewHolder holder, int position) {
         RviewAdapterSearch.Data data = mData.get(position);
-
 
         holder.textView.setVisibility(View.VISIBLE);
         holder.image.setVisibility(View.VISIBLE);
@@ -61,11 +58,9 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
 
             data.context.startActivity(intent);
 
-
         });
 
     }
-
 
     // total number of rows
     @Override
@@ -90,7 +85,8 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -102,8 +98,6 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
     public static class Data {
         Context context;
         Sources.SearchValues searchValues;
-
-
 
         public Data(Context context, Sources.SearchValues searchValues) {
             this.context = context;
