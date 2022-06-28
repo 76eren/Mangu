@@ -72,9 +72,8 @@ public class FavouritesActivity extends AppCompatActivity {
         }
 
         for (FavouriteItem i : sortedFavourites) {
-            if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) { // Checks whether we
-                // want to merge all
-                // sources or not
+            if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) {
+                // Checks whether we want to merge all sources or not
                 // Does not merge all sources together
                 if (i.source.equals(SourceObjectHolder.getSources(this).getClass().getName())) {
                     data.add(new RviewAdapterFavourites.Data(this, i));

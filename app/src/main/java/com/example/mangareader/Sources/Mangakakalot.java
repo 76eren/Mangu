@@ -172,14 +172,10 @@ public class Mangakakalot implements Sources {
                         if (get) {
                             try {
                                 // We remove some clutter form the title
-                                title = title.replace(":", ""); // This will fix things like "chapter 6:" 6: != double
-                                // but 6 is
-
+                                title = title.replace(":", ""); // This will fix things like "chapter 6:" 6: != double  but 6 is
                                 // We want to check whether x in chapter x is a number or not
-                                // We can do this by converting it to a double and trying to make it shot out an
-                                // error
-                                Double.parseDouble(title.split("\\s+")[index + 1]); // this is here to shoot out an
-                                // error
+                                // We can do this by converting it to a double and trying to make it shot out an error
+                                Double.parseDouble(title.split("\\s+")[index + 1]); // this is here to shoot out an error
 
                                 sb.append(x);
                                 sb.append(" ");
@@ -243,8 +239,7 @@ public class Mangakakalot implements Sources {
                 String CookieSiteLocation;
 
                 // To get to server two, we need certain cookies
-                // There are two cookie sites based on whether the url is mangakakalot or
-                // readmanganato
+                // There are two cookie sites based on whether the url is mangakakalot or readmanganato
                 if (url.toLowerCase().contains("readmanganato")) {
                     CookieSiteLocation = "https://readmanganato.com/content_server_s2";
                 } else {
@@ -348,8 +343,8 @@ public class Mangakakalot implements Sources {
     @Override
     public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) {
         String URL;
-        URL = "https://mangakakalot.com/"; // This has been changed to mangakakalot.com/bbl, but I don't know if they'll
-        // ever turn it back to mangakakalot.com so I added a check
+        // This has been changed to mangakakalot.com/bbl, but I don't know if they'll ever turn it back to mangakakalot.com so I added a check
+        URL = "https://mangakakalot.com/";
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
         Document doc;
         try {
@@ -358,8 +353,7 @@ public class Mangakakalot implements Sources {
                     .get();
 
             // This checks whether it's mangakakalot.com/bbl or mangakakalot.com
-            // I don't know when or if the devs will change it back to mangakakalot.com so I
-            // added a check for it
+            // I don't know when or if the devs will change it back to mangakakalot.com so I added a check for it
             if (doc.getElementsByClass("bt-official-gotohome").text().trim().equalsIgnoreCase(">> VIEW FULL SITE <<")) {
                 URL = "https://mangakakalot.com/kkl";
                 doc = Jsoup.connect(URL)
@@ -404,8 +398,7 @@ public class Mangakakalot implements Sources {
                     // Do I really have to fucking iterate like this?
                     for (Element p : item) {
                         Elements slide_caption = p.getElementsByClass("slide-caption");
-                        name = slide_caption.text().split("Chapter")[0]; // The title; we use .split to get rid of the
-                        // chapter in the title
+                        name = slide_caption.text().split("Chapter")[0]; // The title; we use .split to get rid of the chapter in the title
 
                         Elements a = p.select("a");
                         url = a.attr("href");

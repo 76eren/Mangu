@@ -46,15 +46,10 @@ public class Favourites {
         LinkedHashSet<String> favsSetStrings = new LinkedHashSet<>(
                 sharedpreferences.getStringSet("Favourites", new LinkedHashSet<>()));
 
-        // I can't just remove the already existing object because not all values are
-        // the same
-        // e.g the time value will always be different because the time we're calling
-        // this function is different from the time the manga was added
+        // I can't just remove the already existing object because not all values are the same
+        // e.g the time value will always be different because the time we're calling this function is different from the time the manga was added
         // Instead we can just check for urls
-        // Not all values are the same so we cannot just make an identical object and
-        // remove the identical object from the String array
-        // it is a bit annoying but hey it is what it is....
-
+        // Not all values are the same so we cannot just make an identical object and remove the identical object from the String array it is a bit annoying but hey it is what it is....
         // Also I am dumb
 
         for (String i : favsSetStrings) {

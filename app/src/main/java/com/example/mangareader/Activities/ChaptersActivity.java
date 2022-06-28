@@ -38,8 +38,8 @@ public class ChaptersActivity extends AppCompatActivity {
         String imageUrl = "";
         String mangaName = "";
         try {
-            mangaUrl = intent.getStringExtra("url"); // THE URL TO THE MANGA PAGE; e.g
-            // https://readmanganato.com/manga-oa966309
+            mangaUrl = intent.getStringExtra("url");
+            // THE URL TO THE MANGA PAGE; e.g https://readmanganato.com/manga-oa966309
             imageUrl = intent.getStringExtra("img");
             mangaName = intent.getStringExtra("mangaName");
         } catch (Exception ex) {

@@ -46,8 +46,7 @@ public class Mangadex implements Sources {
             String body = GetBody(URL);
 
             if (!"".equals(body) && body != null) {
-                // We'll store the objects with data inside this arraylist and return it later
-                // on
+                // We'll store the objects with data inside this arraylist and return it later on
                 ArrayList<SearchValues> values = new ArrayList<>();
 
                 JSONObject jsonObject = new JSONObject(body);
@@ -265,8 +264,7 @@ public class Mangadex implements Sources {
 
     @Override
     public ArrayList<String> GetImages(ValuesForChapters object, Context context) {
-        String weird_ass_id = object.url.split("/")[4]; // Yes I really am doing it this way. I shouldn't need to do it
-        // this way...
+        String weird_ass_id = object.url.split("/")[4]; // Yes I really am doing it this way. I shouldn't need to do it this way...
 
         String apiPage = "https://api.mangadex.org/at-home/server/" + weird_ass_id;
 
@@ -335,10 +333,8 @@ public class Mangadex implements Sources {
 
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
 
-        String URL_SEASONAL = "https://api.mangadex.org/list/1f43956d-9fe6-478e-9805-aa75ec0ac45e?includes[]=user"; // This
-        // might
-        // mess
-        // up
+        String URL_SEASONAL = "https://api.mangadex.org/list/1f43956d-9fe6-478e-9805-aa75ec0ac45e?includes[]=user";
+        // This might mess up
         String URL_LATEST = "https://api.mangadex.org/chapter?limit=100&offset=0&includes[]=user&includes[]=scanlation_group&includes[]=manga&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&order[readableAt]=desc";
 
         final String[] body = new String[1];
@@ -453,8 +449,7 @@ public class Mangadex implements Sources {
     }
 
     // I am absolutely NOT happy with the way this is working right now
-    // I really really with to change this in the future but for now this will
-    // suffice
+    // I really really with to change this in the future but for now this will suffice
     GetDataHomeActivityImageAndTitle GetImageAndTitle(String id, String url, Context context) {
 
         Settings settings = new Settings();

@@ -92,24 +92,9 @@ public class ReadActivity extends AppCompatActivity {
             cacheTV.setVisibility(View.INVISIBLE);
 
             ArrayList<String> imgs;
-            imgs = SourceObjectHolder.getSources(this).GetImages(ReadValueHolder.getCurrentChapter(this), this); // I am
-            // not
-            // really
-            // a
-            // big
-            // fan
-            // of
-            // calling
-            // ReadValueHolder
-            // rather
-            // than
-            // having
-            // a
-            // local
-            // variable.
-            // It's
-            // whatever
-            // though
+            // I am not really a big fan of calling ReadValueHolder rather than having a local variable.
+            // It's whatever though
+            imgs = SourceObjectHolder.getSources(this).GetImages(ReadValueHolder.getCurrentChapter(this), this);
 
             // This usually runs after inactivity.....
             if (imgs == null) {

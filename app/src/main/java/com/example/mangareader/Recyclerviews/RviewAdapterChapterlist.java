@@ -104,11 +104,10 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
             holder.myButton.setVisibility(View.VISIBLE);
             holder.myButton.setText(data.data.btn.name);
 
-            if (!data.data.extraData.equals("")) { // Ehh I am not happy with checking for an empty string tbh
-
+            if (!data.data.extraData.equals("")) {
+                // Ehh I am not happy with checking for an empty string tbh
                 // I am not very happy with the way we keep track of our history
-                // I'd rather have the ListTracker class keep a bunch of objects rather than
-                // Strings
+                // I'd rather have the ListTracker class keep a bunch of objects rather than Strings
                 ArrayList<String> history = ListTracker.GetFromList(data.data.context, "History");
                 for (String i : history) {
                     if (i.equals(data.data.btn.url)) {

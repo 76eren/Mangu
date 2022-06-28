@@ -63,8 +63,7 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
                 Sources source = Sources.class.cast(obj);
                 SourceObjectHolder.sources = source;
             } catch (Exception ex) {
-                // I dont't think our program is going to like kill itself if this here errors
-                // out
+                // I dont't think our program is going to like kill itself if this here errors out
                 // This shouldn't throw an error though
                 Log.d("lol", ex.toString());
             }
