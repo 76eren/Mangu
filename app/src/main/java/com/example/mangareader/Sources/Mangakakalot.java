@@ -441,10 +441,6 @@ public class Mangakakalot implements Sources {
         return data;
     }
 
-    void a()
-    {
-
-    }
 
 
 }
