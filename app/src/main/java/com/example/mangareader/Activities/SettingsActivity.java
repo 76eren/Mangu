@@ -275,6 +275,18 @@ public class SettingsActivity extends AppCompatActivity {
                 return false;
             });
 
+            // ----------------------------------------------------------------------------------------
+            // preference_image_size
+            SwitchPreference preference_image_size = getPreferenceScreen().findPreference("preference_hardware_acceleration");
+            preference_image_size.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (preference_image_size.isChecked()) {
+                    preference_image_size.setChecked(false);
+                }
+                else {
+                    preference_image_size.setChecked(true);
+                }
+                return false;
+            });
 
         }
     }
@@ -282,7 +294,7 @@ public class SettingsActivity extends AppCompatActivity {
     // Its kinda important we do this
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }
 

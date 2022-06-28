@@ -11,7 +11,6 @@ import com.example.mangareader.Activities.SettingsActivity;
 import com.example.mangareader.R;
 
 public class Navigation {
-
     public void ItemClickSetup(Activity activity, Menu menu) {
 
         MenuItem settings = menu.findItem(R.id.nav_settings);

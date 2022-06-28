@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        overridePendingTransition(0,0); // fuck that animation
+        overridePendingTransition(0,0);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 

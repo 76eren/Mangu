@@ -12,7 +12,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.mangareader.R;
+import com.example.mangareader.Settings;
 import com.github.chrisbanes.photoview.PhotoView;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,8 +48,6 @@ public class Read {
                     .apply(options)
                     .preload();
 
-
-
             index++;
         }
 
@@ -69,22 +69,27 @@ public class Read {
 
         }
 
-        Glide.with(context)
-                .load(glideUrl)
-                .timeout(0)
-                .placeholder(R.drawable.ic_launcher_background) // Pretty good to have a backup in case everything blows up don't you think?
 
-                // Fixes an issue with the image resizing when using it from cache
-                // Update: apparently this breaks stuff so I disabled it.
-                //.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+        Settings settings = new Settings();
+        if (!settings.ReturnValueBoolean(context, "preference_image_size", false)) {
+            Glide.with(context)
+                    .load(glideUrl)
+                    .timeout(0)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .fitCenter()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(photoView);
+        }
 
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(photoView);
-
-
-
-
+        else {
+            Glide.with(context)
+                    .load(glideUrl)
+                    .timeout(0)
+                    .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(photoView);
+        }
 
     }
 }

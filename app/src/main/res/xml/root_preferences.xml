@@ -79,12 +79,16 @@
                 android:title="Light mode" android:key="preference_theme_light"/>
     </PreferenceCategory>
     <PreferenceCategory
-            android:title="[DANGER ZONE]">
+            android:title="DANGER ZONE">
 
         <SwitchPreference
                 android:defaultValue="false"
-                android:title="[DEPRECIATED] \nDisable hardware acceleration. This is not neccesary unless the app is crashing when reading a manga (that contains VERY large images). "
+                android:title="[Disable hardware acceleration]\n\nUse this if loading images in it's original size crashes the app for you."
                 android:key="preference_hardware_acceleration"/>
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="[Load image in original size]\n\nThis may be usefully if images in a manga a blurry.\n\nIn certain scenarios this may cause the app to crash when loading certain images. If this does happen try disabling hardware acceleration"
+                android:key="preference_image_size"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

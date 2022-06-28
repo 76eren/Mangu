@@ -363,14 +363,25 @@ public class Mangakakalot implements Sources {
 
     @Override
     public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) {
-        String URL = "https://mangakakalot.com/"; // We want to scrape directly from mangakakalot
+        String URL;
+        URL = "https://mangakakalot.com/"; // This has been changed to mangakakalot.com/bbl, but I don't know if they'll ever turn it back to mangakakalot.com so I added a check
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
-
         Document doc;
         try {
             doc = Jsoup.connect(URL)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0")
                     .get();
+
+            // This checks whether it's mangakakalot.com/bbl or mangakakalot.com
+            // I don't know when or if the devs will change it back to mangakakalot.com so I added a check for it
+            if (doc.getElementsByClass("bt-official-gotohome").text().trim().equalsIgnoreCase(">> VIEW FULL SITE <<"))
+            {
+                URL = "https://mangakakalot.com/kkl";
+                doc = Jsoup.connect(URL)
+                        .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0")
+                        .get();
+            }
+
 
             // This gets the latest manga
             ArrayList<HomeMangaClass> latest = new ArrayList<>();
@@ -420,8 +431,6 @@ public class Mangakakalot implements Sources {
             }
             data.put("popular", popular);
 
-
-
         }
 
         catch (Exception exception) {
@@ -430,6 +439,11 @@ public class Mangakakalot implements Sources {
         }
 
         return data;
+    }
+
+    void a()
+    {
+
     }
 
 
