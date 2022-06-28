@@ -20,21 +20,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-
-public class ReadScroll implements Readmodes{
+public class ReadScroll implements Readmodes {
     private Data data;
-
 
     @Override
     public void inflate(Activity activity) {
         activity.runOnUiThread(() -> {
 
-
-            LayoutInflater inflater = (LayoutInflater) activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) activity.getApplicationContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.readscroll, null);
             ConstraintLayout constraintLayout = activity.findViewById(R.id.layout_readactivity);
             constraintLayout.addView(view);
-
 
         });
     }
@@ -42,8 +39,6 @@ public class ReadScroll implements Readmodes{
     @Override
     public void Start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
         this.data = new Data(activity, images, sources, reqData);
-
-
 
     }
 
@@ -59,7 +54,6 @@ public class ReadScroll implements Readmodes{
             data.add(new RviewAdapterReadScroll.Data(this.data.activity, i, this.data.reqData, "", this));
         }
         data.add(new RviewAdapterReadScroll.Data(this.data.activity, "", new HashMap<>(), "Next chapter", this));
-
 
         this.data.activity.runOnUiThread(() -> {
 
@@ -90,11 +84,9 @@ public class ReadScroll implements Readmodes{
             }
         }
 
-
-        if (direction == 1 &&  index+1 != ReadValueHolder.ChaptersActivityData.size()) {
+        if (direction == 1 && index + 1 != ReadValueHolder.ChaptersActivityData.size()) {
             index++;
-        }
-        else if (direction == -1 && index-1 > -1) {
+        } else if (direction == -1 && index - 1 > -1) {
             index--;
         }
 
@@ -119,12 +111,7 @@ public class ReadScroll implements Readmodes{
 
             LoadImage();
 
-
         }).start();
-
 
     }
 }
-
-
-

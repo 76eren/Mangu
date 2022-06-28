@@ -37,7 +37,6 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
         context.startActivity(readIntent);
     }
 
-
     // data is passed into the constructor
     public RviewAdapterChapterlist(Context context, List<Data> data, String type) {
         this.mInflater = LayoutInflater.from(context);
@@ -67,7 +66,6 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
         holder.star.setVisibility(View.GONE);
         holder.myImageView.setVisibility(View.GONE);
 
-
         if (data.data.extraData.equals("poster")) {
             holder.myImageView.setVisibility(View.VISIBLE);
             Glide.with(this.ctx).load(data.data.imageUrl).into(holder.myImageView);
@@ -83,7 +81,9 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
 
                 // adds or removes from favourites
                 Activity activity = (Activity) data.data.context;
-                FavouriteItem favouriteItem = new FavouriteItem(SourceObjectHolder.getSources(activity).getClass().getName(), url, img, data.data.name, (int) now().getEpochSecond());
+                FavouriteItem favouriteItem = new FavouriteItem(
+                        SourceObjectHolder.getSources(activity).getClass().getName(), url, img, data.data.name,
+                        (int) now().getEpochSecond());
                 Favourites.checkWhatNeedsToHappen(data.data.context, favouriteItem);
             });
         }
@@ -94,8 +94,7 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
 
         if (!data.data.tv.equals("")) {
             holder.myTextView.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             holder.myTextView.setVisibility(View.GONE);
         }
 
@@ -105,9 +104,8 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
             holder.myButton.setVisibility(View.VISIBLE);
             holder.myButton.setText(data.data.btn.name);
 
-
-            if (!data.data.extraData.equals("")) { // Ehh I am not happy with checking for an empty string tbh
-
+            if (!data.data.extraData.equals("")) {
+                // Ehh I am not happy with checking for an empty string tbh
                 // I am not very happy with the way we keep track of our history
                 // I'd rather have the ListTracker class keep a bunch of objects rather than Strings
                 ArrayList<String> history = ListTracker.GetFromList(data.data.context, "History");
@@ -115,8 +113,7 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
                     if (i.equals(data.data.btn.url)) {
                         holder.myButton.setTextColor(DesignValueHolder.ButtonTextColorRead);
                         break;
-                    }
-                    else {
+                    } else {
                         // We need this so it wont break.
                         holder.myButton.setTextColor(DesignValueHolder.ButtonTextColorNotRead);
                     }
@@ -130,7 +127,7 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
 
                 });
 
-                //Button long hold
+                // Button long hold
                 // This is kinda broken atm
                 holder.myButton.setOnLongClickListener(v -> {
                     ListTracker.ChangeStatus(data.data.context, data.data.btn.url, "History");
@@ -140,8 +137,7 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
                         if (i.equals(data.data.btn.url)) {
                             holder.myButton.setTextColor(DesignValueHolder.ButtonTextColorRead);
                             break;
-                        }
-                        else {
+                        } else {
                             holder.myButton.setTextColor(DesignValueHolder.ButtonTextColorNotRead);
                         }
                     }
@@ -149,10 +145,8 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
                     return true;
                 });
 
-
             }
-        }
-        else {
+        } else {
             holder.myButton.setVisibility(View.GONE);
         }
     }
@@ -162,7 +156,6 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
     public int getItemCount() {
         return mData.size();
     }
-
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -183,7 +176,8 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -203,4 +197,3 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
     }
 
 }
-

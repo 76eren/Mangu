@@ -12,7 +12,6 @@ import com.example.mangareader.Recyclerviews.RviewAdapterSearch;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
 
-
 // I DID USE CODE FROM HERE: https://www.geeksforgeeks.org/navigation-drawer-in-android/
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -23,20 +22,17 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity {
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        overridePendingTransition(0,0); // fuck that animation
-
+        overridePendingTransition(0, 0); // fuck that animation
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -53,15 +49,14 @@ public class MainActivity extends AppCompatActivity {
         Menu menu = navigationView.getMenu();
         navigation.ItemClickSetup(this, menu);
 
-
-
         TextView search = findViewById(R.id.search);
         Context context = this;
 
         search.setOnEditorActionListener((textView, i, keyEvent) -> {
             new Thread(() -> {
                 List<RviewAdapterSearch.Data> data = new ArrayList<>();
-                ArrayList<Sources.SearchValues> searchResults = SourceObjectHolder.getSources(this).CollectDataPicScreen(search.getText().toString());
+                ArrayList<Sources.SearchValues> searchResults = SourceObjectHolder.getSources(this)
+                        .CollectDataPicScreen(search.getText().toString());
 
                 if (searchResults != null) {
                     // prevents a dirty little nullpointerexception
@@ -76,9 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
 
-
             }).start();
-
 
             return false;
         });
@@ -92,6 +85,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }

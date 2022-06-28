@@ -13,7 +13,7 @@ public interface Readmodes {
         Activity activity;
         ArrayList<String> images;
         Sources sources;
-        HashMap<String,String> reqData;
+        HashMap<String, String> reqData;
 
         public Data(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
             this.activity = activity;
@@ -22,22 +22,16 @@ public interface Readmodes {
             this.reqData = reqData;
         }
 
-
     }
 
     void inflate(Activity activity); // Inflates the necessary widgets from a xml file
 
     void Start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData);
 
-
     void LoadImage(); // 1 = next -1 = previous
-
 
     void ChangePages(int direction); // 1 = next -1 = previous
 
     void ChangeChapter(int direction);
-
-
-
 
 }

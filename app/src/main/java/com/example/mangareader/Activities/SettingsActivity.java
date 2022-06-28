@@ -18,20 +18,17 @@ import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;
 
-
 public class SettingsActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
 
         if (savedInstanceState == null) {
             SettingsFragment settingsFragment = new SettingsFragment();
@@ -43,7 +40,6 @@ public class SettingsActivity extends AppCompatActivity {
                     .commit();
         }
 
-        
         drawerLayout = findViewById(R.id.my_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -55,8 +51,6 @@ public class SettingsActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navMenu);
         Menu menu = navigationView.getMenu();
         navigation.ItemClickSetup(this, menu);
-
-
 
     }
 
@@ -76,52 +70,46 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-
-            SwitchPreference preference_merge_manga_favourites = getPreferenceScreen().findPreference("preference_merge_manga_favourites");
+            SwitchPreference preference_merge_manga_favourites = getPreferenceScreen()
+                    .findPreference("preference_merge_manga_favourites");
             preference_merge_manga_favourites.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (preference_merge_manga_favourites.isChecked()) {
                     preference_merge_manga_favourites.setChecked(false);
-                }
-                else {
+                } else {
                     preference_merge_manga_favourites.setChecked(true);
                 }
                 return false;
             });
 
-
-            SwitchPreference preference_ServerMangakakalot = getPreferenceScreen().findPreference("preference_ServerMangakakalot");
+            SwitchPreference preference_ServerMangakakalot = getPreferenceScreen()
+                    .findPreference("preference_ServerMangakakalot");
             preference_ServerMangakakalot.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (preference_ServerMangakakalot.isChecked()){
+                if (preference_ServerMangakakalot.isChecked()) {
                     preference_ServerMangakakalot.setChecked(false);
-                }
-                else  {
+                } else {
                     preference_ServerMangakakalot.setChecked(true);
                 }
                 return false;
             });
 
-            SwitchPreference preference_mangakakalot_showButon = getPreferenceScreen().findPreference("preference_mangakakalot_showButon");
+            SwitchPreference preference_mangakakalot_showButon = getPreferenceScreen()
+                    .findPreference("preference_mangakakalot_showButon");
             preference_mangakakalot_showButon.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (preference_mangakakalot_showButon.isChecked()){
+                if (preference_mangakakalot_showButon.isChecked()) {
                     preference_mangakakalot_showButon.setChecked(false);
-                }
-                else  {
+                } else {
                     preference_mangakakalot_showButon.setChecked(true);
                 }
                 return false;
             });
 
-
             SwitchPreference preference_cache = getPreferenceScreen().findPreference("preference_Cache");
             preference_cache.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (preference_cache.isChecked()){
+                if (preference_cache.isChecked()) {
                     preference_cache.setChecked(false);
-                }
-                else  {
+                } else {
                     preference_cache.setChecked(true);
                 }
-
-
 
                 return false;
             });
@@ -136,7 +124,6 @@ public class SettingsActivity extends AppCompatActivity {
                 mangakakalot.setChecked(true);
                 settings.AssignValueString(activity, "source", "mangakakalot");
 
-
                 SourceObjectHolder.sources = new Mangakakalot();
 
                 return false;
@@ -147,17 +134,14 @@ public class SettingsActivity extends AppCompatActivity {
                 mangakakalot.setChecked(false);
                 settings.AssignValueString(activity, "source", "mangadex");
 
-
                 SourceObjectHolder.sources = new Mangadex();
                 return false;
             });
-
 
             // ----------------------- THEME -------------------------
             CheckBoxPreference defaultTheme = getPreferenceScreen().findPreference("preference_theme_default");
             CheckBoxPreference darkTheme = getPreferenceScreen().findPreference("preference_theme_dark");
             CheckBoxPreference lightTheme = getPreferenceScreen().findPreference("preference_theme_light");
-
 
             defaultTheme.setOnPreferenceClickListener(preference -> {
                 defaultTheme.setChecked(true);
@@ -165,7 +149,6 @@ public class SettingsActivity extends AppCompatActivity {
                 darkTheme.setChecked(false);
 
                 settings.AssignValueString(this.activity, "theme", "default");
-
 
                 return true;
             });
@@ -176,7 +159,6 @@ public class SettingsActivity extends AppCompatActivity {
                 darkTheme.setChecked(true);
 
                 settings.AssignValueString(this.activity, "theme", "dark");
-
 
                 return true;
             });
@@ -190,28 +172,25 @@ public class SettingsActivity extends AppCompatActivity {
 
                 return true;
 
-
             });
 
-
-            // ------------------------------- MANGADEX LANGUAGES ---------------------------------
-            SwitchPreference mangadex_preference_languages = getPreferenceScreen().findPreference("mangadex_preference_languages");
+            // ------------------------------- MANGADEX LANGUAGES
+            // ---------------------------------
+            SwitchPreference mangadex_preference_languages = getPreferenceScreen()
+                    .findPreference("mangadex_preference_languages");
             mangadex_preference_languages.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (mangadex_preference_languages.isChecked()){
+                if (mangadex_preference_languages.isChecked()) {
                     mangadex_preference_languages.setChecked(false);
-                }
-                else  {
+                } else {
                     mangadex_preference_languages.setChecked(true);
                 }
 
-
                 return false;
-
 
             });
 
-
-            // -----------------------------------------------  READ MODE  --------------------------------------
+            // ----------------------------------------------- READ MODE
+            // --------------------------------------
             CheckBoxPreference click = getPreferenceScreen().findPreference("preference_readmode_click");
             CheckBoxPreference scroll = getPreferenceScreen().findPreference("preference_readmode_scroll");
             click.setOnPreferenceClickListener(preference -> {
@@ -229,31 +208,32 @@ public class SettingsActivity extends AppCompatActivity {
                 return false;
             });
 
-
-            SwitchPreference preference_hardware_acceleration = getPreferenceScreen().findPreference("preference_hardware_acceleration");
+            SwitchPreference preference_hardware_acceleration = getPreferenceScreen()
+                    .findPreference("preference_hardware_acceleration");
             preference_hardware_acceleration.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (preference_hardware_acceleration.isChecked()) {
                     preference_hardware_acceleration.setChecked(false);
-                }
-                else {
+                } else {
                     preference_hardware_acceleration.setChecked(true);
                 }
                 return false;
             });
 
-
             // -----------------------------------------------------------------
             // FAVOURITES SORTING
             CheckBoxPreference alphabet = getPreferenceScreen().findPreference("preference_favourites_sort_alphabet");
-            CheckBoxPreference preference_favourites_sort_date_down = getPreferenceScreen().findPreference("preference_favourites_sort_date_down");
-            CheckBoxPreference preference_favourites_sort_date_up = getPreferenceScreen().findPreference("preference_favourites_sort_date_up");
+            CheckBoxPreference preference_favourites_sort_date_down = getPreferenceScreen()
+                    .findPreference("preference_favourites_sort_date_down");
+            CheckBoxPreference preference_favourites_sort_date_up = getPreferenceScreen()
+                    .findPreference("preference_favourites_sort_date_up");
 
             alphabet.setOnPreferenceClickListener(preference -> {
                 preference_favourites_sort_date_down.setChecked(false);
                 preference_favourites_sort_date_up.setChecked(false);
                 alphabet.setChecked(true);
 
-                settings.AssignValueString(activity, "preference_favourites_sort", "preference_favourites_sort_alphabet");
+                settings.AssignValueString(activity, "preference_favourites_sort",
+                        "preference_favourites_sort_alphabet");
                 return false;
             });
 
@@ -261,7 +241,8 @@ public class SettingsActivity extends AppCompatActivity {
                 preference_favourites_sort_date_down.setChecked(true);
                 preference_favourites_sort_date_up.setChecked(false);
                 alphabet.setChecked(false);
-                settings.AssignValueString(activity, "preference_favourites_sort", "preference_favourites_sort_date_down");
+                settings.AssignValueString(activity, "preference_favourites_sort",
+                        "preference_favourites_sort_date_down");
 
                 return false;
             });
@@ -271,18 +252,19 @@ public class SettingsActivity extends AppCompatActivity {
                 alphabet.setChecked(false);
                 preference_favourites_sort_date_down.setChecked(false);
 
-                settings.AssignValueString(activity, "preference_favourites_sort", "preference_favourites_sort_date_up");
+                settings.AssignValueString(activity, "preference_favourites_sort",
+                        "preference_favourites_sort_date_up");
                 return false;
             });
 
             // ----------------------------------------------------------------------------------------
             // preference_image_size
-            SwitchPreference preference_image_size = getPreferenceScreen().findPreference("preference_hardware_acceleration");
+            SwitchPreference preference_image_size = getPreferenceScreen()
+                    .findPreference("preference_hardware_acceleration");
             preference_image_size.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (preference_image_size.isChecked()) {
                     preference_image_size.setChecked(false);
-                }
-                else {
+                } else {
                     preference_image_size.setChecked(true);
                 }
                 return false;
@@ -297,6 +279,5 @@ public class SettingsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }
-
 
 }

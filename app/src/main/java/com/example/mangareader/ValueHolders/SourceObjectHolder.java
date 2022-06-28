@@ -13,8 +13,7 @@ public class SourceObjectHolder {
         if (sources != null) {
             return sources;
 
-        }
-        else {
+        } else {
             Settings settings = new Settings();
             String src = settings.ReturnValueString(activity, "source", "mangadex");
 
@@ -28,7 +27,6 @@ public class SourceObjectHolder {
                 case "mangadex":
                     SourceObjectHolder.sources = new Mangadex();
                     return sources;
-
 
                 default:
                     SourceObjectHolder.sources = new Mangadex();

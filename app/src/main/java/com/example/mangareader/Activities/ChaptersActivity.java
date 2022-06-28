@@ -29,21 +29,20 @@ public class ChaptersActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_chapters);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
 
         // First we retrieve the url
         Intent intent = getIntent();
-
 
         String mangaUrl = "";
         String imageUrl = "";
         String mangaName = "";
         try {
-            mangaUrl = intent.getStringExtra("url"); // THE URL TO THE MANGA PAGE; e.g https://readmanganato.com/manga-oa966309
+            mangaUrl = intent.getStringExtra("url");
+            // THE URL TO THE MANGA PAGE; e.g https://readmanganato.com/manga-oa966309
             imageUrl = intent.getStringExtra("img");
             mangaName = intent.getStringExtra("mangaName");
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Intent x = new Intent(this, HomeActivity.class);
             startActivity(x);
         }
@@ -52,12 +51,10 @@ public class ChaptersActivity extends AppCompatActivity {
             startActivity(x);
         }
 
-
         TextView Splashscreen = findViewById(R.id.Splashscreen);
         Splashscreen.setText(SplashScreen.returnQuote());
 
         Activity activity = this;
-
 
         String finalMangaUrl = mangaUrl;
         String finalMangaName = mangaName;
@@ -72,17 +69,20 @@ public class ChaptersActivity extends AppCompatActivity {
 
             ReadValueHolder.ChaptersActivityData = dataChapters; // LOL imagine assigning values statically lol
 
-
             // This is future me writing this
             // I am so sorry for what I have done
             List<RviewAdapterChapterlist.Data> data = new ArrayList<>();
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass(finalMangaName, "", "the_fucking_star", null, "", this, finalMangaUrl, finalImageUrl)));
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", "", "", null, "poster", this, finalMangaUrl, finalImageUrl)));
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", mangaStory, "", null, "Clickable", this, finalMangaUrl, finalImageUrl)));
+            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass(finalMangaName, "",
+                    "the_fucking_star", null, "", this, finalMangaUrl, finalImageUrl)));
+            data.add(new RviewAdapterChapterlist.Data(
+                    new RviewChapterlistDataClass("", "", "", null, "poster", this, finalMangaUrl, finalImageUrl)));
+            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", mangaStory, "", null,
+                    "Clickable", this, finalMangaUrl, finalImageUrl)));
 
             for (Sources.ValuesForChapters i : dataChapters) {
                 url = i.url;
-                data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", "", "", i, "url", this, finalMangaUrl, finalImageUrl)));
+                data.add(new RviewAdapterChapterlist.Data(
+                        new RviewChapterlistDataClass("", "", "", i, "url", this, finalMangaUrl, finalImageUrl)));
 
             }
 

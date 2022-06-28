@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-
 public class Read {
 
     public static void Cache(Activity activity, ArrayList<String> images, HashMap<String, String> reqData) {
@@ -33,7 +32,8 @@ public class Read {
         for (String i : images) {
 
             int finalIndex = index;
-            activity.runOnUiThread(() -> cacheStatusUpdate.setText("Caching image " + finalIndex + " out of " + images.size()));
+            activity.runOnUiThread(
+                    () -> cacheStatusUpdate.setText("Caching image " + finalIndex + " out of " + images.size()));
 
             GlideUrl url = new GlideUrl(i.trim(), new LazyHeaders.Builder()
                     .addHeader("Referer", Objects.requireNonNull(reqData.get("Referer")))
@@ -41,7 +41,6 @@ public class Read {
 
             RequestOptions options = new RequestOptions()
                     .diskCacheStrategy(DiskCacheStrategy.ALL);
-
 
             Glide.with(activity)
                     .load(url)
@@ -54,7 +53,7 @@ public class Read {
         activity.runOnUiThread(() -> cacheStatusUpdate.setVisibility(PhotoView.GONE));
     }
 
-    public static void LoadImage(String url, PhotoView photoView, HashMap<String,String> reqData, Context context) {
+    public static void LoadImage(String url, PhotoView photoView, HashMap<String, String> reqData, Context context) {
 
         GlideUrl glideUrl;
         if (reqData != null) {
@@ -62,13 +61,11 @@ public class Read {
             glideUrl = new GlideUrl(url, new LazyHeaders.Builder()
                     .addHeader("Referer", Objects.requireNonNull(reqData.get("Referer")))
                     .build());
-        }
-        else {
+        } else {
             glideUrl = new GlideUrl(url, new LazyHeaders.Builder()
                     .build());
 
         }
-
 
         Settings settings = new Settings();
         if (!settings.ReturnValueBoolean(context, "preference_image_size", false)) {

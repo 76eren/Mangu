@@ -22,34 +22,30 @@ import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 import com.example.mangareader.R;
 
-
 import java.util.*;
 
 public class Mangakakalot implements Sources {
-    //public Context context;
-
+    // public Context context;
 
     // THIS IS FOR THE MAIN ACTIVITY
     // GETS THE INFO FOR THE PICTURE SCREEN
     @Override
     public ArrayList<SearchValues> CollectDataPicScreen(String manga) {
 
-
         manga = manga.replace(" ", "_");
-        String url = "https://mangakakalot.com/search/story/"+manga;
+        String url = "https://mangakakalot.com/search/story/" + manga;
         Document doc;
         try {
             doc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                     .get();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
 
         Elements elems = doc.getElementsByClass("panel_story_list");
         ArrayList<SearchValues> objectsPicScreen = new ArrayList<>();
-        if (elems.first() != null){
+        if (elems.first() != null) {
             for (Element i : elems.first().children()) {
                 Elements x = i.getElementsByClass("story_item");
                 Elements y = x.select("a");
@@ -72,14 +68,13 @@ public class Mangakakalot implements Sources {
 
             return objectsPicScreen;
 
-
         }
 
         return null;
     }
 
-
     Document doc;
+
     @Override
     public String getStory(String url) {
         try {
@@ -91,8 +86,7 @@ public class Mangakakalot implements Sources {
             Elements x = null;
             if (url.toLowerCase().contains("readmanganato.com")) {
                 x = doc.getElementsByClass("panel-story-info-description"); // This also contains data we don't need
-            }
-            else if (url.toLowerCase().contains("mangakakalot.com")) {
+            } else if (url.toLowerCase().contains("mangakakalot.com")) {
                 x = doc.select("div#noidungm");
             }
 
@@ -100,20 +94,20 @@ public class Mangakakalot implements Sources {
 
             if (x != null) {
                 Document document = Jsoup.parse(x.html());
-                document.outputSettings(new Document.OutputSettings().prettyPrint(false)); //makes html() preserve linebreaks and spacing
+                document.outputSettings(new Document.OutputSettings().prettyPrint(false)); // makes html() preserve
+                // linebreaks and spacing
                 document.select("br").append("\\n");
                 document.select("p").prepend("\\n\\n");
                 String s = document.html().replaceAll("\\\\n", "\n");
-                String storyUnreadable =  Jsoup.clean(s, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
+                String storyUnreadable = Jsoup.clean(s, "", Whitelist.none(),
+                        new Document.OutputSettings().prettyPrint(false));
 
                 return StringEscapeUtils.unescapeHtml3(storyUnreadable); // Using deprecated libraries? Couldn't be me.
             }
 
             return null;
 
-
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "No story";
         }
     }
@@ -122,118 +116,109 @@ public class Mangakakalot implements Sources {
     // We collect: chapter name + it's url
     @Override
     public ArrayList<ValuesForChapters> GetChapters(String url, Context context) {
-            try {
-                ArrayList<ValuesForChapters> data = new ArrayList<>();
-                ArrayList<String> links = new ArrayList<>();
-                ArrayList<String> names = new ArrayList<>();
+        try {
+            ArrayList<ValuesForChapters> data = new ArrayList<>();
+            ArrayList<String> links = new ArrayList<>();
+            ArrayList<String> names = new ArrayList<>();
 
+            Elements ul = null;
+            if (url.toLowerCase().contains("readmanganato.com")) {
+                ul = doc.getElementsByClass("row-content-chapter");
+            } else if (url.toLowerCase().contains("mangakakalot.com")) {
+                ul = doc.getElementsByClass("chapter-list");
+            }
 
-                Elements ul = null;
+            if (ul == null) {
+                return null;
+            }
+
+            for (Element i : ul.first().children()) {
+                String title = "";
+                String link = "";
+
+                Elements li;
                 if (url.toLowerCase().contains("readmanganato.com")) {
-                    ul = doc.getElementsByClass("row-content-chapter");
+                    li = i.getElementsByClass("chapter-name text-nowrap");
+                    title = li.attr("title"); // This is the chapter title
+                    link = li.attr("href"); // This is the url
                 }
+
                 else if (url.toLowerCase().contains("mangakakalot.com")) {
-                    ul = doc.getElementsByClass("chapter-list");
+                    li = i.getElementsByClass("row");
+                    title = li.text();
+                    Elements p = li.select("a");
+                    link = p.attr("href");
                 }
 
-                if (ul == null) {
-                    return null;
+                // We now have to edit the string so only the chapter shows
+                StringBuilder sb = new StringBuilder();
+                int index = 0;
+                String oldTitle = title;
+                boolean get = false;
+
+                // This wants to make me kms
+                int amount = 0;
+                for (String p : title.split("\\s+")) {
+                    if (p.equalsIgnoreCase("chapter")) {
+                        amount++;
+                    }
+                }
+                if (amount <= 1) {
+                    get = true;
                 }
 
-                for (Element i : ul.first().children()) {
-                    String title = "";
-                    String link = "";
+                for (String x : title.split("\\s+")) {
+                    if (x.equalsIgnoreCase("chapter")) {
+                        if (get) {
+                            try {
+                                // We remove some clutter form the title
+                                title = title.replace(":", ""); // This will fix things like "chapter 6:" 6: != double  but 6 is
+                                // We want to check whether x in chapter x is a number or not
+                                // We can do this by converting it to a double and trying to make it shot out an error
+                                Double.parseDouble(title.split("\\s+")[index + 1]); // this is here to shoot out an error
 
-                    Elements li;
-                    if (url.toLowerCase().contains("readmanganato.com")) {
-                        li = i.getElementsByClass("chapter-name text-nowrap");
-                        title = li.attr("title"); // This is the chapter title
-                        link = li.attr("href"); // This is the url
-                    }
+                                sb.append(x);
+                                sb.append(" ");
+                                sb.append(title.split("\\s+")[index + 1]);
+                                title = sb.toString();
+                            } catch (Exception ex) {
+                                title = oldTitle;
+                            }
 
-                    else if (url.toLowerCase().contains("mangakakalot.com")) {
-                        li = i.getElementsByClass("row");
-                        title = li.text();
-                        Elements p = li.select("a");
-                        link = p.attr("href");
-                    }
-
-                    // We now have to edit the string so only the chapter shows
-                    StringBuilder sb = new StringBuilder();
-                    int index=0;
-                    String oldTitle = title;
-                    boolean get=false;
-
-                    // This wants to make me kms
-                    int amount = 0;
-                    for (String p : title.split("\\s+")) {
-                        if (p.equalsIgnoreCase("chapter")) {
-                            amount++;
+                            // These two lines may break shit.
+                            if (title.toLowerCase().contains("chapter")) {
+                                title = title.replace(':', ' ');
+                            }
+                            break;
+                        } else {
+                            get = true;
                         }
                     }
-                    if (amount <= 1) {
-                        get=true;
-                    }
-
-                    for (String x : title.split("\\s+")) {
-                        if (x.equalsIgnoreCase("chapter")) {
-                            if (get) {
-                                try {
-                                    // We remove some clutter form the title
-                                    title = title.replace(":", ""); // This will fix things like "chapter 6:" 6: != double but 6 is
-
-
-                                    // We want to check whether x in chapter x is a number or not
-                                    // We can do this by converting it to a double and trying to make it shot out an error
-                                    Double.parseDouble(title.split("\\s+")[index+1]); // this is here to shoot out an error
-
-
-                                    sb.append(x);
-                                    sb.append(" ");
-                                    sb.append(title.split("\\s+")[index+1]);
-                                    title=sb.toString();
-                                }
-                                catch (Exception ex) {
-                                    title = oldTitle;
-                                }
-
-                                // These two lines may break shit.
-                                if (title.toLowerCase().contains("chapter")) {
-                                    title = title.replace(':', ' ');
-                                }
-                                break;
-                            }
-                            else {
-                                get=true;
-                            }
-                        }
-                        index++;
-                    }
-                    // Adds our data to the arraylist
-                    names.add(title);
-                    links.add(link);
+                    index++;
                 }
-
-                // Now that we have the names and links
-                // We need reverse it and add the outputs to a linkedhashmap
-                Collections.reverse(names);
-                Collections.reverse(links);
-
-                for (int i = 0; i < names.size();i++) {
-                    ValuesForChapters valuesForChapters = new ValuesForChapters();
-                    valuesForChapters.name = names.get(i);
-                    valuesForChapters.url = links.get(i);
-                    data.add(valuesForChapters);
-                }
-
-                return data;
+                // Adds our data to the arraylist
+                names.add(title);
+                links.add(link);
             }
-            catch (Exception error) {
-                return new ArrayList<ValuesForChapters>();
+
+            // Now that we have the names and links
+            // We need reverse it and add the outputs to a linkedhashmap
+            Collections.reverse(names);
+            Collections.reverse(links);
+
+            for (int i = 0; i < names.size(); i++) {
+                ValuesForChapters valuesForChapters = new ValuesForChapters();
+                valuesForChapters.name = names.get(i);
+                valuesForChapters.url = links.get(i);
+                data.add(valuesForChapters);
             }
+
+            return data;
+        } catch (Exception error) {
+            return new ArrayList<ValuesForChapters>();
+        }
 
     }
-
 
     // THis part is in charge of getting the manga images
     // Mangakakalot has two servers
@@ -250,16 +235,14 @@ public class Mangakakalot implements Sources {
                 doc = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                         .get();
-            }
-            else {
+            } else {
                 String CookieSiteLocation;
 
                 // To get to server two, we need certain cookies
                 // There are two cookie sites based on whether the url is mangakakalot or readmanganato
                 if (url.toLowerCase().contains("readmanganato")) {
                     CookieSiteLocation = "https://readmanganato.com/content_server_s2";
-                }
-                else {
+                } else {
                     CookieSiteLocation = "https://mangakakalot.com/change_content_s2";
                 }
 
@@ -269,7 +252,7 @@ public class Mangakakalot implements Sources {
                         .method(Connection.Method.GET)
                         .execute();
 
-                Map<String,String> coookies = res.cookies(); // The cookies (what a surprise)
+                Map<String, String> coookies = res.cookies(); // The cookies (what a surprise)
 
                 doc = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
@@ -287,34 +270,30 @@ public class Mangakakalot implements Sources {
             }
             return images;
 
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
-
 
     }
 
     @Override
-    public HashMap<String,String> GetRequestData(String url) {
+    public HashMap<String, String> GetRequestData(String url) {
         try {
             doc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                     .get();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
 
-        HashMap<String,String> reqData = new HashMap<>();
+        HashMap<String, String> reqData = new HashMap<>();
 
         String referer = "";
         if (url.toLowerCase().contains("readmanganato.com")) {
             referer = "https://readmanganato.com/";
             reqData.put("Host", "s71.mkklcdnv6tempv2.com");
 
-        }
-        else if (url.toLowerCase().contains("mangakakalot.com")) {
+        } else if (url.toLowerCase().contains("mangakakalot.com")) {
             referer = "https://mangakakalot.com/";
             reqData.put("Host", "avt.mkklcdnv6temp.com");
         }
@@ -327,7 +306,8 @@ public class Mangakakalot implements Sources {
     @Override
     public void PrepareReadChapter(ReadActivity readActivity) {
         Settings settings = new Settings();
-        if (!settings.ReturnValueBoolean(readActivity.getApplicationContext(), "preference_mangakakalot_showButon", false)) {
+        if (!settings.ReturnValueBoolean(readActivity.getApplicationContext(), "preference_mangakakalot_showButon",
+                false)) {
             Log.d("lol", "NOPE");
             return;
         }
@@ -338,25 +318,24 @@ public class Mangakakalot implements Sources {
         ConstraintLayout constraintLayout = readActivity.findViewById(R.id.layout_readactivity);
         constraintLayout.addView(vieww);
 
-
         // We do the epic code here for our not so epic switch
         SwitchCompat toggle = readActivity.findViewById(R.id.switchServer);
         toggle.setVisibility(View.VISIBLE);
 
-
-        Boolean server = settings.ReturnValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot", false);
+        Boolean server = settings.ReturnValueBoolean(readActivity.getApplicationContext(),
+                "preference_ServerMangakakalot", false);
         toggle.setChecked(server); // true or false
         toggle.setOnClickListener(v -> {
             if (toggle.isChecked()) {
-                settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot", true);
-            }
-            else {
-                settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot", false);
+                settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot",
+                        true);
+            } else {
+                settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot",
+                        false);
             }
 
-            //readActivity.read.LoadChapter(ReadValueHolder.currentChapter);
+            // readActivity.read.LoadChapter(ReadValueHolder.currentChapter);
             readActivity.read.ChangeChapter(0);
-
 
         });
     }
@@ -364,7 +343,8 @@ public class Mangakakalot implements Sources {
     @Override
     public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) {
         String URL;
-        URL = "https://mangakakalot.com/"; // This has been changed to mangakakalot.com/bbl, but I don't know if they'll ever turn it back to mangakakalot.com so I added a check
+        // This has been changed to mangakakalot.com/bbl, but I don't know if they'll ever turn it back to mangakakalot.com so I added a check
+        URL = "https://mangakakalot.com/";
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
         Document doc;
         try {
@@ -374,14 +354,12 @@ public class Mangakakalot implements Sources {
 
             // This checks whether it's mangakakalot.com/bbl or mangakakalot.com
             // I don't know when or if the devs will change it back to mangakakalot.com so I added a check for it
-            if (doc.getElementsByClass("bt-official-gotohome").text().trim().equalsIgnoreCase(">> VIEW FULL SITE <<"))
-            {
+            if (doc.getElementsByClass("bt-official-gotohome").text().trim().equalsIgnoreCase(">> VIEW FULL SITE <<")) {
                 URL = "https://mangakakalot.com/kkl";
                 doc = Jsoup.connect(URL)
                         .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0")
                         .get();
             }
-
 
             // This gets the latest manga
             ArrayList<HomeMangaClass> latest = new ArrayList<>();
@@ -412,7 +390,7 @@ public class Mangakakalot implements Sources {
                 String url = "";
 
                 Elements owl_item = i.getElementsByClass("item");
-                for (Element x  : owl_item) {
+                for (Element x : owl_item) {
                     Elements item = x.getElementsByClass("item");
                     Elements img = item.select("img");
                     image = img.attr("src"); // The image
@@ -440,7 +418,5 @@ public class Mangakakalot implements Sources {
 
         return data;
     }
-
-
 
 }
