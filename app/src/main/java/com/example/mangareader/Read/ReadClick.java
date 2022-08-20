@@ -1,5 +1,6 @@
 package com.example.mangareader.Read;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ public class ReadClick implements Readmodes {
 
     private TextView progress;
 
+
     @Override
     public void inflate(Activity activity) {
         LayoutInflater inflater = (LayoutInflater) activity.getApplicationContext()
@@ -49,15 +51,17 @@ public class ReadClick implements Readmodes {
         next.setOnClickListener(view -> ChangePages(1));
         previous.setOnClickListener(view -> ChangePages(-1));
 
-        // I'm pretty sure this has no use but I am too scared to remove it
-        previous.setBackgroundColor(Color.TRANSPARENT);
-        float x = 0;
-        previous.setAlpha(x);
-        next.setBackgroundColor(Color.TRANSPARENT);
-        next.setAlpha(x);
+        activity.runOnUiThread(() -> {
+            previous.setBackgroundColor(Color.TRANSPARENT);
+            previous.setAlpha(0);
+            next.setBackgroundColor(Color.TRANSPARENT);
+            next.setAlpha(0);
+        });
+
 
     }
 
+    @SuppressLint("SetTextI18n") // lol
     @Override
     public void LoadImage() {
         Log.d("lol", data.images.get(page).trim());
@@ -101,8 +105,12 @@ public class ReadClick implements Readmodes {
         }
         if (direction == 1 && index + 1 != ReadValueHolder.ChaptersActivityData.size()) {
             index++;
-        } else if (direction == -1 && index - 1 > -1) {
+
+        }
+
+        else if (direction == -1 && index - 1 >= 0) {
             index--;
+
         }
 
         Sources.ValuesForChapters newChapter = ReadValueHolder.ChaptersActivityData.get(index);

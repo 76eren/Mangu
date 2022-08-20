@@ -333,8 +333,10 @@ public class Mangadex implements Sources {
 
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
 
-        String URL_SEASONAL = "https://api.mangadex.org/list/1f43956d-9fe6-478e-9805-aa75ec0ac45e?includes[]=user";
-        // This might mess up
+        // I literally have no idea how mangadex gets this
+        // I am kinda tempted to just convert this bit to a regular webscaper
+        String URL_SEASONAL = "https://api.mangadex.org/list/7df1dabc-b1c5-4e8e-a757-de5a2a3d37e9?includes[]=user";
+
         String URL_LATEST = "https://api.mangadex.org/chapter?limit=100&offset=0&includes[]=user&includes[]=scanlation_group&includes[]=manga&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&order[readableAt]=desc";
 
         final String[] body = new String[1];
@@ -389,9 +391,7 @@ public class Mangadex implements Sources {
             return null;
         }
 
-        // --------------------------------------------------------------- NOW WE GET
-        // THE LATEST MANGA
-        // -------------------------------------------------------------------------------------
+        //NOW WE GET THE LATEST MANGA
         ArrayList<String> ids = new ArrayList<>();
 
         client = new OkHttpClient();

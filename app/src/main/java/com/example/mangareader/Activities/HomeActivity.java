@@ -107,7 +107,8 @@ public class HomeActivity extends AppCompatActivity {
 
             try {
                 homeData = source.GetDataHomeActivity(this);
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e) {
                 homeData = null;
             }
 

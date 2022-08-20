@@ -72,12 +72,9 @@ public class ChaptersActivity extends AppCompatActivity {
             // This is future me writing this
             // I am so sorry for what I have done
             List<RviewAdapterChapterlist.Data> data = new ArrayList<>();
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass(finalMangaName, "",
-                    "the_fucking_star", null, "", this, finalMangaUrl, finalImageUrl)));
-            data.add(new RviewAdapterChapterlist.Data(
-                    new RviewChapterlistDataClass("", "", "", null, "poster", this, finalMangaUrl, finalImageUrl)));
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", mangaStory, "", null,
-                    "Clickable", this, finalMangaUrl, finalImageUrl)));
+            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass(finalMangaName, "", "the_fucking_star", null, "", this, finalMangaUrl, finalImageUrl)));
+            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", "", "", null, "poster", this, finalMangaUrl, finalImageUrl)));
+            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", mangaStory, "", null, "Clickable", this, finalMangaUrl, finalImageUrl)));
 
             for (Sources.ValuesForChapters i : dataChapters) {
                 url = i.url;
