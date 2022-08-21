@@ -15,6 +15,9 @@
         and shows the navigation drawer-->
     <!--include the menu created in the menu folder-->
 
+    <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:visibility="invisible" android:id="@+id/webview"/>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:id="@+id/linearLayout">

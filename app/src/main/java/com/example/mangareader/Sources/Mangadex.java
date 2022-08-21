@@ -1,16 +1,24 @@
 package com.example.mangareader.Sources;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.webkit.WebView;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.Home.HomeMangaClass;
 import com.example.mangareader.ListTracker;
+import com.example.mangareader.R;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.util.*;
 
 public class Mangadex implements Sources {
@@ -329,12 +337,13 @@ public class Mangadex implements Sources {
      * / - I added threading
      */
     @Override
+
     public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) throws InterruptedException {
 
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
 
-        // I literally have no idea how mangadex gets this
-        // I am kinda tempted to just convert this bit to a regular webscaper
+        // Mangadex hardcodes this and they use JS so I cannot webscrape either
+        // I guess I could use like a headless browser but I cba
         String URL_SEASONAL = "https://api.mangadex.org/list/7df1dabc-b1c5-4e8e-a757-de5a2a3d37e9?includes[]=user";
 
         String URL_LATEST = "https://api.mangadex.org/chapter?limit=100&offset=0&includes[]=user&includes[]=scanlation_group&includes[]=manga&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&order[readableAt]=desc";
@@ -372,7 +381,8 @@ public class Mangadex implements Sources {
                         number = relationships.getJSONObject(finalI);
                         id = number.getString("id");
 
-                    } catch (JSONException e) {
+                    }
+                    catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
 
@@ -386,7 +396,8 @@ public class Mangadex implements Sources {
                 });
                 t1.start();
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception) {
             Log.d("lol", exception.toString());
             return null;
         }
