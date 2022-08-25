@@ -1,14 +1,11 @@
 package com.example.mangareader.ValueHolders;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import com.example.mangareader.Activities.HomeActivity;
 import com.example.mangareader.SourceHandlers.Sources;
 
 import java.util.ArrayList;
-import java.util.Currency;
-import java.util.LinkedHashMap;
 
 public class ReadValueHolder {
 

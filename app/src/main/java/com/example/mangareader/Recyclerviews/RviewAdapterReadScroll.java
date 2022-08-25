@@ -1,20 +1,12 @@
 package com.example.mangareader.Recyclerviews;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaderFactory;
-import com.bumptech.glide.load.model.LazyHeaders;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.mangareader.R;
 import com.example.mangareader.Read.Read;
 import com.example.mangareader.Read.ReadScroll;
@@ -22,7 +14,6 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterReadScroll.ViewHolder> {
     private final List<Data> mData;
@@ -37,6 +28,7 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
 
     // inflates the row layout from xml when needed
     @Override
+    @NonNull
     public RviewAdapterReadScroll.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recyclerview_widgets_read, parent, false);
 

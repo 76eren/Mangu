@@ -1,6 +1,6 @@
 package com.example.mangareader.ValueHolders;
 
-import android.app.Activity;
+import android.content.Context;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.Sources.Mangadex;
@@ -9,13 +9,13 @@ import com.example.mangareader.Sources.Mangakakalot;
 public class SourceObjectHolder {
     public static Sources sources;
 
-    public static Sources getSources(Activity activity) {
+    public static Sources getSources(Context context) {
         if (sources != null) {
             return sources;
 
         } else {
             Settings settings = new Settings();
-            String src = settings.ReturnValueString(activity, "source", "mangadex");
+            String src = settings.ReturnValueString(context, "source", "mangadex");
 
             // The default value MUST reflect the default value of the root proferences!!!!
             switch (src) {

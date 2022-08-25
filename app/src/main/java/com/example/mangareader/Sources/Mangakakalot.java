@@ -1,8 +1,6 @@
 package com.example.mangareader.Sources;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,19 +10,20 @@ import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.Home.HomeMangaClass;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
-import com.example.mangareader.ValueHolders.ReadValueHolder;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 import com.example.mangareader.R;
 
 import java.util.*;
 
 public class Mangakakalot implements Sources {
+
+    private static final Document.OutputSettings NO_PRETTY_PRINTING = new Document.OutputSettings().prettyPrint(false);
+
     // public Context context;
 
     // THIS IS FOR THE MAIN ACTIVITY
@@ -94,15 +93,14 @@ public class Mangakakalot implements Sources {
 
             if (x != null) {
                 Document document = Jsoup.parse(x.html());
-                document.outputSettings(new Document.OutputSettings().prettyPrint(false)); // makes html() preserve
+                document.outputSettings(NO_PRETTY_PRINTING); // makes html() preserve
                 // linebreaks and spacing
                 document.select("br").append("\\n");
                 document.select("p").prepend("\\n\\n");
                 String s = document.html().replaceAll("\\\\n", "\n");
-                String storyUnreadable = Jsoup.clean(s, "", Whitelist.none(),
-                        new Document.OutputSettings().prettyPrint(false));
 
-                return StringEscapeUtils.unescapeHtml3(storyUnreadable); // Using deprecated libraries? Couldn't be me.
+                return Jsoup.clean(s, "", Safelist.none(), NO_PRETTY_PRINTING);
+
             }
 
             return null;

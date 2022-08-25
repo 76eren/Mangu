@@ -66,7 +66,7 @@ public class FavouritesActivity extends AppCompatActivity {
                 break;
 
             case "preference_favourites_sort_alphabet":
-                sortedFavourites.sort(Comparator.comparing(FavouriteItem::returnName));
+                sortedFavourites.sort(Comparator.comparing(FavouriteItem::getName));
                 break;
 
         }

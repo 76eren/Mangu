@@ -8,8 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.mangareader.Recyclerviews.RviewAdapterChapterlist;
-import com.example.mangareader.Recyclerviews.RviewChapterlistDataClass;
+import com.example.mangareader.Recyclerviews.chapterlist.*;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.SplashScreen;
@@ -17,6 +16,7 @@ import com.example.mangareader.R;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChaptersActivity extends AppCompatActivity {
     RviewAdapterChapterlist adapter;
@@ -69,24 +69,25 @@ public class ChaptersActivity extends AppCompatActivity {
 
             ReadValueHolder.ChaptersActivityData = dataChapters; // LOL imagine assigning values statically lol
 
-            // This is future me writing this
-            // I am so sorry for what I have done
-            List<RviewAdapterChapterlist.Data> data = new ArrayList<>();
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass(finalMangaName, "", "the_fucking_star", null, "", this, finalMangaUrl, finalImageUrl)));
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", "", "", null, "poster", this, finalMangaUrl, finalImageUrl)));
-            data.add(new RviewAdapterChapterlist.Data(new RviewChapterlistDataClass("", mangaStory, "", null, "Clickable", this, finalMangaUrl, finalImageUrl)));
-
-            for (Sources.ValuesForChapters i : dataChapters) {
-                url = i.url;
-                data.add(new RviewAdapterChapterlist.Data(
-                        new RviewChapterlistDataClass("", "", "", i, "url", this, finalMangaUrl, finalImageUrl)));
-
-            }
+            List<ChapterInfo> items = dataChapters.stream()
+                    .map(ChapterInfo::new)
+                    .collect(Collectors.toList());
 
             activity.runOnUiThread(() -> {
+
                 RecyclerView recyclerView = findViewById(R.id.rview);
                 recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-                adapter = new RviewAdapterChapterlist(activity, data, "imageview");
+
+                adapter = new RviewAdapterChapterlist(
+                        activity,
+                        new HeaderInfo(
+                                finalMangaName,
+                                finalMangaUrl,
+                                finalImageUrl,
+                                mangaStory
+                        ),
+                        items
+                );
                 recyclerView.setAdapter(adapter);
 
                 Splashscreen.setVisibility(View.INVISIBLE);
