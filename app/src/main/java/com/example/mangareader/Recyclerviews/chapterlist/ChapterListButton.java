@@ -24,21 +24,27 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
 
     public void bind (ChapterInfo chapterInfo) {
         button.setText(chapterInfo.getValuesForChapters().name);
-        button.setTextColor(
-                inHistory(button.getContext(), chapterInfo.getValuesForChapters().url)
-                        ? DesignValueHolder.ButtonTextColorRead
-                        : DesignValueHolder.ButtonTextColorNotRead
-        );
+        button.setTextColor(getButtonColor(button, chapterInfo.getValuesForChapters().url));
         button.setOnClickListener(v -> {
             ReadValueHolder.currentChapter = chapterInfo.getValuesForChapters();
             Intent readIntent = new Intent(button.getContext(), ReadActivity.class);
             button.getContext().startActivity(readIntent);
+        });
+        button.setOnLongClickListener(v -> {
+            ListTracker.ChangeStatus(button.getContext(), chapterInfo.getValuesForChapters().url, "History");
+            button.setTextColor(getButtonColor(button, chapterInfo.getValuesForChapters().url));
+            return true;
         });
     }
 
     private static boolean inHistory (Context context, String url) {
         return ListTracker.GetFromList(context, "History").stream()
                 .anyMatch(s -> s.equals(url));
+    }
+    private static int getButtonColor (Button button, String url) {
+        return inHistory(button.getContext(), url)
+                ? DesignValueHolder.ButtonTextColorRead
+                : DesignValueHolder.ButtonTextColorNotRead;
     }
 
 }
