@@ -57,11 +57,9 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
             // Sets the correct source
             // This is unnecessary if we have to merge manga option turned off by the way
             try {
-                Class c;
-                c = Class.forName(data.favouriteItem.source);
+                Class<?> c = Class.forName(data.favouriteItem.source);
                 Object obj = c.newInstance();
-                Sources source = Sources.class.cast(obj);
-                SourceObjectHolder.sources = source;
+                SourceObjectHolder.sources = (Sources) obj;
             } catch (Exception ex) {
                 // I dont't think our program is going to like kill itself if this here errors out
                 // This shouldn't throw an error though
