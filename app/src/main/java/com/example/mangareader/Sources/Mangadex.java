@@ -1,27 +1,27 @@
 package com.example.mangareader.Sources;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.webkit.WebView;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.Home.HomeMangaClass;
 import com.example.mangareader.ListTracker;
-import com.example.mangareader.R;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.*;
 
 public class Mangadex implements Sources {
+
+    private final OkHttpClient client;
+    public Mangadex() {
+        this.client = new OkHttpClient.Builder()
+                .build();
+    }
+
     private String GetBody(String url) {
         try {
             Request request = new Request.Builder()
@@ -29,7 +29,6 @@ public class Mangadex implements Sources {
                     .build();
 
             String body;
-            OkHttpClient client = new OkHttpClient();
             try (Response response = client.newCall(request).execute()) {
                 body = response.body().string();
                 return body;
@@ -46,7 +45,6 @@ public class Mangadex implements Sources {
     @Override
     public ArrayList<SearchValues> CollectDataPicScreen(String manga) {
         // We first need to call the API
-        OkHttpClient client = new OkHttpClient();
         try {
             String URL = "https://api.mangadex.org/manga?title=" + manga
                     + "&includes[]=cover_art&order[relevance]=desc";
@@ -162,7 +160,6 @@ public class Mangadex implements Sources {
                     "&translatedLanguage[]=en";
         }
 
-        OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(initialPage)
                 .build();
@@ -324,17 +321,17 @@ public class Mangadex implements Sources {
     }
 
     /*
-     * / I've been having a lot of trouble with mangadex
-     * / Basically getting all of the data from the API is HELL
-     * / It's just a very slow process because you have to get multiple APIs for all
+     * I've been having a lot of trouble with mangadex
+     * Basically getting all of the data from the API is HELL
+     * It's just a very slow process because you have to get multiple APIs for all
      * the necessary data
-     * / Things I have implemented to make everything faster:
-     * / I am so tired right now.
-     * / - I added a cache that remember all of the manga that have been on the home
+     * Things I have implemented to make everything faster:
+     * I am so tired right now.
+     * - I added a cache that remember all of the manga that have been on the home
      * screen before
-     * / - I added an allow and deny list that remembers which manga have been
+     * - I added an allow and deny list that remembers which manga have been
      * blocked because they have no chapters
-     * / - I added threading
+     * - I added threading
      */
     @Override
 
@@ -350,7 +347,6 @@ public class Mangadex implements Sources {
 
         final String[] body = new String[1];
 
-        OkHttpClient client = new OkHttpClient();
         Request request;
 
         ArrayList<HomeMangaClass> seasonalObjects = new ArrayList<>();
@@ -361,7 +357,6 @@ public class Mangadex implements Sources {
                 .url(URL_SEASONAL)
                 .build();
 
-        client = new OkHttpClient();
         Thread t1 = null;
         Thread t2 = null;
 
@@ -404,8 +399,6 @@ public class Mangadex implements Sources {
 
         //NOW WE GET THE LATEST MANGA
         ArrayList<String> ids = new ArrayList<>();
-
-        client = new OkHttpClient();
 
         request = new Request.Builder()
                 .url(URL_LATEST)
@@ -498,7 +491,6 @@ public class Mangadex implements Sources {
                 .url(newUrl)
                 .build();
 
-        OkHttpClient client = new OkHttpClient();
         String body;
         try (Response response = client.newCall(request).execute()) {
             body = response.body().string();

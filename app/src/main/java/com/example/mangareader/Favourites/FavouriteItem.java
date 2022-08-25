@@ -2,9 +2,9 @@ package com.example.mangareader.Favourites;
 
 public class FavouriteItem {
     public String source;
-    public String url = "";
-    public String image = "";
-    public String mangaName = "[NO NAME]";
+    public String url;
+    public String image;
+    public String mangaName;
     public int date = 0;
 
     public FavouriteItem(String source, String url, String image, String mangaName, int date) {
@@ -20,7 +20,7 @@ public class FavouriteItem {
         return this.date;
     }
 
-    public String returnName() {
+    public String getName () {
         return this.mangaName;
     }
 

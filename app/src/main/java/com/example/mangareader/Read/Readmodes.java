@@ -1,7 +1,6 @@
 package com.example.mangareader.Read;
 
 import android.app.Activity;
-import android.widget.TextView;
 import com.example.mangareader.SourceHandlers.Sources;
 
 import java.util.ArrayList;
