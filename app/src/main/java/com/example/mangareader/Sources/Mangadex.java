@@ -213,7 +213,7 @@ public class Mangadex implements Sources {
     }
 
     @Override
-    public ArrayList<ValuesForChapters> GetChapters(String url, Context context) {
+    public ArrayList<ValuesForChapters> GetChapters(String url, Context context, HashMap<String, Object> extraData) {
 
         ArrayList<String> api_pages = GetApiPageForChapters(url, context);
         ArrayList<ValuesForChapters> data = new ArrayList<>();
@@ -291,7 +291,6 @@ public class Mangadex implements Sources {
 
                 String url_last_part = data.getString(i);
                 String url = "https://uploads.mangadex.org/data/" + hash + "/" + url_last_part;
-                Log.d("lol", url);
                 images.add(url);
 
             }
@@ -386,7 +385,7 @@ public class Mangadex implements Sources {
                     GetDataHomeActivityImageAndTitle x = GetImageAndTitle(id, seasonal_url, context);
 
                     if (x != null) {
-                        seasonalObjects.add(new HomeMangaClass(x.title, seasonal_url, x.image));
+                        seasonalObjects.add(new HomeMangaClass(x.title, seasonal_url, x.image, null));
                     }
                 });
                 t1.start();
@@ -424,7 +423,7 @@ public class Mangadex implements Sources {
 
                                 GetDataHomeActivityImageAndTitle x = GetImageAndTitle(id, latestUrl, context);
                                 if (x != null) {
-                                    latestObjects.add(new HomeMangaClass(x.title, latestUrl, x.image));
+                                    latestObjects.add(new HomeMangaClass(x.title, latestUrl, x.image, null));
                                 }
                             }
                         }
@@ -450,6 +449,11 @@ public class Mangadex implements Sources {
         data.put("latest", latestObjects);
 
         return data;
+    }
+
+    @Override
+    public String GetSourceName() {
+        return "mangadex";
     }
 
     // I am absolutely NOT happy with the way this is working right now
@@ -552,7 +556,7 @@ public class Mangadex implements Sources {
 
                     else {
                         if (!denyList.contains(url)) {
-                            ArrayList<ValuesForChapters> y = GetChapters(url, context);
+                            ArrayList<ValuesForChapters> y = GetChapters(url, context, null);
                             if (y.size() != 0) { // Makes sure there is nothing empty but makes the whole process A LOT
                                 // slower.
                                 String imageUrl = "https://mangadex.org/covers/" + id + "/"

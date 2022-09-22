@@ -1,6 +1,7 @@
 package com.example.mangareader.Activities;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -116,7 +117,6 @@ public class HomeActivity extends AppCompatActivity {
 
                 // Does the latest
                 if (latest != null) {
-
                     // We first start with the latest
                     List<RviewAdapterHome.Data> data = new ArrayList<>();
                     for (HomeMangaClass i : latest) {
@@ -130,6 +130,9 @@ public class HomeActivity extends AppCompatActivity {
                         recyclerView.setAdapter(adapter);
 
                     });
+                }
+                else {
+                    Log.d("lol", "Latest is null");
                 }
 
                 // Does the popular

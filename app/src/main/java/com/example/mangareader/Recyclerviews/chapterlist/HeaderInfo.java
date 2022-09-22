@@ -6,11 +6,14 @@ public class HeaderInfo {
     private final String mangaUrl;
     private final String mangaImageUrl;
     private final String description;
-    public HeaderInfo(String mangaName, String mangaUrl, String mangaImageUrl, String description) {
+    private final String referer;
+
+    public HeaderInfo(String mangaName, String mangaUrl, String mangaImageUrl, String description, String referer) {
         this.mangaName = mangaName;
         this.mangaUrl = mangaUrl;
         this.mangaImageUrl = mangaImageUrl;
         this.description = description;
+        this.referer = referer;
     }
 
     public String getMangaName() {
@@ -28,5 +31,7 @@ public class HeaderInfo {
     public String getDescription() {
         return description;
     }
+
+    public String getReferer() {return referer;}
 
 }

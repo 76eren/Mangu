@@ -113,7 +113,7 @@ public class Mangakakalot implements Sources {
     // Collects data for the chapter list
     // We collect: chapter name + it's url
     @Override
-    public ArrayList<ValuesForChapters> GetChapters(String url, Context context) {
+    public ArrayList<ValuesForChapters> GetChapters(String url, Context context, HashMap<String, Object> extraData) {
         try {
             ArrayList<ValuesForChapters> data = new ArrayList<>();
             ArrayList<String> links = new ArrayList<>();
@@ -372,7 +372,7 @@ public class Mangakakalot implements Sources {
                     String name = tooltip.text(); // THE NAME OF THE MANGA
                     String url = tooltip.attr("href"); // The url to the manga
                     String image = img.attr("src"); // The url to the image
-                    HomeMangaClass homeMangaClass = new HomeMangaClass(name, url, image);
+                    HomeMangaClass homeMangaClass = new HomeMangaClass(name, url, image, null);
                     latest.add(homeMangaClass);
                 }
             }
@@ -401,7 +401,7 @@ public class Mangakakalot implements Sources {
                         Elements a = p.select("a");
                         url = a.attr("href");
                     }
-                    HomeMangaClass homeMangaClass = new HomeMangaClass(name, url, image);
+                    HomeMangaClass homeMangaClass = new HomeMangaClass(name, url, image, null);
                     popular.add(homeMangaClass);
                 }
             }
@@ -415,6 +415,11 @@ public class Mangakakalot implements Sources {
         }
 
         return data;
+    }
+
+    @Override
+    public String GetSourceName() {
+        return "mangakakalot";
     }
 
 }

@@ -68,8 +68,6 @@ public class ReadActivity extends AppCompatActivity {
 
         source.PrepareReadChapter(this); // Prepares the readchapter
 
-        // MAKE THIS CALL ALREADY EXISTING FUNCTIONS IN THE READ CLASS
-        // INSTEAD OF DOING IT ALL OVERT AGAIN
         new Thread(() -> {
             TextView progress = findViewById(R.id.progress);
 
@@ -110,13 +108,13 @@ public class ReadActivity extends AppCompatActivity {
 
             // Caching
             Boolean shouldCache = settings.ReturnValueBoolean(this, "preference_Cache", false);
-
             if (shouldCache) {
                 runOnUiThread(() -> cacheTV.setVisibility(View.VISIBLE));
                 Read.Cache(this, imgs, reqData);
-
                 read.LoadImage();
-            } else {
+            }
+
+            else {
                 runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
                 read.LoadImage();
             }

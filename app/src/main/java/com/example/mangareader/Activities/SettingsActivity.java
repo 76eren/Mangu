@@ -3,6 +3,7 @@ package com.example.mangareader.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.example.mangareader.R;
 import com.example.mangareader.Settings;
 import com.example.mangareader.Sources.Mangadex;
 import com.example.mangareader.Sources.Mangakakalot;
+import com.example.mangareader.Sources.webtoons.Webtoons;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;
@@ -115,16 +117,58 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
             // -------------- Sources -----------------
-            // Surely there is a better way of doing this
             Settings settings = new Settings();
             CheckBoxPreference mangakakalot = getPreferenceScreen().findPreference("preference_source_mangakakalot");
             CheckBoxPreference mangadex = getPreferenceScreen().findPreference("preference_source_mangadex");
+            CheckBoxPreference webtoons = getPreferenceScreen().findPreference("preference_source_webtoons");
+
+            // This makes sure the right preference is checked
+            // I am aware that the SettingsActivity keeps track of this by default however we need to add this
+            // Because the favouritesActivity may change these sources without notifying the SettingsActivity
+            String src = settings.ReturnValueString(activity, "source", "mangadex");
+            switch (src) {
+                case "mangakakalot":
+                    mangadex.setChecked(false);
+                    mangakakalot.setChecked(true);
+                    webtoons.setChecked(false);
+                    break;
+
+                case "mangadex":
+                    mangadex.setChecked(true);
+                    mangakakalot.setChecked(false);
+                    webtoons.setChecked(false);
+                    break;
+
+                case "webtoons":
+                    mangadex.setChecked(false);
+                    mangakakalot.setChecked(false);
+                    webtoons.setChecked(true);
+                    break;
+
+                default:
+                    Log.d("lol", "Taking default");
+                    mangadex.setChecked(true);
+                    mangakakalot.setChecked(false);
+                    webtoons.setChecked(false);
+                    break;
+            }
+
+
+            webtoons.setOnPreferenceClickListener(preference -> {
+                mangadex.setChecked(false);
+                mangakakalot.setChecked(false);
+                webtoons.setChecked(true);
+                SourceObjectHolder.ChangeSource(new Webtoons(), activity);
+
+                return false;
+            });
+
             mangakakalot.setOnPreferenceClickListener(preference -> {
                 mangadex.setChecked(false);
                 mangakakalot.setChecked(true);
-                settings.AssignValueString(activity, "source", "mangakakalot");
+                webtoons.setChecked(false);
+                SourceObjectHolder.ChangeSource(new Mangakakalot(), activity);
 
-                SourceObjectHolder.sources = new Mangakakalot();
 
                 return false;
             });
@@ -132,9 +176,9 @@ public class SettingsActivity extends AppCompatActivity {
             mangadex.setOnPreferenceClickListener(preference -> {
                 mangadex.setChecked(true);
                 mangakakalot.setChecked(false);
-                settings.AssignValueString(activity, "source", "mangadex");
+                webtoons.setChecked(false);
+                SourceObjectHolder.ChangeSource(new Mangadex(), activity);
 
-                SourceObjectHolder.sources = new Mangadex();
                 return false;
             });
 

@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Sources.SearchValues> searchResults = SourceObjectHolder.getSources(this)
                         .CollectDataPicScreen(search.getText().toString());
 
+
                 if (searchResults != null) {
-                    // prevents a dirty little nullpointerexception
                     for (Sources.SearchValues i1 : searchResults) {
                         data.add(new RviewAdapterSearch.Data(context, i1));
                     }

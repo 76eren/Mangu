@@ -14,7 +14,7 @@
                     android:title="Click" android:key="preference_readmode_click"/>
             <CheckBoxPreference
                     android:defaultValue="true"
-                    android:title="[BETA] scroll" android:key="preference_readmode_scroll"/>
+                    android:title="scroll" android:key="preference_readmode_scroll"/>
         </PreferenceCategory>
     </PreferenceCategory>
     <PreferenceCategory
@@ -26,6 +26,9 @@
         <CheckBoxPreference
                 android:defaultValue="true"
                 android:title="Mangadex" android:key="preference_source_mangadex"/>
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:title="[BETA] Webtoons" android:key="preference_source_webtoons"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Favourites">

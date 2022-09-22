@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.mangareader.Activities.ChaptersActivity;
 import com.example.mangareader.Favourites.FavouriteItem;
 import com.example.mangareader.R;
+import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 
@@ -59,7 +60,13 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
             try {
                 Class<?> c = Class.forName(data.favouriteItem.source);
                 Object obj = c.newInstance();
-                SourceObjectHolder.sources = (Sources) obj;
+
+                // Right now this just straight up changes the source :/
+                //SourceObjectHolder.sources = (Sources) obj; [This is old code]
+
+                SourceObjectHolder.ChangeSource((Sources) obj, data.context);
+
+
             } catch (Exception ex) {
                 // I dont't think our program is going to like kill itself if this here errors out
                 // This shouldn't throw an error though

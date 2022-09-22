@@ -1,4 +1,9 @@
 # Mangu
-Mangu is a manga app made by me.
-I'm not too familiar with android development but it has been quite fun so far.
+Mangu is an application that allows you to read manga from the internet.
 
+Currently these are the available sources:
+	- Mangakakalot
+	- Mangadex
+	- Webtoons 
+
+Please do note that I am not very experienced with android app development, this project has been big learning journey for me.

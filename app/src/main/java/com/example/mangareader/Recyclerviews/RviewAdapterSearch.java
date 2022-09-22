@@ -2,6 +2,7 @@ package com.example.mangareader.Recyclerviews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.mangareader.Activities.ChaptersActivity;
 import com.example.mangareader.R;
 import com.example.mangareader.SourceHandlers.Sources;
@@ -47,14 +50,28 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
         holder.image.setVisibility(View.VISIBLE);
         holder.cardView.setVisibility(View.VISIBLE);
 
-        Glide.with(data.context).load(data.searchValues.image).into(holder.image);
+        if (data.searchValues.referer != null) {
+            GlideUrl url = new GlideUrl(data.searchValues.image, new LazyHeaders.Builder()
+                    .addHeader("Referer", data.searchValues.referer)
+                    .build());
+
+            Glide.with(data.context).load(url).into(holder.image);
+        }
+
+        else {
+            Glide.with(data.context).load(data.searchValues.image).into(holder.image);
+        }
+
+
         holder.textView.setText(data.searchValues.name);
 
         holder.cardView.setOnClickListener(view -> {
             Intent intent = new Intent(data.context, ChaptersActivity.class);
             intent.putExtra("url", data.searchValues.url);
+            Log.d("lol", data.searchValues.url);
             intent.putExtra("img", data.searchValues.image);
             intent.putExtra("mangaName", data.searchValues.name);
+            intent.putExtra("referer", data.searchValues.referer); // This may be null
 
             data.context.startActivity(intent);
 

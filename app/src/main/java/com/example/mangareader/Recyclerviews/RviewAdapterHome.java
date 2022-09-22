@@ -2,6 +2,7 @@ package com.example.mangareader.Recyclerviews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.mangareader.Activities.ChaptersActivity;
 import com.example.mangareader.Home.HomeMangaClass;
 import com.example.mangareader.R;
@@ -40,7 +44,25 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RviewAdapterHome.Data data = mData.get(position);
-        Glide.with(data.context).load(data.homeMangaClassObject.image).into(holder.imageView);
+
+
+        if (data.homeMangaClassObject.referer != null) {
+            GlideUrl url = new GlideUrl(data.homeMangaClassObject.image, new LazyHeaders.Builder()
+                    .addHeader("Referer", data.homeMangaClassObject.referer)
+                    .build());
+
+
+
+            Glide.with(data.context).
+                    load(url)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.imageView);
+        }
+
+        else {
+            Glide.with(data.context).load(data.homeMangaClassObject.image).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imageView);
+        }
+
         holder.textView.setText(data.homeMangaClassObject.name);
 
         holder.imageView.setOnClickListener(view -> {
@@ -48,6 +70,7 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
             intent.putExtra("url", data.homeMangaClassObject.chapterUrl);
             intent.putExtra("mangaName", data.homeMangaClassObject.name);
             intent.putExtra("img", data.homeMangaClassObject.image);
+            intent.putExtra("referer", data.homeMangaClassObject.referer);
             data.context.startActivity(intent);
         });
 

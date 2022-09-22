@@ -1,12 +1,15 @@
 package com.example.mangareader.Recyclerviews.chapterlist;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.mangareader.Favourites.FavouriteItem;
 import com.example.mangareader.Favourites.Favourites;
 import com.example.mangareader.R;
@@ -45,9 +48,18 @@ public class ChapterListHeader extends RviewAdapterChapterlist.ViewHolder {
 
         });
 
-        Glide.with(poster.getContext())
-                .load(data.getMangaImageUrl())
-                .into(poster);
+        if (data.getReferer() == null) {
+            Glide.with(poster.getContext())
+                    .load(data.getMangaImageUrl())
+                    .into(poster);
+        }
+        else {
+            GlideUrl url = new GlideUrl(data.getMangaImageUrl(), new LazyHeaders.Builder()
+                    .addHeader("Referer", data.getReferer())
+                    .build());
+
+            Glide.with(poster.getContext()).load(url).into(poster);
+        }
 
         description.setText(data.getDescription());
 
