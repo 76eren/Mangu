@@ -1,7 +1,6 @@
 package com.example.mangareader.Recyclerviews.chapterlist;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -43,7 +42,7 @@ public class ChapterListHeader extends RviewAdapterChapterlist.ViewHolder {
             Context context = favouriteStar.getContext();
             FavouriteItem favouriteItem = new FavouriteItem(
                     SourceObjectHolder.getSources(context).getClass().getName(), url, img, data.getMangaName(),
-                    (int) Instant.now().getEpochSecond());
+                    (int) Instant.now().getEpochSecond(), data.getReferer());
             Favourites.checkWhatNeedsToHappen(context, favouriteItem);
 
         });

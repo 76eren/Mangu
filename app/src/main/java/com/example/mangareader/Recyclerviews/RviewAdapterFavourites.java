@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.mangareader.Activities.ChaptersActivity;
 import com.example.mangareader.Favourites.FavouriteItem;
 import com.example.mangareader.R;
@@ -46,7 +48,19 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
     public void onBindViewHolder(RviewAdapterFavourites.ViewHolder holder, int position) {
         RviewAdapterFavourites.Data data = mData.get(position);
 
-        Glide.with(data.context).load(data.favouriteItem.image).into(holder.cardImage);
+        if (data.favouriteItem.referer == null) {
+            Glide.with(data.context)
+                    .load(data.favouriteItem.image)
+                    .into(holder.cardImage);
+        }
+        else {
+            GlideUrl url = new GlideUrl(data.favouriteItem.image, new LazyHeaders.Builder()
+                    .addHeader("Referer", data.favouriteItem.referer)
+                    .build());
+
+            Glide.with(data.context).load(url).into(holder.cardImage);
+        }
+
         holder.cardText.setText(data.favouriteItem.mangaName);
 
         holder.card.setOnClickListener(v -> {
@@ -54,6 +68,7 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
             intent.putExtra("url", data.favouriteItem.url);
             intent.putExtra("img", data.favouriteItem.image);
             intent.putExtra("mangaName", data.favouriteItem.mangaName);
+            intent.putExtra("referer", data.favouriteItem.referer);
 
             // Sets the correct source
             // This is unnecessary if we have to merge manga option turned off by the way

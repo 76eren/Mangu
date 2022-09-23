@@ -6,13 +6,15 @@ public class FavouriteItem {
     public String image;
     public String mangaName;
     public int date = 0;
+    public String referer;
 
-    public FavouriteItem(String source, String url, String image, String mangaName, int date) {
+    public FavouriteItem(String source, String url, String image, String mangaName, int date, String referer) {
         this.source = source;
         this.url = url;
         this.image = image;
         this.mangaName = mangaName;
         this.date = date;
+        this.referer = referer;
     }
 
     // These functions are needed for the sorting
