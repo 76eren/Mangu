@@ -1,3 +1,8 @@
+// UPDATE 17-10-2022:
+// Mangakakalot recently added a new domain called "chapmanganato"
+// From what I can tell this si supposed to be a replacement for the already existing "readmanganato" source, however I decided to keep all the references for readmanganato just in case
+// From now on I will treat chapmanganato and readmanganato the same, just with different names (except for the referer!!!)
+
 package com.example.mangareader.Sources;
 
 import android.content.Context;
@@ -32,6 +37,7 @@ public class Mangakakalot implements Sources {
     public ArrayList<SearchValues> CollectDataPicScreen(String manga) {
 
         manga = manga.replace(" ", "_");
+        manga = manga.replace("'", "_");
         String url = "https://mangakakalot.com/search/story/" + manga;
         Document doc;
         try {
@@ -55,7 +61,6 @@ public class Mangakakalot implements Sources {
                 String name = z.attr("alt"); // The manga's name
 
                 // Now we need to add our stuff to the arrays
-
                 SearchValues object = new SearchValues();
                 object.image = img;
                 object.name = name;
@@ -83,14 +88,14 @@ public class Mangakakalot implements Sources {
 
             // MANGAKAKLOT USES MULTIPLE WEBSITES
             Elements x = null;
-            if (url.toLowerCase().contains("readmanganato.com")) {
+            if (url.toLowerCase().contains("readmanganato.com") || url.toLowerCase().contains("chapmanganato.com")) { // Recently mangakakalot added a new (replacement?) domain for readmanganato
                 x = doc.getElementsByClass("panel-story-info-description"); // This also contains data we don't need
-            } else if (url.toLowerCase().contains("mangakakalot.com")) {
+            }
+            else if (url.toLowerCase().contains("mangakakalot.com")) {
                 x = doc.select("div#noidungm");
             }
 
             // I stole this from somewhere on stackoverflow
-
             if (x != null) {
                 Document document = Jsoup.parse(x.html());
                 document.outputSettings(NO_PRETTY_PRINTING); // makes html() preserve
@@ -120,9 +125,10 @@ public class Mangakakalot implements Sources {
             ArrayList<String> names = new ArrayList<>();
 
             Elements ul = null;
-            if (url.toLowerCase().contains("readmanganato.com")) {
+            if (url.toLowerCase().contains("readmanganato.com") || url.toLowerCase().contains("chapmanganato.com")) { // mangakakalot added a new (replacement) domain called chapmanganato
                 ul = doc.getElementsByClass("row-content-chapter");
-            } else if (url.toLowerCase().contains("mangakakalot.com")) {
+            }
+            else if (url.toLowerCase().contains("mangakakalot.com")) {
                 ul = doc.getElementsByClass("chapter-list");
             }
 
@@ -135,7 +141,8 @@ public class Mangakakalot implements Sources {
                 String link = "";
 
                 Elements li;
-                if (url.toLowerCase().contains("readmanganato.com")) {
+
+                if (url.toLowerCase().contains("readmanganato.com") || url.toLowerCase().contains("readmanganato.com")) {
                     li = i.getElementsByClass("chapter-name text-nowrap");
                     title = li.attr("title"); // This is the chapter title
                     link = li.attr("href"); // This is the url
@@ -233,14 +240,28 @@ public class Mangakakalot implements Sources {
                 doc = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                         .get();
-            } else {
-                String CookieSiteLocation;
+            }
+            else {
+                String CookieSiteLocation = "";
 
                 // To get to server two, we need certain cookies
-                // There are two cookie sites based on whether the url is mangakakalot or readmanganato
+                // There are cookie sites based on whether the url is mangakakalot or readmanganato or chapmanganato
+
+                // This isn't broken
                 if (url.toLowerCase().contains("readmanganato")) {
                     CookieSiteLocation = "https://readmanganato.com/content_server_s2";
-                } else {
+                }
+                if (url.toLowerCase().contains("chapmanganato")) {
+                    CookieSiteLocation = "https://chapmanganato.com/content_server_s2";
+                }
+
+                // This is broken for some reason
+                // It used to work but right now it doesn't, and I am not sure why because it should be working :/
+                if (url.toLowerCase().contains("mangakakalot")) {
+                    Log.d("lol", "HITTING THIS CUNT");
+                    CookieSiteLocation = "https://mangakakalot.com/change_content_s2";
+                }
+                if (CookieSiteLocation.equals("")) {
                     CookieSiteLocation = "https://mangakakalot.com/change_content_s2";
                 }
 
@@ -266,6 +287,11 @@ public class Mangakakalot implements Sources {
                 String img = imgTag.attr("src");
                 images.add(img);
             }
+
+            for (String i : images) {
+                Log.d("lol", i);
+            }
+
             return images;
 
         } catch (Exception ex) {
@@ -289,12 +315,17 @@ public class Mangakakalot implements Sources {
         String referer = "";
         if (url.toLowerCase().contains("readmanganato.com")) {
             referer = "https://readmanganato.com/";
-            reqData.put("Host", "s71.mkklcdnv6tempv2.com");
 
-        } else if (url.toLowerCase().contains("mangakakalot.com")) {
-            referer = "https://mangakakalot.com/";
-            reqData.put("Host", "avt.mkklcdnv6temp.com");
         }
+        else if (url.toLowerCase().contains("mangakakalot.com")) {
+            referer = "https://mangakakalot.com/";
+        }
+
+        // mangakakalot decided to add a new domain called "chapmanganato"
+        else if (url.toLowerCase().contains("chapmanganato.com")) {
+            referer = "https://chapmanganato.com/";
+        }
+
         reqData.put("Referer", referer);
         reqData.put("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0");
 

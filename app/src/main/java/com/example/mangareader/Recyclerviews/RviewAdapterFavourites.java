@@ -21,6 +21,7 @@ import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFavourites.ViewHolder> {
 
@@ -47,7 +48,6 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
     @Override
     public void onBindViewHolder(RviewAdapterFavourites.ViewHolder holder, int position) {
         RviewAdapterFavourites.Data data = mData.get(position);
-
         if (data.favouriteItem.referer == null) {
             Glide.with(data.context)
                     .load(data.favouriteItem.image)
