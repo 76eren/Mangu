@@ -45,22 +45,20 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RviewAdapterHome.Data data = mData.get(position);
 
-
         if (data.homeMangaClassObject.referer != null) {
             GlideUrl url = new GlideUrl(data.homeMangaClassObject.image, new LazyHeaders.Builder()
                     .addHeader("Referer", data.homeMangaClassObject.referer)
                     .build());
 
 
-
-            Glide.with(data.context).
+            Glide.with(data.context.getApplicationContext()).
                     load(url)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.imageView);
         }
 
         else {
-            Glide.with(data.context).load(data.homeMangaClassObject.image).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imageView);
+            Glide.with(data.context.getApplicationContext()).load(data.homeMangaClassObject.image).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imageView);
         }
 
         holder.textView.setText(data.homeMangaClassObject.name);

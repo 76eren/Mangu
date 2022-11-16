@@ -1,6 +1,5 @@
 package com.example.mangareader.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +33,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             SettingsFragment settingsFragment = new SettingsFragment();
-            settingsFragment.activity = this;
 
             getSupportFragmentManager()
                     .beginTransaction()
@@ -66,7 +64,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        Activity activity;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -125,7 +122,7 @@ public class SettingsActivity extends AppCompatActivity {
             // This makes sure the right preference is checked
             // I am aware that the SettingsActivity keeps track of this by default however we need to add this
             // Because the favouritesActivity may change these sources without notifying the SettingsActivity
-            String src = settings.ReturnValueString(activity, "source", "mangadex");
+            String src = settings.ReturnValueString(this.getActivity(), "source", "mangadex");
             switch (src) {
                 case "mangakakalot":
                     mangadex.setChecked(false);
@@ -158,7 +155,7 @@ public class SettingsActivity extends AppCompatActivity {
                 mangadex.setChecked(false);
                 mangakakalot.setChecked(false);
                 webtoons.setChecked(true);
-                SourceObjectHolder.ChangeSource(new Webtoons(), activity);
+                SourceObjectHolder.ChangeSource(new Webtoons(), this.getActivity());
 
                 return false;
             });
@@ -167,7 +164,7 @@ public class SettingsActivity extends AppCompatActivity {
                 mangadex.setChecked(false);
                 mangakakalot.setChecked(true);
                 webtoons.setChecked(false);
-                SourceObjectHolder.ChangeSource(new Mangakakalot(), activity);
+                SourceObjectHolder.ChangeSource(new Mangakakalot(), this.getActivity());
 
 
                 return false;
@@ -177,7 +174,7 @@ public class SettingsActivity extends AppCompatActivity {
                 mangadex.setChecked(true);
                 mangakakalot.setChecked(false);
                 webtoons.setChecked(false);
-                SourceObjectHolder.ChangeSource(new Mangadex(), activity);
+                SourceObjectHolder.ChangeSource(new Mangadex(), this.getActivity());
 
                 return false;
             });
@@ -192,7 +189,7 @@ public class SettingsActivity extends AppCompatActivity {
                 lightTheme.setChecked(false);
                 darkTheme.setChecked(false);
 
-                settings.AssignValueString(this.activity, "theme", "default");
+                settings.AssignValueString(this.getActivity(), "theme", "default");
 
                 return true;
             });
@@ -202,7 +199,7 @@ public class SettingsActivity extends AppCompatActivity {
                 lightTheme.setChecked(false);
                 darkTheme.setChecked(true);
 
-                settings.AssignValueString(this.activity, "theme", "dark");
+                settings.AssignValueString(this.getActivity(), "theme", "dark");
 
                 return true;
             });
@@ -212,7 +209,7 @@ public class SettingsActivity extends AppCompatActivity {
                 lightTheme.setChecked(true);
                 darkTheme.setChecked(false);
 
-                settings.AssignValueString(this.activity, "theme", "light");
+                settings.AssignValueString(this.getActivity(), "theme", "light");
 
                 return true;
 
@@ -240,14 +237,14 @@ public class SettingsActivity extends AppCompatActivity {
             click.setOnPreferenceClickListener(preference -> {
                 scroll.setChecked(false);
                 click.setChecked(true);
-                settings.AssignValueString(activity, "read_mode", "click");
+                settings.AssignValueString(this.getActivity(), "read_mode", "click");
                 return false;
             });
 
             scroll.setOnPreferenceClickListener(preference -> {
                 scroll.setChecked(true);
                 click.setChecked(false);
-                settings.AssignValueString(activity, "read_mode", "scroll");
+                settings.AssignValueString(this.getActivity(), "read_mode", "scroll");
 
                 return false;
             });
@@ -276,7 +273,7 @@ public class SettingsActivity extends AppCompatActivity {
                 preference_favourites_sort_date_up.setChecked(false);
                 alphabet.setChecked(true);
 
-                settings.AssignValueString(activity, "preference_favourites_sort",
+                settings.AssignValueString(this.getActivity(), "preference_favourites_sort",
                         "preference_favourites_sort_alphabet");
                 return false;
             });
@@ -285,7 +282,7 @@ public class SettingsActivity extends AppCompatActivity {
                 preference_favourites_sort_date_down.setChecked(true);
                 preference_favourites_sort_date_up.setChecked(false);
                 alphabet.setChecked(false);
-                settings.AssignValueString(activity, "preference_favourites_sort",
+                settings.AssignValueString(this.getActivity(), "preference_favourites_sort",
                         "preference_favourites_sort_date_down");
 
                 return false;
@@ -296,7 +293,7 @@ public class SettingsActivity extends AppCompatActivity {
                 alphabet.setChecked(false);
                 preference_favourites_sort_date_down.setChecked(false);
 
-                settings.AssignValueString(activity, "preference_favourites_sort",
+                settings.AssignValueString(this.getActivity(), "preference_favourites_sort",
                         "preference_favourites_sort_date_up");
                 return false;
             });

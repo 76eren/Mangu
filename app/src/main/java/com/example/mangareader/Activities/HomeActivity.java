@@ -74,7 +74,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // We set the correct theme
         // This is very lazy
-        String theme = settings.ReturnValueString(this, "theme", "default");
+        String theme = settings.ReturnValueString(this.getApplicationContext(), "theme", "default");
         switch (theme) {
             case "default":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
