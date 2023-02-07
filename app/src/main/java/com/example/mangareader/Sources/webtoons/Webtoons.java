@@ -17,6 +17,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -35,14 +36,13 @@ public class Webtoons implements Sources {
                 body = response.body().string();
                 return body;
             }
-        }
-
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.d("error", ex.toString());
             return null;
         }
 
     }
+
     @Override
     public ArrayList<SearchValues> CollectDataPicScreen(String manga) {
         manga = manga.trim();
@@ -55,8 +55,7 @@ public class Webtoons implements Sources {
             document = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0")
                     .get();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.d("error", ex.toString());
             return null;
         }
@@ -79,7 +78,7 @@ public class Webtoons implements Sources {
         Elements li = card_lst.select("li");
         for (Element i : li) {
             Elements a = i.select("a");
-            String chapterUrl = "https://www.webtoons.com"+a.attr("href"); // url
+            String chapterUrl = "https://www.webtoons.com" + a.attr("href"); // url
 
             Elements src = i.select("img");
             String image = src.attr("src"); // image
@@ -95,6 +94,7 @@ public class Webtoons implements Sources {
         }
         return data;
     }
+
     @Override
     public String getStory(String url) {
         Document doc;
@@ -102,9 +102,7 @@ public class Webtoons implements Sources {
             doc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0")
                     .get();
-        }
-
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "A problem occured whilst trying to get the description";
         }
 
@@ -124,8 +122,7 @@ public class Webtoons implements Sources {
 
             genre = url.split("en/")[1];
             genre = genre.split("/")[0];
-        }
-        else {
+        } else {
             // We first need to get the full url
 
             String body = "";
@@ -145,7 +142,7 @@ public class Webtoons implements Sources {
                     String titleNo = a.getString("titleNo");
                     if (titleNo.equals(id)) {
                         genre = a.getString("representGenre");
-                        got=true;
+                        got = true;
                         break;
                     }
                 }
@@ -154,8 +151,7 @@ public class Webtoons implements Sources {
                     genre = "challenge";
                 }
 
-            }
-            else {
+            } else {
                 return null;
             }
         }
@@ -163,8 +159,7 @@ public class Webtoons implements Sources {
         String api_page;
         if (!old_url.contains("challenge")) {
             api_page = WebtoonsMac.GetChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/episodeList.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + id + "&v=4&platform=APP_ANDROID&titleNo=95&startIndex=0&pageSize=100000");
-        }
-        else {
+        } else {
             api_page = WebtoonsMac.GetChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/challengeEpisodeList.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + id + "&v=4&platform=APP_ANDROID&titleNo=95&startIndex=0&pageSize=100000");
         }
 
@@ -196,8 +191,7 @@ public class Webtoons implements Sources {
                 String chapterUrl;
                 if (!old_url.contains("challenge")) {
                     chapterUrl = "https://www.webtoons.com/en/" + genre + "/" + title + "/" + episodeTitle + "/viewer?title_no=" + titleNo + "&episode_no=" + episodeNo;
-                }
-                else {
+                } else {
                     genre = "challenge";
                     chapterUrl = "https://www.webtoons.com/en/challenge/" + title + "/" + episodeTitle + "/viewer?title_no=" + id + "&episode_no=" + episodeNo;
                 }
@@ -225,17 +219,15 @@ public class Webtoons implements Sources {
 
         String apiUrl;
         if (!object.url.toLowerCase().contains("challenge")) {
-            apiUrl = "https://apis.webtoons.com/lineWebtoon/webtoon/episodeInfo.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + titleNo + "&v=4&platform=APP_ANDROID&titleNo=" + titleNo + "&episodeNo="+episodeNo;
-        }
-        else {
-            apiUrl = "https://apis.webtoons.com/lineWebtoon/webtoon/challengeEpisodeInfo.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + titleNo + "&v=4&platform=APP_ANDROID&titleNo=" + titleNo + "&episodeNo="+episodeNo;
+            apiUrl = "https://apis.webtoons.com/lineWebtoon/webtoon/episodeInfo.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + titleNo + "&v=4&platform=APP_ANDROID&titleNo=" + titleNo + "&episodeNo=" + episodeNo;
+        } else {
+            apiUrl = "https://apis.webtoons.com/lineWebtoon/webtoon/challengeEpisodeInfo.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + titleNo + "&v=4&platform=APP_ANDROID&titleNo=" + titleNo + "&episodeNo=" + episodeNo;
         }
 
         String apiPage = "";
         try {
             apiPage = WebtoonsMac.GetChapterList(apiUrl);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.d("error", ex.toString());
         }
         String body = GetBody(apiPage);
@@ -254,8 +246,7 @@ public class Webtoons implements Sources {
                     images.add(url);
                 }
 
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Log.d("error", ex.toString());
             }
         }
@@ -316,8 +307,7 @@ public class Webtoons implements Sources {
             document = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0")
                     .get();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.d("error", ex.toString());
             return null;
         }
@@ -327,28 +317,28 @@ public class Webtoons implements Sources {
         int day_int = calendar.get(Calendar.DAY_OF_WEEK);
         String day = "";
 
-        switch(day_int){
+        switch (day_int) {
             // The first day of the week is Monday and I do not care what anybody says
             case 2:
-                day="Monday";
+                day = "Monday";
                 break;
             case 3:
-                day="Tuesday";
+                day = "Tuesday";
                 break;
             case 4:
-                day="Wednesday";
+                day = "Wednesday";
                 break;
             case 5:
-                day="Thursday";
+                day = "Thursday";
                 break;
             case 6:
-                day="Friday";
+                day = "Friday";
                 break;
             case 7:
-                day="Saturday";
+                day = "Saturday";
                 break;
             case 1:
-                day="Sunday";
+                day = "Sunday";
                 break;
 
         }

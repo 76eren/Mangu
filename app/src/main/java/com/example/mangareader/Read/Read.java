@@ -16,6 +16,7 @@ import com.bumptech.glide.request.target.Target;
 import com.example.mangareader.R;
 import com.example.mangareader.Settings;
 import com.github.chrisbanes.photoview.PhotoView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -66,8 +67,7 @@ public class Read {
                     .placeholder(R.drawable.ic_launcher_background)
                     .fitCenter()
                     .into(photoView);
-        }
-        else {
+        } else {
             Glide.with(context)
                     .load(imagePath + "/" + imageName)
                     .placeholder(R.drawable.ic_launcher_background)
@@ -101,9 +101,7 @@ public class Read {
                     .fitCenter()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(photoView);
-        }
-
-        else {
+        } else {
             Glide.with(context)
                     .load(glideUrl)
                     .timeout(0)

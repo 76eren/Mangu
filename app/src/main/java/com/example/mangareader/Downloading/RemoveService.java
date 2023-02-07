@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.chapterlist.ButtonValuesChapterScreen;
+
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -57,9 +58,8 @@ public class RemoveService extends Service {
                     if (y.getUrl().equals(i.getSelectedButtonUrl())) {
                         targetChapter = y;
                         break;
-                    }
-                    else {
-                        Log.d("lol", y.getUrl()  + " != " + i.getSelectedButtonUrl());
+                    } else {
+                        Log.d("lol", y.getUrl() + " != " + i.getSelectedButtonUrl());
                     }
                 }
 

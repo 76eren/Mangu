@@ -2,50 +2,15 @@ package com.example.mangareader.Downloading;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.DownloadManager;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.example.mangareader.Recyclerviews.chapterlist.ButtonValuesChapterScreen;
-import com.example.mangareader.SourceHandlers.Sources;
-import com.example.mangareader.ValueHolders.ReadValueHolder;
-import com.example.mangareader.ValueHolders.SourceObjectHolder;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Downloader {
     public void remove(CopyOnWriteArrayList<ButtonValuesChapterScreen> values) {

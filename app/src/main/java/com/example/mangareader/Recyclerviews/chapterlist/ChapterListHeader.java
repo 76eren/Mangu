@@ -3,7 +3,6 @@ package com.example.mangareader.Recyclerviews.chapterlist;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,13 +32,13 @@ public class ChapterListHeader extends RviewAdapterChapterlist.ViewHolder {
     public ChapterListHeader(LayoutInflater inflater, @NonNull @NotNull ViewGroup parent, int layoutResource) {
         super(inflater, parent, layoutResource);
         this.favouriteStar = this.itemView.findViewById(R.id.favourite_star);
-        this.poster        = this.itemView.findViewById(R.id.poster);
-        this.description   = this.itemView.findViewById(R.id.description_text);
-        this.download      = this.itemView.findViewById(R.id.download_button);
+        this.poster = this.itemView.findViewById(R.id.poster);
+        this.description = this.itemView.findViewById(R.id.description_text);
+        this.download = this.itemView.findViewById(R.id.download_button);
     }
 
 
-    public void bind (HeaderInfo data) {
+    public void bind(HeaderInfo data) {
 
         favouriteStar.setOnClickListener(v -> {
 
@@ -75,8 +74,7 @@ public class ChapterListHeader extends RviewAdapterChapterlist.ViewHolder {
                     .load(data.getMangaImageUrl())
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(poster);
-        }
-        else {
+        } else {
             GlideUrl url = new GlideUrl(data.getMangaImageUrl(), new LazyHeaders.Builder()
                     .addHeader("Referer", data.getReferer())
                     .build());

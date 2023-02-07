@@ -3,13 +3,10 @@ package com.example.mangareader.Downloading;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
-import com.example.mangareader.Favourites.FavouriteItem;
 import com.example.mangareader.Recyclerviews.chapterlist.ButtonValuesChapterScreen;
-import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.google.gson.Gson;
 
-import javax.xml.transform.Source;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -21,7 +18,7 @@ public class DownloadTracker {
     public void removeFromDownloads(CopyOnWriteArrayList<ButtonValuesChapterScreen> values, Context context) {
         // we need to remove these from
         ArrayList<DownloadedChapter> toRemove = new ArrayList<>();
-        LinkedHashSet<DownloadedChapter> downloadedChapters =  getFromDownloads(context);
+        LinkedHashSet<DownloadedChapter> downloadedChapters = getFromDownloads(context);
 
         // We put all the downloads we want to remove in a list
         for (ButtonValuesChapterScreen i : values) {
@@ -104,7 +101,6 @@ public class DownloadTracker {
 
         return setObjects;
     }
-
 
 
     public void removeFromDownloads() {

@@ -2,14 +2,15 @@ package com.example.mangareader.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.preference.*;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
 import com.example.mangareader.R;
 import com.example.mangareader.Settings;
 import com.example.mangareader.Sources.Mangadex;
@@ -72,43 +73,27 @@ public class SettingsActivity extends AppCompatActivity {
             SwitchPreference preference_merge_manga_favourites = getPreferenceScreen()
                     .findPreference("preference_merge_manga_favourites");
             preference_merge_manga_favourites.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (preference_merge_manga_favourites.isChecked()) {
-                    preference_merge_manga_favourites.setChecked(false);
-                } else {
-                    preference_merge_manga_favourites.setChecked(true);
-                }
+                preference_merge_manga_favourites.setChecked(!preference_merge_manga_favourites.isChecked());
                 return false;
             });
 
             SwitchPreference preference_ServerMangakakalot = getPreferenceScreen()
                     .findPreference("preference_ServerMangakakalot");
             preference_ServerMangakakalot.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (preference_ServerMangakakalot.isChecked()) {
-                    preference_ServerMangakakalot.setChecked(false);
-                } else {
-                    preference_ServerMangakakalot.setChecked(true);
-                }
+                preference_ServerMangakakalot.setChecked(!preference_ServerMangakakalot.isChecked());
                 return false;
             });
 
             SwitchPreference preference_mangakakalot_showButon = getPreferenceScreen()
                     .findPreference("preference_mangakakalot_showButon");
             preference_mangakakalot_showButon.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (preference_mangakakalot_showButon.isChecked()) {
-                    preference_mangakakalot_showButon.setChecked(false);
-                } else {
-                    preference_mangakakalot_showButon.setChecked(true);
-                }
+                preference_mangakakalot_showButon.setChecked(!preference_mangakakalot_showButon.isChecked());
                 return false;
             });
 
             SwitchPreference preference_cache = getPreferenceScreen().findPreference("preference_Cache");
             preference_cache.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (preference_cache.isChecked()) {
-                    preference_cache.setChecked(false);
-                } else {
-                    preference_cache.setChecked(true);
-                }
+                preference_cache.setChecked(!preference_cache.isChecked());
 
                 return false;
             });
@@ -214,11 +199,7 @@ public class SettingsActivity extends AppCompatActivity {
             SwitchPreference mangadex_preference_languages = getPreferenceScreen()
                     .findPreference("mangadex_preference_languages");
             mangadex_preference_languages.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (mangadex_preference_languages.isChecked()) {
-                    mangadex_preference_languages.setChecked(false);
-                } else {
-                    mangadex_preference_languages.setChecked(true);
-                }
+                mangadex_preference_languages.setChecked(!mangadex_preference_languages.isChecked());
 
                 return false;
 
@@ -246,11 +227,7 @@ public class SettingsActivity extends AppCompatActivity {
             SwitchPreference preference_hardware_acceleration = getPreferenceScreen()
                     .findPreference("preference_hardware_acceleration");
             preference_hardware_acceleration.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (preference_hardware_acceleration.isChecked()) {
-                    preference_hardware_acceleration.setChecked(false);
-                } else {
-                    preference_hardware_acceleration.setChecked(true);
-                }
+                preference_hardware_acceleration.setChecked(!preference_hardware_acceleration.isChecked());
                 return false;
             });
 
@@ -297,11 +274,7 @@ public class SettingsActivity extends AppCompatActivity {
             SwitchPreference preference_image_size = getPreferenceScreen()
                     .findPreference("preference_hardware_acceleration");
             preference_image_size.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (preference_image_size.isChecked()) {
-                    preference_image_size.setChecked(false);
-                } else {
-                    preference_image_size.setChecked(true);
-                }
+                preference_image_size.setChecked(!preference_image_size.isChecked());
                 return false;
             });
 

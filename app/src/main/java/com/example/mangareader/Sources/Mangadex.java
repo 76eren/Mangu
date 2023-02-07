@@ -7,16 +7,21 @@ import com.example.mangareader.Home.HomeMangaClass;
 import com.example.mangareader.ListTracker;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
-import okhttp3.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class Mangadex implements Sources {
 
     private final OkHttpClient client;
+
     public Mangadex() {
         this.client = new OkHttpClient.Builder()
                 .build();
@@ -33,9 +38,7 @@ public class Mangadex implements Sources {
                 body = response.body().string();
                 return body;
             }
-        }
-
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.d("lol", ex.toString());
             return null;
         }
@@ -83,9 +86,7 @@ public class Mangadex implements Sources {
 
                         values.add(obbie);
 
-                    }
-
-                    catch (Exception ignored) {
+                    } catch (Exception ignored) {
                     }
 
                 }
@@ -94,9 +95,7 @@ public class Mangadex implements Sources {
             }
 
             return null;
-        }
-
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
         }
 
         return null;
@@ -197,14 +196,10 @@ public class Mangadex implements Sources {
                         links.add(page.toString());
 
                     }
-                }
-
-                else {
+                } else {
                     links.add(initialPage);
                 }
-            }
-
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Log.d("lol", ex.toString());
             }
         }
@@ -375,8 +370,7 @@ public class Mangadex implements Sources {
                         number = relationships.getJSONObject(finalI);
                         id = number.getString("id");
 
-                    }
-                    catch (JSONException e) {
+                    } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
 
@@ -390,8 +384,7 @@ public class Mangadex implements Sources {
                 });
                 t1.start();
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             Log.d("lol", exception.toString());
             return null;
         }
@@ -426,9 +419,7 @@ public class Mangadex implements Sources {
                                     latestObjects.add(new HomeMangaClass(x.title, latestUrl, x.image, null));
                                 }
                             }
-                        }
-
-                        catch (Exception ex) {
+                        } catch (Exception ex) {
                             Log.d("lol", ex.toString());
                         }
 
@@ -468,9 +459,7 @@ public class Mangadex implements Sources {
 
         if (mangadex_preference_languages) {
             stuff = ListTracker.GetFromList(context, "home_mangadex_cache_multilingual");
-        }
-
-        else {
+        } else {
             stuff = ListTracker.GetFromList(context, "home_mangadex_cache_english");
         }
 
@@ -481,9 +470,7 @@ public class Mangadex implements Sources {
                 if (manga.getString("url").equals(url)) {
                     return new GetDataHomeActivityImageAndTitle(manga.getString("name"), manga.getString("image"));
                 }
-            }
-
-            catch (Exception exception) {
+            } catch (Exception exception) {
                 Log.d("lol", exception.toString());
             }
         }
@@ -539,9 +526,7 @@ public class Mangadex implements Sources {
                     if (mangadex_preference_languages) {
                         allowList = ListTracker.GetFromList(context, "allowList_multilingual_mangadex");
                         denyList = ListTracker.GetFromList(context, "denyList_multilingual_mangadex");
-                    }
-
-                    else {
+                    } else {
                         allowList = ListTracker.GetFromList(context, "allowList_english_mangadex");
                         denyList = ListTracker.GetFromList(context, "denyList_english_mangadex");
                     }
@@ -552,9 +537,7 @@ public class Mangadex implements Sources {
                         AddMangaToListtracker(mangadex_preference_languages, context, title, id, imageUrl);
 
                         return new GetDataHomeActivityImageAndTitle(title, imageUrl);
-                    }
-
-                    else {
+                    } else {
                         if (!denyList.contains(url)) {
                             ArrayList<ValuesForChapters> y = GetChapters(url, context, null);
                             if (y.size() != 0) { // Makes sure there is nothing empty but makes the whole process A LOT
@@ -567,9 +550,7 @@ public class Mangadex implements Sources {
 
                                     ListTracker.AddToList(context, url, "allowList_multilingual_mangadex");
 
-                                }
-
-                                else {
+                                } else {
                                     ListTracker.AddToList(context, url, "allowList_english_mangadex");
                                     AddMangaToListtracker(false, context, title, id, imageUrl);
 
@@ -580,9 +561,7 @@ public class Mangadex implements Sources {
                             } else {
                                 if (mangadex_preference_languages) {
                                     ListTracker.AddToList(context, url, "denyList_multilingual_mangadex");
-                                }
-
-                                else {
+                                } else {
                                     ListTracker.AddToList(context, url, "denyList_english_mangadex");
 
                                 }
@@ -593,9 +572,7 @@ public class Mangadex implements Sources {
 
                 }
             }
-        }
-
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
 
@@ -623,9 +600,7 @@ public class Mangadex implements Sources {
 
             if (mangadex_preference_languages) {
                 ListTracker.AddToList(context, jsonString, "home_mangadex_cache_multilingual");
-            }
-
-            else {
+            } else {
                 ListTracker.AddToList(context, jsonString, "home_mangadex_cache_english");
             }
         } catch (Exception ex) {

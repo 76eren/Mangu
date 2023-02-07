@@ -1,21 +1,19 @@
 package com.example.mangareader.Activities;
 
 import android.content.Context;
-import android.view.Menu;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.RviewAdapterSearch;
-import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
-
-// I DID USE CODE FROM HERE: https://www.geeksforgeeks.org/navigation-drawer-in-android/
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import android.view.MenuItem;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;
 

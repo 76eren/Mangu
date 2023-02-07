@@ -2,29 +2,29 @@ package com.example.mangareader.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.Downloading.DownloadTracker;
 import com.example.mangareader.Downloading.DownloadedChapter;
-import com.example.mangareader.Recyclerviews.chapterlist.*;
-import com.example.mangareader.ValueHolders.SourceObjectHolder;
+import com.example.mangareader.R;
+import com.example.mangareader.Recyclerviews.chapterlist.ChapterInfo;
+import com.example.mangareader.Recyclerviews.chapterlist.ChapterListButton;
+import com.example.mangareader.Recyclerviews.chapterlist.HeaderInfo;
+import com.example.mangareader.Recyclerviews.chapterlist.RviewAdapterChapterlist;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.SplashScreen;
-import com.example.mangareader.R;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class ChaptersActivity extends AppCompatActivity {
@@ -58,8 +58,7 @@ public class ChaptersActivity extends AppCompatActivity {
             imageUrl = intent.getStringExtra("img");
             mangaName = intent.getStringExtra("mangaName");
             referer = intent.getStringExtra("referer");
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Intent x = new Intent(this, HomeActivity.class);
             startActivity(x);
         }
@@ -125,8 +124,7 @@ public class ChaptersActivity extends AppCompatActivity {
 
             relevantDownloads.clear();
             relevantDownloads.addAll(sortedRelevantDownloads);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
         }
 
 
@@ -137,8 +135,7 @@ public class ChaptersActivity extends AppCompatActivity {
 
             if (!finalDownloaded) {
                 mangaStory = sources.getStory(finalMangaUrl);
-            }
-            else {
+            } else {
                 // The mangastory is for every object the same, so we can just get the first object in our arraylist
                 mangaStory = relevantDownloads.get(0).getMangaStory();
             }
@@ -158,12 +155,10 @@ public class ChaptersActivity extends AppCompatActivity {
             if (!finalDownloaded) {
                 try {
                     dataChapters = sources.GetChapters(finalMangaUrl, activity, extraData);
-                }
-                catch (IOException | NoSuchAlgorithmException | InvalidKeyException | JSONException e) {
+                } catch (IOException | NoSuchAlgorithmException | InvalidKeyException | JSONException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            else {
+            } else {
                 for (DownloadedChapter i : relevantDownloads) {
                     Sources.ValuesForChapters valuesForChapters = new Sources.ValuesForChapters();
                     valuesForChapters.name = i.getChapterName();
@@ -238,13 +233,11 @@ public class ChaptersActivity extends AppCompatActivity {
         if (ChapterListButton.getButtonMode() == 1) {
             ChapterListButton.resetButtons();
             ChapterListButton.setButtonMode(0);
-        }
-        else {
+        } else {
             dataChapters = new ArrayList<>(); // We are using a bunch of statics so we need to clear the variables manually if we have no use for them.
             if (!isDownloaded) {
                 this.finish();
-            }
-            else {
+            } else {
                 Intent intent = new Intent(this, DownloadsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

@@ -1,7 +1,6 @@
 package com.example.mangareader.Recyclerviews;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,17 +58,14 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
             if (data.button.equals("")) {
                 holder.photoView.setVisibility(View.VISIBLE);
                 Read.LoadImage(data.url, holder.photoView, data.reqData, data.context);
-            }
-            else {
+            } else {
                 holder.button.setVisibility(View.VISIBLE);
                 holder.button.setText(data.button);
                 Data finalData = data;
                 holder.button.setOnClickListener(view -> {
                     if (finalData.button.equals("Next chapter")) {
                         finalData.readScroll.ChangeChapter(1);
-                    }
-
-                    else if (finalData.button.equals("Previous chapter")) {
+                    } else if (finalData.button.equals("Previous chapter")) {
                         finalData.readScroll.ChangeChapter(-1);
                     }
                 });
@@ -87,15 +83,12 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
                 holder.button.setOnClickListener(v -> {
                     if (finalDataDownload.button.equals("Next chapter")) {
                         finalDataDownload.readScroll.changeChapterDownloads(1);
-                    }
-
-                    else if (finalDataDownload.button.equals("Previous chapter")) {
+                    } else if (finalDataDownload.button.equals("Previous chapter")) {
                         finalDataDownload.readScroll.changeChapterDownloads(-1);
                     }
                 });
 
-            }
-            else {
+            } else {
                 // The code for the actual image loading
                 holder.photoView.setVisibility(View.VISIBLE);
                 Read.LoadImageDownload(dataDownload.context, holder.photoView, dataDownload.imageName, dataDownload.path);
@@ -112,8 +105,7 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
     public int getItemCount() {
         if (mData != null) {
             return mData.size();
-        }
-        else {
+        } else {
             return mDataDownload.size();
         }
     }

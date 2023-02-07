@@ -14,15 +14,14 @@ import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.RviewAdapterReadScroll;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
-import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 
 import java.util.*;
 
 public class ReadScroll implements Readmodes {
     private Data data = null;
     public DownloadData dataDownload = null;
-
 
 
     @Override
@@ -164,8 +163,7 @@ public class ReadScroll implements Readmodes {
 
         if (direction == 1 && index + 1 != ReadValueHolder.ChaptersActivityData.size()) {
             index++;
-        }
-        else if (direction == -1 && index - 1 > -1) {
+        } else if (direction == -1 && index - 1 > -1) {
             index--;
         }
 

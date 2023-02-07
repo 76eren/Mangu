@@ -6,10 +6,10 @@ import com.example.mangareader.SourceHandlers.Sources;
 import java.util.HashMap;
 
 public class ButtonValuesChapterScreen {
-    private Button selectedButton;
-    private String selectedButtonUrl;
-    private Sources.ValuesForChapters valuesForChapters;
-    private HashMap<String, Object> extraData;
+    private final Button selectedButton;
+    private final String selectedButtonUrl;
+    private final Sources.ValuesForChapters valuesForChapters;
+    private final HashMap<String, Object> extraData;
 
     public ButtonValuesChapterScreen(Button selectedButton, String selectedButtonUrl, Sources.ValuesForChapters valuesForChapters, HashMap<String, Object> extraData) {
         this.selectedButton = selectedButton;
@@ -17,6 +17,7 @@ public class ButtonValuesChapterScreen {
         this.valuesForChapters = valuesForChapters;
         this.extraData = extraData;
     }
+
     public Button getSelectedButton() {
         return selectedButton;
     }

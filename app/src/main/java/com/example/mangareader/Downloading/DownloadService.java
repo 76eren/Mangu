@@ -17,6 +17,7 @@ import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.chapterlist.ButtonValuesChapterScreen;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -84,14 +85,13 @@ public class DownloadService extends Service {
 
                     notifications.notify(123, builder.build());
                     builder.setContentTitle("Downloads: " + (myValues.indexOf(i) + 1) + " out of " + myValues.size());
-                    imageNames[index-1] = imageUrl;
+                    imageNames[index - 1] = imageUrl;
 
                     //https://stackoverflow.com/questions/18210700/best-method-to-download-image-from-url-in-android
                     URL url = null;
                     try {
                         url = new URL(imageUrl);
-                    }
-                    catch (MalformedURLException e) {
+                    } catch (MalformedURLException e) {
                         Log.d("lol", e.toString());
                         e.printStackTrace();
                     }
@@ -101,41 +101,39 @@ public class DownloadService extends Service {
                         conn.setRequestProperty("Referer", reqData.get("Referer"));
 
                         bm = BitmapFactory.decodeStream(conn.getInputStream());
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     //Create Path to save Image
                     String name = "Mangu_" + i.getExtraData().get("mangaName") + "_" + i.getValuesForChapters().name;
-                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/"+name);
+                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/" + name);
                     imagesPath = path.getPath();
 
-                    if(!path.exists()) {
+                    if (!path.exists()) {
                         path.mkdirs();
                     }
 
-                    File imageFile = new File(path, System.currentTimeMillis() +".png");
-                    imageNames[index-1] = imageFile.getName();
+                    File imageFile = new File(path, System.currentTimeMillis() + ".png");
+                    imageNames[index - 1] = imageFile.getName();
                     FileOutputStream out = null;
                     try {
                         out = new FileOutputStream(imageFile);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    try{
+                    try {
                         bm.compress(Bitmap.CompressFormat.PNG, 100, out); // Compress Image
                         out.flush();
                         out.close();
 
                         // Tell the media scanner about the new file so that it is
                         // immediately available to the user.
-                        MediaScannerConnection.scanFile(getApplicationContext() ,new String[] { imageFile.getAbsolutePath() }, null, (path1, uri) -> {
+                        MediaScannerConnection.scanFile(getApplicationContext(), new String[]{imageFile.getAbsolutePath()}, null, (path1, uri) -> {
                             // Log.i("ExternalStorage", "Scanned " + path + ":");
                             //    Log.i("ExternalStorage", "-> uri=" + uri);
                         });
-                    }
-                    catch(Exception e) {
+                    } catch (Exception e) {
 
                     }
                     index++;

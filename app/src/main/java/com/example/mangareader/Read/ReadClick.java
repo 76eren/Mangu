@@ -16,11 +16,14 @@ import com.example.mangareader.ListTracker;
 import com.example.mangareader.R;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
-import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.github.chrisbanes.photoview.PhotoView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 public class ReadClick implements Readmodes {
     private Data data;
@@ -144,9 +147,7 @@ public class ReadClick implements Readmodes {
         if (direction == 1 && index + 1 != ReadValueHolder.ChaptersActivityData.size()) {
             index++;
 
-        }
-
-        else if (direction == -1 && index - 1 >= 0) {
+        } else if (direction == -1 && index - 1 >= 0) {
             index--;
 
         }
@@ -192,8 +193,7 @@ public class ReadClick implements Readmodes {
 
         if (direction == 1 && index + 1 != ReadValueHolder.ChaptersActivityData.size()) {
             index++;
-        }
-        else if (direction == -1 && index - 1 > -1) {
+        } else if (direction == -1 && index - 1 > -1) {
             index--;
         }
 

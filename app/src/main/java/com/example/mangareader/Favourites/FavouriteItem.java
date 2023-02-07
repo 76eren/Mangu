@@ -22,7 +22,7 @@ public class FavouriteItem {
         return this.date;
     }
 
-    public String getName () {
+    public String getName() {
         return this.mangaName;
     }
 

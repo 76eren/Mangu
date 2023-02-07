@@ -21,6 +21,7 @@ import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 
 import java.util.List;
+
 public class RviewAdapterDownloads extends RecyclerView.Adapter<RviewAdapterDownloads.ViewHolder> {
 
     private final List<Data> mData;
@@ -53,8 +54,7 @@ public class RviewAdapterDownloads extends RecyclerView.Adapter<RviewAdapterDown
                     .load(data.downloadedChapter.getImage())
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(holder.cardImage);
-        }
-        else {
+        } else {
             GlideUrl url = new GlideUrl(data.downloadedChapter.getImage(), new LazyHeaders.Builder()
                     .addHeader("Referer", data.downloadedChapter.getReferer())
                     .build());

@@ -1,6 +1,7 @@
 package com.example.mangareader.Activities;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -107,8 +107,7 @@ public class HomeActivity extends AppCompatActivity {
 
             try {
                 homeData = source.GetDataHomeActivity(this);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 homeData = null;
             }
 
@@ -130,8 +129,7 @@ public class HomeActivity extends AppCompatActivity {
                         recyclerView.setAdapter(adapter);
 
                     });
-                }
-                else {
+                } else {
                     Log.d("lol", "Latest is null");
                 }
 

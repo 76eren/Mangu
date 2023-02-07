@@ -29,9 +29,7 @@ public class ReadValueHolder {
     public static Sources.ValuesForChapters getCurrentChapter(Activity activity) {
         if (currentChapter != null) {
             return currentChapter;
-        }
-
-        else {
+        } else {
             // I don't think this is like ever going to run, but we might as well put this here you never know.
             Intent intent = new Intent(activity, HomeActivity.class);
             activity.startActivity(intent);

@@ -2,7 +2,6 @@ package com.example.mangareader.Recyclerviews;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +54,7 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
                     load(url)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.imageView);
-        }
-
-        else {
+        } else {
             Glide.with(data.context.getApplicationContext()).load(data.homeMangaClassObject.image).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imageView);
         }
 

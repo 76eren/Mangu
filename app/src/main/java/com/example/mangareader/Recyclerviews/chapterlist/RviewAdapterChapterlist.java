@@ -1,7 +1,6 @@
 package com.example.mangareader.Recyclerviews.chapterlist;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -72,5 +71,5 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
             super(inflater.inflate(layoutResource, parent, false));
         }
     }
-    
+
 }

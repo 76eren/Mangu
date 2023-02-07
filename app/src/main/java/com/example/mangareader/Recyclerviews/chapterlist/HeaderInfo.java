@@ -1,9 +1,6 @@
 package com.example.mangareader.Recyclerviews.chapterlist;
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class HeaderInfo {
 

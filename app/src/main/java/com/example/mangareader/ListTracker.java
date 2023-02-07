@@ -10,7 +10,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ListTracker {
     public static void AddToList(Context context, String data, String setting) {

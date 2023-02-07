@@ -6,13 +6,13 @@
 package com.example.mangareader.Sources;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.Home.HomeMangaClass;
+import com.example.mangareader.R;
 import com.example.mangareader.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
 import org.jsoup.Connection;
@@ -21,9 +21,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
-import com.example.mangareader.R;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Mangakakalot implements Sources {
 
@@ -90,8 +92,7 @@ public class Mangakakalot implements Sources {
             Elements x = null;
             if (url.toLowerCase().contains("readmanganato.com") || url.toLowerCase().contains("chapmanganato.com")) { // Recently mangakakalot added a new (replacement?) domain for readmanganato
                 x = doc.getElementsByClass("panel-story-info-description"); // This also contains data we don't need
-            }
-            else if (url.toLowerCase().contains("mangakakalot.com")) {
+            } else if (url.toLowerCase().contains("mangakakalot.com")) {
                 x = doc.select("div#noidungm");
             }
 
@@ -127,8 +128,7 @@ public class Mangakakalot implements Sources {
             Elements ul = null;
             if (url.toLowerCase().contains("readmanganato.com") || url.toLowerCase().contains("chapmanganato.com")) { // mangakakalot added a new (replacement) domain called chapmanganato
                 ul = doc.getElementsByClass("row-content-chapter");
-            }
-            else if (url.toLowerCase().contains("mangakakalot.com")) {
+            } else if (url.toLowerCase().contains("mangakakalot.com")) {
                 ul = doc.getElementsByClass("chapter-list");
             }
 
@@ -146,9 +146,7 @@ public class Mangakakalot implements Sources {
                     li = i.getElementsByClass("chapter-name text-nowrap");
                     title = li.attr("title"); // This is the chapter title
                     link = li.attr("href"); // This is the url
-                }
-
-                else if (url.toLowerCase().contains("mangakakalot.com")) {
+                } else if (url.toLowerCase().contains("mangakakalot.com")) {
                     li = i.getElementsByClass("row");
                     title = li.text();
                     Elements p = li.select("a");
@@ -240,8 +238,7 @@ public class Mangakakalot implements Sources {
                 doc = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                         .get();
-            }
-            else {
+            } else {
                 String CookieSiteLocation = "";
 
                 // To get to server two, we need certain cookies
@@ -312,8 +309,7 @@ public class Mangakakalot implements Sources {
         if (url.toLowerCase().contains("readmanganato.com")) {
             referer = "https://readmanganato.com/";
 
-        }
-        else if (url.toLowerCase().contains("mangakakalot.com")) {
+        } else if (url.toLowerCase().contains("mangakakalot.com")) {
             referer = "https://mangakakalot.com/";
         }
 
@@ -350,13 +346,8 @@ public class Mangakakalot implements Sources {
                 "preference_ServerMangakakalot", false);
         toggle.setChecked(server); // true or false
         toggle.setOnClickListener(v -> {
-            if (toggle.isChecked()) {
-                settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot",
-                        true);
-            } else {
-                settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot",
-                        false);
-            }
+            settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot",
+                    toggle.isChecked());
 
             // readActivity.read.LoadChapter(ReadValueHolder.currentChapter);
             readActivity.read.ChangeChapter(0);
@@ -433,9 +424,7 @@ public class Mangakakalot implements Sources {
             }
             data.put("popular", popular);
 
-        }
-
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return null;
         }
 

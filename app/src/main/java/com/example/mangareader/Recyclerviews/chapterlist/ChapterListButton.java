@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import com.example.mangareader.Activities.ChaptersActivity;
 import com.example.mangareader.Activities.DownloadsActivity;
 import com.example.mangareader.Activities.ReadActivity;
-import com.example.mangareader.Downloading.DownloadService;
 import com.example.mangareader.Downloading.DownloadTracker;
 import com.example.mangareader.Downloading.Downloader;
 import com.example.mangareader.ListTracker;
@@ -26,7 +25,6 @@ import com.example.mangareader.R;
 import com.example.mangareader.ValueHolders.DesignValueHolder;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -50,12 +48,13 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
 
     public static Button staticRemoveDownloadsWithImages;
 
-    public static void setButtonMode(int buttonMode) { ChapterListButton.buttonMode = buttonMode;}
+    public static void setButtonMode(int buttonMode) {
+        ChapterListButton.buttonMode = buttonMode;
+    }
 
     public static int getButtonMode() {
         return buttonMode;
     }
-
 
 
     public ChapterListButton(LayoutInflater inflater, @NonNull ViewGroup parent, int layoutResource) {
@@ -79,13 +78,13 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
 
 
     @SuppressLint("SetTextI18n")
-    public void bind (ChapterInfo chapterInfo) {
+    public void bind(ChapterInfo chapterInfo) {
         button.setText(chapterInfo.getValuesForChapters().name);
         button.setTextColor(getButtonColor(button, chapterInfo.getValuesForChapters().url, false));
 
 
         staticReadUnreadButton.setOnClickListener(view -> {
-            for (ButtonValuesChapterScreen i : values)  {
+            for (ButtonValuesChapterScreen i : values) {
                 ListTracker.ChangeStatus(i.getSelectedButton().getContext(), i.getSelectedButtonUrl(), "History");
                 button.setTextColor(getButtonColor(i.getSelectedButton(), i.getSelectedButtonUrl(), false));
 
@@ -138,8 +137,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
                 downloadsActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 button.getContext().startActivity(downloadsActivityIntent);
 
-            }
-            else {
+            } else {
                 Toast.makeText(button.getContext(), "Starting download. Please note that the notification may be bugged.", Toast.LENGTH_LONG).show();
                 Downloader downloader = new Downloader();
                 downloader.download(values);
@@ -153,16 +151,14 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
                 Intent readIntent = new Intent(button.getContext(), ReadActivity.class);
                 readIntent.putExtra("downloaded", ChaptersActivity.isDownloaded);
                 button.getContext().startActivity(readIntent);
-            }
-            else {
+            } else {
                 //List<Button> newList = values.stream().map(ButtonValuesChapterScreen::getSelectedButton).collect(Collectors.toList());
                 List<String> newList = values.stream().map(ButtonValuesChapterScreen::getSelectedButtonUrl).collect(Collectors.toList());
 
                 if (!newList.contains(chapterInfo.getValuesForChapters().url)) {
                     values.add(new ButtonValuesChapterScreen(button, chapterInfo.getValuesForChapters().url, chapterInfo.getValuesForChapters(), chapterInfo.getExtraData()));
                     this.button.setTextColor(Color.BLUE);
-                }
-                else {
+                } else {
                     Log.d("lol", "REMOVING CHAPTER URL " + chapterInfo.getValuesForChapters().url);
                     int index = 0;
                     for (ButtonValuesChapterScreen i : values) {
@@ -201,11 +197,12 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
         });
     }
 
-    private static boolean inHistory (Context context, String url) {
+    private static boolean inHistory(Context context, String url) {
         return ListTracker.GetFromList(context, "History").stream()
                 .anyMatch(s -> s.equals(url));
     }
-    private static int getButtonColor (Button button, String url, boolean isClearing) {
+
+    private static int getButtonColor(Button button, String url, boolean isClearing) {
         if (!isClearing) {
             for (ButtonValuesChapterScreen i : values) {
                 if (i.getSelectedButtonUrl().equals(url)) {

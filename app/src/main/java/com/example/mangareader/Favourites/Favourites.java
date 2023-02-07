@@ -1,12 +1,12 @@
-
 package com.example.mangareader.Favourites;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 import androidx.preference.PreferenceManager;
-import com.google.gson.*;
-import java.util.*;
+import com.google.gson.Gson;
+
+import java.util.LinkedHashSet;
 
 public class Favourites {
     public static void AddToFavourites(Context context, FavouriteItem favouriteItem) {
@@ -89,9 +89,7 @@ public class Favourites {
             RemoveFromFavourites(context, favouriteItem);
             Toast.makeText(context, "Removed manga from favourites", Toast.LENGTH_SHORT).show();
 
-        }
-
-        else {
+        } else {
             AddToFavourites(context, favouriteItem);
             Toast.makeText(context, "Added manga to favourites", Toast.LENGTH_SHORT).show();
 

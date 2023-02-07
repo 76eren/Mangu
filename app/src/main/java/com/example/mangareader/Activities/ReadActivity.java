@@ -2,24 +2,23 @@ package com.example.mangareader.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.mangareader.Downloading.DownloadTracker;
 import com.example.mangareader.Downloading.DownloadedChapter;
+import com.example.mangareader.ListTracker;
 import com.example.mangareader.R;
 import com.example.mangareader.Read.Read;
 import com.example.mangareader.Read.ReadClick;
-import com.example.mangareader.ListTracker;
 import com.example.mangareader.Read.ReadScroll;
 import com.example.mangareader.Read.Readmodes;
 import com.example.mangareader.Settings;
-import com.example.mangareader.ValueHolders.DesignValueHolder;
-import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.SourceHandlers.Sources;
+import com.example.mangareader.ValueHolders.DesignValueHolder;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
+import com.example.mangareader.ValueHolders.SourceObjectHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,8 +82,7 @@ public class ReadActivity extends AppCompatActivity {
             progress.setOnClickListener(view -> {
                 if (progress.getAlpha() == 0) {
                     progress.setAlpha(DesignValueHolder.ProgressBarAlphaWhenEnabled);
-                }
-                else {
+                } else {
                     progress.setAlpha(0);
                 }
 
@@ -111,8 +109,7 @@ public class ReadActivity extends AppCompatActivity {
                     startActivity(intent);
                     return;
                 }
-            }
-            else {
+            } else {
                 LinkedHashSet<DownloadedChapter> tempDownloads = downloadTracker.getFromDownloads(this);
                 for (DownloadedChapter i : tempDownloads) {
                     if (i.getUrl().equals(ReadValueHolder.getCurrentChapter(this).url)) {
@@ -135,14 +132,11 @@ public class ReadActivity extends AppCompatActivity {
                     runOnUiThread(() -> cacheTV.setVisibility(View.VISIBLE));
                     Read.Cache(this, imgs, reqData);
                     read.LoadImage();
-                }
-
-                else {
+                } else {
                     runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
                     read.LoadImage();
                 }
-            }
-            else {
+            } else {
                 read.Start(this, imgs, source, reqData); // We assign our context to read
                 read.startDownloads(this, finalDownloads, source, reqData);
                 read.loadImageDownload();

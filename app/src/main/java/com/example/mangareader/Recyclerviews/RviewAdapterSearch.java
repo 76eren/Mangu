@@ -56,9 +56,7 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
                     .build());
 
             Glide.with(data.context).load(url).into(holder.image);
-        }
-
-        else {
+        } else {
             Glide.with(data.context).load(data.searchValues.image).into(holder.image);
         }
 

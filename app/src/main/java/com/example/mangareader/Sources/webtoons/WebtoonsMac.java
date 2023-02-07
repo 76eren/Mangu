@@ -10,7 +10,7 @@ import java.util.Base64;
 
 public class WebtoonsMac {
 
-    private static String ss (String str, String str2) {
+    private static String ss(String str, String str2) {
         String substring = str.substring(0, Math.min(255, str.length()));
         return substring + str2;
     }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public interface Readmodes {
 
-    public class Data {
+    class Data {
         Activity activity;
         ArrayList<String> images;
         Sources sources;
@@ -23,7 +23,7 @@ public interface Readmodes {
         }
     }
 
-    public class DownloadData {
+    class DownloadData {
         Activity activity;
         ArrayList<DownloadedChapter> chapterDatas;
         Sources sources;
