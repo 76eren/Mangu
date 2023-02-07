@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.example.mangareader.Activities.FavouritesActivity;
-import com.example.mangareader.Activities.HomeActivity;
-import com.example.mangareader.Activities.MainActivity;
-import com.example.mangareader.Activities.SettingsActivity;
+import com.example.mangareader.Activities.*;
 import com.example.mangareader.R;
 
 public class Navigation {
@@ -47,6 +44,18 @@ public class Navigation {
             activity.startActivity(intent);
             return false;
 
+        });
+
+        MenuItem downloads = menu.findItem(R.id.nav_downloads);
+        downloads.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                Intent intent = new Intent(activity, DownloadsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                activity.startActivity(intent);
+                return false;
+            }
         });
 
     }

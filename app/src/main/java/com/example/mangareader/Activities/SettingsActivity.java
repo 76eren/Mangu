@@ -122,13 +122,8 @@ public class SettingsActivity extends AppCompatActivity {
             // This makes sure the right preference is checked
             // I am aware that the SettingsActivity keeps track of this by default however we need to add this
             // Because the favouritesActivity may change these sources without notifying the SettingsActivity
-            String src = settings.ReturnValueString(this.getActivity(), "source", "mangadex");
+            String src = settings.ReturnValueString(this.getActivity(), "source", "mangakakalot");
             switch (src) {
-                case "mangakakalot":
-                    mangadex.setChecked(false);
-                    mangakakalot.setChecked(true);
-                    webtoons.setChecked(false);
-                    break;
 
                 case "mangadex":
                     mangadex.setChecked(true);
@@ -143,9 +138,8 @@ public class SettingsActivity extends AppCompatActivity {
                     break;
 
                 default:
-                    Log.d("lol", "Taking default");
-                    mangadex.setChecked(true);
-                    mangakakalot.setChecked(false);
+                    mangadex.setChecked(false);
+                    mangakakalot.setChecked(true);
                     webtoons.setChecked(false);
                     break;
             }

@@ -6,7 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,21 +15,20 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.mangareader.Activities.ChaptersActivity;
-import com.example.mangareader.Favourites.FavouriteItem;
+import com.example.mangareader.Downloading.DownloadedChapter;
 import com.example.mangareader.R;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 
 import java.util.List;
+public class RviewAdapterDownloads extends RecyclerView.Adapter<RviewAdapterDownloads.ViewHolder> {
 
-public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFavourites.ViewHolder> {
-
-    private final List<RviewAdapterFavourites.Data> mData;
+    private final List<Data> mData;
     private final LayoutInflater mInflater;
     private RviewAdapterFavourites.ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public RviewAdapterFavourites(Context context, List<RviewAdapterFavourites.Data> data, String type) {
+    public RviewAdapterDownloads(Context context, List<RviewAdapterDownloads.Data> data, String type) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
 
@@ -37,42 +37,48 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
     // inflates the row layout from xml when needed
     @NonNull
     @Override
-    public RviewAdapterFavourites.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RviewAdapterDownloads.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recyclerview_widgets_favs, parent, false);
 
-        return new RviewAdapterFavourites.ViewHolder(view);
+        return new RviewAdapterDownloads.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RviewAdapterFavourites.ViewHolder holder, int position) {
-        RviewAdapterFavourites.Data data = mData.get(position);
-        if (data.favouriteItem.referer == null) {
+    public void onBindViewHolder(RviewAdapterDownloads.ViewHolder holder, int position) {
+        RviewAdapterDownloads.Data data = mData.get(position);
+
+        // Currently this still uses internet.
+        if (data.downloadedChapter.getReferer() == null) {
             Glide.with(data.context)
-                    .load(data.favouriteItem.image)
+                    .load(data.downloadedChapter.getImage())
+                    .placeholder(R.drawable.ic_launcher_background)
                     .into(holder.cardImage);
         }
         else {
-            GlideUrl url = new GlideUrl(data.favouriteItem.image, new LazyHeaders.Builder()
-                    .addHeader("Referer", data.favouriteItem.referer)
+            GlideUrl url = new GlideUrl(data.downloadedChapter.getImage(), new LazyHeaders.Builder()
+                    .addHeader("Referer", data.downloadedChapter.getReferer())
                     .build());
 
-            Glide.with(data.context).load(url).into(holder.cardImage);
+            Glide.with(data.context)
+                    .load(url)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(holder.cardImage);
         }
 
-        holder.cardText.setText(data.favouriteItem.mangaName);
+        holder.cardText.setText(data.downloadedChapter.getMangaName());
 
         holder.card.setOnClickListener(v -> {
             Intent intent = new Intent(data.context, ChaptersActivity.class);
-            intent.putExtra("downloaded", false);
-            intent.putExtra("url", data.favouriteItem.url);
-            intent.putExtra("img", data.favouriteItem.image);
-            intent.putExtra("mangaName", data.favouriteItem.mangaName);
-            intent.putExtra("referer", data.favouriteItem.referer);
+            intent.putExtra("downloaded", true);
+            intent.putExtra("url", data.downloadedChapter.getUrl());
+            intent.putExtra("img", data.downloadedChapter.getImage());
+            intent.putExtra("mangaName", data.downloadedChapter.getMangaName());
+            intent.putExtra("referer", data.downloadedChapter.getReferer());
 
             // Sets the correct source
             // This is unnecessary if we have to merge manga option turned off by the way
             try {
-                Class<?> c = Class.forName(data.favouriteItem.source);
+                Class<?> c = Class.forName(data.downloadedChapter.getSource());
                 Object obj = c.newInstance();
 
                 // Right now this just straight up changes the source :/
@@ -127,11 +133,11 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
 
     public static class Data {
         Context context;
-        FavouriteItem favouriteItem;
+        DownloadedChapter downloadedChapter;
 
-        public Data(Context context, FavouriteItem favouriteItem) {
+        public Data(Context context, DownloadedChapter downloadedChapter) {
             this.context = context;
-            this.favouriteItem = favouriteItem;
+            this.downloadedChapter = downloadedChapter;
         }
 
     }

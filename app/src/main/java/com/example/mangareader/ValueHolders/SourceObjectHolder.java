@@ -12,12 +12,12 @@ public class SourceObjectHolder {
 
     public static Sources getSources(Context context) {
         Settings settings = new Settings();
-        String src = settings.ReturnValueString(context, "source", "mangadex");
+        String src = settings.ReturnValueString(context, "source", "mangakakalot");
 
         // The default value MUST reflect the default value of the root proferences!!!!
         switch (src) {
-            case "mangakakalot":
-                SourceObjectHolder.sources = new Mangakakalot();
+            case "mangadex":
+                SourceObjectHolder.sources = new Mangadex();
                 return sources;
 
             case "webtoons":
@@ -25,7 +25,7 @@ public class SourceObjectHolder {
                 return sources;
 
             default:
-                SourceObjectHolder.sources = new Mangadex();
+                SourceObjectHolder.sources = new Mangakakalot();
                 return sources;
         }
     }

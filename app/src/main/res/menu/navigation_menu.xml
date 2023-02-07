@@ -15,5 +15,6 @@
     <item
             android:id="@+id/nav_favourites"
             android:title="Favourites" />
+    <item android:title="[BETA] Downloads" android:id="@+id/nav_downloads"/>
 
 </menu>

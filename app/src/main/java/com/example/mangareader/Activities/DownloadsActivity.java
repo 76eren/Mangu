@@ -1,5 +1,6 @@
 package com.example.mangareader.Activities;
 
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -8,10 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.mangareader.Favourites.FavouriteItem;
-import com.example.mangareader.Favourites.Favourites;
+import com.example.mangareader.Downloading.DownloadTracker;
+import com.example.mangareader.Downloading.DownloadedChapter;
 import com.example.mangareader.R;
-import com.example.mangareader.Recyclerviews.RviewAdapterFavourites;
+import com.example.mangareader.Recyclerviews.RviewAdapterDownloads;
 import com.example.mangareader.Settings;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.navigation.Navigation;
@@ -19,15 +20,15 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.*;
 
-public class FavouritesActivity extends AppCompatActivity {
 
+public class DownloadsActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourites);
+        setContentView(R.layout.activity_downloads);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         overridePendingTransition(0, 0);
@@ -47,45 +48,62 @@ public class FavouritesActivity extends AppCompatActivity {
         Menu menu = navigationView.getMenu();
         navigation.ItemClickSetup(this, menu);
 
-        List<RviewAdapterFavourites.Data> data = new ArrayList<>();
 
-        LinkedHashSet<FavouriteItem> set = Favourites.GetFavourites(this);
+        List<RviewAdapterDownloads.Data> data = new ArrayList<>();
+        DownloadTracker downloadTracker = new DownloadTracker();
+        LinkedHashSet<DownloadedChapter> set = downloadTracker.getFromDownloads(this);
 
-        // We sort the set with favourites however we want
+
         Settings settings = new Settings();
-        ArrayList<FavouriteItem> sortedFavourites = new ArrayList<>(set);
+        ArrayList<DownloadedChapter> temp = new ArrayList<>(set);
+        ArrayList<DownloadedChapter> sortedDownloads = new ArrayList<>();
+
+        for (DownloadedChapter i : temp) {
+            boolean canAdd = true;
+            for (DownloadedChapter y : sortedDownloads) {
+                if (y.getName().equals(i.getName())) {
+                    canAdd = false;
+                    break;
+                }
+            }
+            if (canAdd) {
+
+                sortedDownloads.add(i);
+            }
+        }
+
 
         switch (settings.ReturnValueString(this, "preference_favourites_sort", "preference_favourites_sort_date_up")) {
             case "preference_favourites_sort_date_down":
-                sortedFavourites.sort(Comparator.comparingInt(FavouriteItem::returnDate));
+                sortedDownloads.sort(Comparator.comparingInt(DownloadedChapter::returnDate));
                 break;
 
             case "preference_favourites_sort_date_up":
-                sortedFavourites.sort(Comparator.comparingInt(FavouriteItem::returnDate));
-                Collections.reverse(sortedFavourites);
+                sortedDownloads.sort(Comparator.comparingInt(DownloadedChapter::returnDate));
+                Collections.reverse(sortedDownloads);
                 break;
 
             case "preference_favourites_sort_alphabet":
-                sortedFavourites.sort(Comparator.comparing(FavouriteItem::getName));
+                sortedDownloads.sort(Comparator.comparing(DownloadedChapter::getName));
                 break;
 
         }
 
-        for (FavouriteItem i : sortedFavourites) {
+        for (DownloadedChapter i : sortedDownloads) {
             if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) {
                 // Checks whether we want to merge all sources or not
                 // Does not merge all sources together
-                if (i.source.equals(SourceObjectHolder.getSources(this).getClass().getName())) {
-                    data.add(new RviewAdapterFavourites.Data(this, i));
+                if (i.getSource().equals(SourceObjectHolder.getSources(this).getClass().getName())) {
+                    data.add(new RviewAdapterDownloads.Data(this, i));
                 }
             } else {
                 // Merges all sources together
-                data.add(new RviewAdapterFavourites.Data(this, i));
+                data.add(new RviewAdapterDownloads.Data(this, i));
             }
         }
 
         RecyclerView recyclerView = findViewById(R.id.rviewDownloads);
-        RviewAdapterFavourites adapter = new RviewAdapterFavourites(this, data, "imageview");
+        RviewAdapterDownloads adapter = new RviewAdapterDownloads(this, data, "imageview");
         recyclerView.setAdapter(adapter);
 
     }
@@ -98,5 +116,4 @@ public class FavouritesActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

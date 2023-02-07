@@ -69,6 +69,7 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
             Intent intent = new Intent(data.context, ChaptersActivity.class);
             intent.putExtra("url", data.searchValues.url);
             Log.d("lol", data.searchValues.url);
+            intent.putExtra("downloaded", false);
             intent.putExtra("img", data.searchValues.image);
             intent.putExtra("mangaName", data.searchValues.name);
             intent.putExtra("referer", data.searchValues.referer); // This may be null
@@ -93,9 +94,9 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.image = itemView.findViewById(R.id.card_favs_image);
-            this.textView = itemView.findViewById(R.id.card_favs_text);
-            this.cardView = itemView.findViewById(R.id.card_favs);
+            this.image = itemView.findViewById(R.id.card_favs_image_downloads);
+            this.textView = itemView.findViewById(R.id.card_favs_text_downloads);
+            this.cardView = itemView.findViewById(R.id.card_favs_downloads);
 
             itemView.setOnClickListener(this);
         }

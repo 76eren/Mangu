@@ -36,7 +36,7 @@ public interface Sources {
           // In that case we can just leave theme empty
           public String url = "";
           public String name = "";
-          public HashMap<String, String> extraData = new HashMap<>();
+          public HashMap<String, Object> extraData = new HashMap<>();
      }
 
      ArrayList<ValuesForChapters> GetChapters(String url, Context context, HashMap<String, Object> extraData) throws IOException, NoSuchAlgorithmException, InvalidKeyException, JSONException;

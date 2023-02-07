@@ -21,10 +21,9 @@
             android:title="Select source">
 
         <CheckBoxPreference
-                android:defaultValue="false"
-                android:title="Mangakakalot" android:key="preference_source_mangakakalot"/>
+                android:title="Mangakakalot" android:key="preference_source_mangakakalot" android:defaultValue="true"/>
         <CheckBoxPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:title="Mangadex" android:key="preference_source_mangadex"/>
         <CheckBoxPreference
                 android:defaultValue="false"

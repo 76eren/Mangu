@@ -17,5 +17,32 @@
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/rview"/>
+            android:id="@+id/rviewDownloads"/>
+    <Button
+            android:text="Download"
+            android:backgroundTint="@color/teal_700"
+            android:layout_width="309dp"
+            android:layout_height="53dp" android:id="@+id/DownloadButton"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.952" app:layout_constraintHorizontal_bias="0.46"
+            app:iconTint="#000000" app:rippleColor="#000000" android:visibility="invisible" android:alpha="0.75"/>
+    <Button
+            android:text="Read/Unread"
+            android:backgroundTint="@color/teal_700"
+            android:layout_width="312dp"
+            android:layout_height="55dp" android:id="@+id/ReadUnreadButton"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.853" app:layout_constraintHorizontal_bias="0.495"
+            app:iconTint="#8A1212" app:rippleColor="#000000" android:visibility="invisible" android:alpha="0.75"/>
+    <Button
+            android:text="Remove downloads with images"
+            android:backgroundTint="@color/teal_700"
+            android:layout_width="308dp"
+            android:layout_height="67dp" android:id="@+id/removeDownloadsWithImages"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.742" app:layout_constraintHorizontal_bias="0.431"
+            app:iconTint="#8A1212" app:rippleColor="#000000" android:visibility="invisible" android:alpha="0.75"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

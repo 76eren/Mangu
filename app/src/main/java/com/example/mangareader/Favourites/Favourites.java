@@ -28,7 +28,6 @@ public class Favourites {
             favs.add(json);
 
             // We push our set to the sharedprefs
-
             editor.putStringSet("Favourites", favs);
             editor.apply();
         }

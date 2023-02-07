@@ -10,6 +10,7 @@ public class DesignValueHolder {
     // Chapters activity recyclerview
     public static int ButtonTextColorNotRead = Color.WHITE;
     public static int ButtonTextColorRead = Color.RED;
+    public static int ButtonTextColorBlue = Color.BLUE;
 
     // Readactivity
     public static float ProgressBarAlphaWhenEnabled = 0.8f;

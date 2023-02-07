@@ -258,7 +258,6 @@ public class Mangakakalot implements Sources {
                 // This is broken for some reason
                 // It used to work but right now it doesn't, and I am not sure why because it should be working :/
                 if (url.toLowerCase().contains("mangakakalot")) {
-                    Log.d("lol", "HITTING THIS CUNT");
                     CookieSiteLocation = "https://mangakakalot.com/change_content_s2";
                 }
                 if (CookieSiteLocation.equals("")) {
@@ -288,9 +287,6 @@ public class Mangakakalot implements Sources {
                 images.add(img);
             }
 
-            for (String i : images) {
-                Log.d("lol", i);
-            }
 
             return images;
 
@@ -337,7 +333,6 @@ public class Mangakakalot implements Sources {
         Settings settings = new Settings();
         if (!settings.ReturnValueBoolean(readActivity.getApplicationContext(), "preference_mangakakalot_showButon",
                 false)) {
-            Log.d("lol", "NOPE");
             return;
         }
 
@@ -441,7 +436,6 @@ public class Mangakakalot implements Sources {
         }
 
         catch (Exception exception) {
-            Log.d("lol", exception.toString());
             return null;
         }
 
