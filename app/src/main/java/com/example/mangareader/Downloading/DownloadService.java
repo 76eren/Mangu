@@ -66,6 +66,8 @@ public class DownloadService extends Service {
         DownloadTracker downloadTracker = new DownloadTracker();
 
         executor.execute(() -> {
+
+
             for (ButtonValuesChapterScreen i : myValues) {
 
                 ArrayList<String> images = source.GetImages(i.getValuesForChapters(), i.getSelectedButton().getContext());
@@ -91,8 +93,8 @@ public class DownloadService extends Service {
                     URL url = null;
                     try {
                         url = new URL(imageUrl);
-                    } catch (MalformedURLException e) {
-                        Log.d("lol", e.toString());
+                    }
+                    catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
                     Bitmap bm = null;
@@ -106,9 +108,13 @@ public class DownloadService extends Service {
                     }
 
                     //Create Path to save Image
+                    PathFormatter pathFormatter = new PathFormatter();
                     String name = "Mangu_" + i.getExtraData().get("mangaName") + "_" + i.getValuesForChapters().name;
+                    name = pathFormatter.getPath(name);
                     File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/" + name);
                     imagesPath = path.getPath();
+                    imagesPath = pathFormatter.getPath(imagesPath);
+
 
                     if (!path.exists()) {
                         path.mkdirs();
@@ -134,7 +140,6 @@ public class DownloadService extends Service {
                             //    Log.i("ExternalStorage", "-> uri=" + uri);
                         });
                     } catch (Exception e) {
-
                     }
                     index++;
                 }

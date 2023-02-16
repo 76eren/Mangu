@@ -96,7 +96,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
             Downloader downloader = new Downloader();
             downloader.remove(values);
 
-            // We remove the actual downloads from the DwnloadTracker here
+            // We remove the actual downloads from the DownloadTracker here
             // I am also making a copy of the DownloadTracker in the RemoveService from within the downloader.remove() function
             // The reason I am doing this is that I want to immediately remove the chapter from the download tracker while
             // still being able to go through the old download tracker to get certain data for removing the images

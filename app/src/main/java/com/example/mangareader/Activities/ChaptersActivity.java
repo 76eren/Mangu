@@ -3,6 +3,7 @@ package com.example.mangareader.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.Downloading.DownloadTracker;
 import com.example.mangareader.Downloading.DownloadedChapter;
 import com.example.mangareader.R;
-import com.example.mangareader.Recyclerviews.chapterlist.ChapterInfo;
-import com.example.mangareader.Recyclerviews.chapterlist.ChapterListButton;
-import com.example.mangareader.Recyclerviews.chapterlist.HeaderInfo;
-import com.example.mangareader.Recyclerviews.chapterlist.RviewAdapterChapterlist;
+import com.example.mangareader.Recyclerviews.chapterlist.*;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.SplashScreen;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
@@ -89,42 +87,24 @@ public class ChaptersActivity extends AppCompatActivity {
                     relevantDownloads.add(i);
                 }
             }
-        }
 
-        // Now we sort the relevantDownloads
-        // For example we want to sort this list from ["Chapter 1", "Chapter 3", "Chapter 1.1"] to ["Chapter 1", "Chapter 1.1", "Chapter 3"]
-        ArrayList<String> relevantDownloadsChapterNames = (ArrayList<String>) relevantDownloads.stream()
-                .map(DownloadedChapter::getChapterName)
-                .collect(Collectors.toList());
-
-        try {
-            // https://stackoverflow.com/questions/13973503/sorting-strings-that-contains-number-in-java
-            // Right now this code doesn't work correctly.
-            // For example it messes up with floats.
-            Collections.sort(relevantDownloadsChapterNames, new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    return extractInt(o1) - extractInt(o2);
-                }
-
-                int extractInt(String s) {
-                    String num = s.replaceAll("\\D", "");
-                    // return 0 if no digits found
-                    return num.isEmpty() ? 0 : Integer.parseInt(num);
-                }
-            });
-
-            ArrayList<DownloadedChapter> sortedRelevantDownloads = new ArrayList<>();
-            for (String i : relevantDownloadsChapterNames) {
-                relevantDownloads.stream()
-                        .filter(DownloadedChapter -> i.equals(DownloadedChapter.getChapterName()))
-                        .findFirst()
-                        .ifPresent(sortedRelevantDownloads::add);
+            // This does the actual sorting
+            try {
+                ArrayList<DownloadedChapter> sorted = sortingoptionOne(relevantDownloads);
+                relevantDownloads.clear();
+                relevantDownloads.addAll(sorted);
             }
+            catch (Exception ex) {
+                try {
+                    ArrayList<DownloadedChapter> sorted = sortingOptionTwo(relevantDownloads);
+                    relevantDownloads.clear();
+                    relevantDownloads.addAll(sorted);
+                }
+                catch (Exception error) {
 
-            relevantDownloads.clear();
-            relevantDownloads.addAll(sortedRelevantDownloads);
-        } catch (Exception ex) {
+                }
+
+            }
         }
 
 
@@ -151,14 +131,21 @@ public class ChaptersActivity extends AppCompatActivity {
             extraData.put("referer", finalReferer);
             extraData.put("mangaUrl", finalMangaUrl);
             extraData.put("mangaStory", mangaStory);
-
             if (!finalDownloaded) {
                 try {
                     dataChapters = sources.GetChapters(finalMangaUrl, activity, extraData);
-                } catch (IOException | NoSuchAlgorithmException | InvalidKeyException | JSONException e) {
+                    ArrayList<String> chapterNamesDefaultOrderArraylist = new ArrayList<>();
+                    for (Sources.ValuesForChapters i : dataChapters) {
+                        chapterNamesDefaultOrderArraylist.add(i.name);
+                    }
+                    String[] chapterNamesDefaultOrder = chapterNamesDefaultOrderArraylist.toArray(new String[0]);
+                    extraData.put("chapterNamesDefaultOrder", chapterNamesDefaultOrder);
+                }
+                catch (IOException | NoSuchAlgorithmException | InvalidKeyException | JSONException e) {
                     throw new RuntimeException(e);
                 }
-            } else {
+            }
+            else {
                 for (DownloadedChapter i : relevantDownloads) {
                     Sources.ValuesForChapters valuesForChapters = new Sources.ValuesForChapters();
                     valuesForChapters.name = i.getChapterName();
@@ -234,7 +221,7 @@ public class ChaptersActivity extends AppCompatActivity {
             ChapterListButton.resetButtons();
             ChapterListButton.setButtonMode(0);
         } else {
-            dataChapters = new ArrayList<>(); // We are using a bunch of statics so we need to clear the variables manually if we have no use for them.
+            dataChapters = new ArrayList<>(); // We are using a bunch of statics, so we need to clear the variables manually if we have no use for them.
             if (!isDownloaded) {
                 this.finish();
             } else {
@@ -244,6 +231,66 @@ public class ChaptersActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    private ArrayList<DownloadedChapter> sortingoptionOne(ArrayList<DownloadedChapter> relevantDownloads) {
+        // Now we sort the relevantDownloads
+        // For example we want to sort this list from ["Chapter 1", "Chapter 3", "Chapter 1.1"] to ["Chapter 1", "Chapter 1.1", "Chapter 3"]
+        ArrayList<String> relevantDownloadsChapterNames = null;
+        relevantDownloadsChapterNames = (ArrayList<String>) relevantDownloads.stream()
+                .map(DownloadedChapter::getChapterName)
+                .collect(Collectors.toList());
+
+        // This gets the latest relevantDownloadsChapterNamesArray there is available
+        // Because the relevantDownloadsChapterNamesArray for each object never gets updated
+        // It'll mess up if a new manga chapter every comes out
+        // In order to fix this we'll always target the relevantDownloadsChapterNamesArray with the latest object DownloadedChapter object creation (so the highest int date)
+        DownloadedChapter latestDownload = relevantDownloads.stream()
+                .max(Comparator.comparingInt(DownloadedChapter::getDate))
+                .orElse(null);
+        String[] relevantDownloadsChapterNamesArray = latestDownload.getChapterNamesDefaultOrder();
+
+        Collections.sort(relevantDownloadsChapterNames, Comparator.comparingInt(s -> Arrays.asList(relevantDownloadsChapterNamesArray).indexOf(s))); // magic
+        ArrayList<DownloadedChapter> sortedRelevantDownloads = new ArrayList<>();
+        for (String i : relevantDownloadsChapterNames) {
+            relevantDownloads.stream()
+                    .filter(DownloadedChapter -> i.equals(DownloadedChapter.getChapterName()))
+                    .findFirst()
+                    .ifPresent(sortedRelevantDownloads::add);
+        }
+
+        return sortedRelevantDownloads;
+    }
+
+    private ArrayList<DownloadedChapter> sortingOptionTwo(ArrayList<DownloadedChapter> relevantDownloads) {
+        // if for whatever reason the sorting fails we'll use this fallback as a second sorting option
+        // https://stackoverflow.com/questions/13973503/sorting-strings-that-contains-number-in-java
+        // Right now this code doesn't work correctly.
+        // For example, it messes up with floats.
+        // This function is a hit or miss really and that's also the reason why I'm using it as a plan B.
+        ArrayList<String> relevantDownloadsChapterNames = null;
+        Collections.sort(relevantDownloadsChapterNames, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return extractInt(o1) - extractInt(o2);
+            }
+
+            int extractInt(String s) {
+                String num = s.replaceAll("\\D", "");
+                // return 0 if no digits found
+                return num.isEmpty() ? 0 : Integer.parseInt(num);
+            }
+        });
+
+        ArrayList<DownloadedChapter> sortedRelevantDownloads = new ArrayList<>();
+        for (String i : relevantDownloadsChapterNames) {
+            relevantDownloads.stream()
+                    .filter(DownloadedChapter -> i.equals(DownloadedChapter.getChapterName()))
+                    .findFirst()
+                    .ifPresent(sortedRelevantDownloads::add);
+        }
+
+        return sortedRelevantDownloads;
     }
 
 

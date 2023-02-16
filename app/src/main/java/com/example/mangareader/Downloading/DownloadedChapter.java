@@ -12,10 +12,10 @@ public class DownloadedChapter {
 
     private String[] imageNames;
     private String imagesPath;
-
+    private String[] chapterNamesDefaultOrder;
 
     public DownloadedChapter(String source, String url, String image, String mangaName, int date, String referer, String mangaStory, String chapterName, String[] imageNames,
-                             String imagesPath) {
+                             String imagesPath, String[] chapterNamesDefaultOrder) {
         this.source = source;
         this.url = url;
         this.image = image;
@@ -26,7 +26,17 @@ public class DownloadedChapter {
         this.mangaStory = mangaStory;
         this.imageNames = imageNames;
         this.imagesPath = imagesPath;
+        this.chapterNamesDefaultOrder = chapterNamesDefaultOrder;
 
+
+    }
+
+    public String[] getChapterNamesDefaultOrder() {
+        return chapterNamesDefaultOrder;
+    }
+
+    public void setChapterNamesDefaultOrder(String[] chapterNamesDefaultOrder) {
+        this.chapterNamesDefaultOrder = chapterNamesDefaultOrder;
     }
 
     public String getChapterName() {

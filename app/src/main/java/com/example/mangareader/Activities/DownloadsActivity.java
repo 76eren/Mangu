@@ -54,9 +54,10 @@ public class DownloadsActivity extends AppCompatActivity {
 
 
         Settings settings = new Settings();
+
+        // Sorts our downloads
         ArrayList<DownloadedChapter> temp = new ArrayList<>(set);
         ArrayList<DownloadedChapter> sortedDownloads = new ArrayList<>();
-
         for (DownloadedChapter i : temp) {
             boolean canAdd = true;
             for (DownloadedChapter y : sortedDownloads) {
@@ -66,7 +67,6 @@ public class DownloadsActivity extends AppCompatActivity {
                 }
             }
             if (canAdd) {
-
                 sortedDownloads.add(i);
             }
         }
@@ -85,7 +85,6 @@ public class DownloadsActivity extends AppCompatActivity {
             case "preference_favourites_sort_alphabet":
                 sortedDownloads.sort(Comparator.comparing(DownloadedChapter::getName));
                 break;
-
         }
 
         for (DownloadedChapter i : sortedDownloads) {

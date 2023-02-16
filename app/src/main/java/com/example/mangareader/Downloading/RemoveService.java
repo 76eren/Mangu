@@ -66,6 +66,7 @@ public class RemoveService extends Service {
                 // Thanks chatgpt, I truly love you
                 // I truly cannot imagine a world without you anymore
                 if (targetChapter != null) {
+                    PathFormatter pathFormatter = new PathFormatter();
                     File directory = new File(targetChapter.getImagesPath());
                     File[] files = directory.listFiles();
                     for (File file : files) {

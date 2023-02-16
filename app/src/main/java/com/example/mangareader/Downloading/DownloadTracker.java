@@ -49,7 +49,6 @@ public class DownloadTracker {
         editor.apply();
     }
 
-
     public void addToDownloads(ButtonValuesChapterScreen values, Context context, String[] imageNames, String imagesPath) {
         Gson gson = new Gson();
         DownloadedChapter downloadedChapter = new DownloadedChapter(
@@ -62,9 +61,10 @@ public class DownloadTracker {
                 (String) values.getExtraData().get("mangaStory"),
                 values.getValuesForChapters().name,
                 imageNames,
-                imagesPath
-
+                imagesPath,
+                (String[]) values.getExtraData().get("chapterNamesDefaultOrder")
         );
+
 
         String json = gson.toJson(downloadedChapter);
 
@@ -103,9 +103,6 @@ public class DownloadTracker {
     }
 
 
-    public void removeFromDownloads() {
-
-    }
 
 
 }
