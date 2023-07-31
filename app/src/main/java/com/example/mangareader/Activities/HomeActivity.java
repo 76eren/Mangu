@@ -2,7 +2,6 @@ package com.example.mangareader.Activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
 
         NavigationView navigationView = findViewById(R.id.navMenu);
         Menu menu = navigationView.getMenu();
-        navigation.ItemClickSetup(this, menu);
+        navigation.itemClickSetup(this, menu);
 
         Settings settings = new Settings();
         TextView waitTV = findViewById(R.id.waitTV);
@@ -74,11 +73,8 @@ public class HomeActivity extends AppCompatActivity {
 
         // We set the correct theme
         // This is very lazy
-        String theme = settings.ReturnValueString(this.getApplicationContext(), "theme", "default");
+        String theme = settings.returnValueString(this.getApplicationContext(), "theme", "default");
         switch (theme) {
-            case "default":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                break;
 
             case "dark":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -93,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
         }
 
-        // Now we get all of the data for the activity
+        // Now we get all the data for the activity
         Sources source = SourceObjectHolder.getSources(this); // This both sets and gets the source
 
         // This shouldn't be here.
@@ -106,7 +102,7 @@ public class HomeActivity extends AppCompatActivity {
             HashMap<String, ArrayList<HomeMangaClass>> homeData = null;
 
             try {
-                homeData = source.GetDataHomeActivity(this);
+                homeData = source.getDataHomeActivity(this);
             } catch (InterruptedException e) {
                 homeData = null;
             }
@@ -129,8 +125,6 @@ public class HomeActivity extends AppCompatActivity {
                         recyclerView.setAdapter(adapter);
 
                     });
-                } else {
-                    Log.d("lol", "Latest is null");
                 }
 
                 // Does the popular

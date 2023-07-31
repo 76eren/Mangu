@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -26,11 +25,10 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 public class ReadClick implements Readmodes {
+    int page = 0;
     private Data data;
     private Readmodes.DownloadData dataDownload;
     private PhotoView photoView;
-    int page = 0;
-
     private TextView progress;
 
 
@@ -39,7 +37,7 @@ public class ReadClick implements Readmodes {
     public void loadImageDownload() {
         this.dataDownload.activity.runOnUiThread(() -> {
 
-            Read.LoadImageDownload(dataDownload.activity, this.photoView, this.dataDownload.chapterDatas.get(0).getImageNames()[page], this.dataDownload.chapterDatas.get(0).getImagesPath());
+            Read.loadImageDownload(dataDownload.activity, this.photoView, this.dataDownload.chapterDatas.get(0).getImageNames()[page], this.dataDownload.chapterDatas.get(0).getImagesPath());
 
             this.progress.setText(this.page + 1 + "/" + this.dataDownload.chapterDatas.get(0).getImageNames().length + " - "
                     + ReadValueHolder.getCurrentChapter(this.data.activity).name);
@@ -57,7 +55,7 @@ public class ReadClick implements Readmodes {
     }
 
     @Override
-    public void Start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
+    public void start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
         this.data = new Data(activity, images, sources, reqData);
 
         this.photoView = activity.findViewById(R.id.photo_view);
@@ -67,8 +65,8 @@ public class ReadClick implements Readmodes {
         this.progress = activity.findViewById(R.id.progress);
 
         // Controls the page switching
-        next.setOnClickListener(view -> ChangePages(1));
-        previous.setOnClickListener(view -> ChangePages(-1));
+        next.setOnClickListener(view -> changePages(1));
+        previous.setOnClickListener(view -> changePages(-1));
 
         activity.runOnUiThread(() -> {
             previous.setBackgroundColor(Color.TRANSPARENT);
@@ -91,8 +89,8 @@ public class ReadClick implements Readmodes {
         this.progress = activity.findViewById(R.id.progress);
 
         // Controls the page switching
-        next.setOnClickListener(view -> ChangePagesDownload(1));
-        previous.setOnClickListener(view -> ChangePagesDownload(-1));
+        next.setOnClickListener(view -> changePagesDownload(1));
+        previous.setOnClickListener(view -> changePagesDownload(-1));
 
         activity.runOnUiThread(() -> {
             previous.setBackgroundColor(Color.TRANSPARENT);
@@ -104,10 +102,9 @@ public class ReadClick implements Readmodes {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void LoadImage() {
-        Log.d("lol", data.images.get(page).trim());
+    public void loadImage() {
         this.data.activity.runOnUiThread(() -> {
-            Read.LoadImage(data.images.get(page), photoView, this.data.reqData, this.data.activity);
+            Read.loadImage(data.images.get(page), photoView, this.data.reqData, this.data.activity);
             this.progress.setText(this.page + 1 + "/" + this.data.images.size() + " - "
                     + ReadValueHolder.getCurrentChapter(this.data.activity).name);
         });
@@ -115,26 +112,26 @@ public class ReadClick implements Readmodes {
     }
 
     @Override
-    public void ChangePages(int direction) {
+    public void changePages(int direction) {
         page += direction;
 
         // We go to the next chapter
         if (page >= this.data.images.size()) {
-            ChangeChapter(1); // 1 = next, -1 = previous
+            changeChapter(1); // 1 = next, -1 = previous
             return;
         }
 
         // We go to the previous page
         if (page < 0) {
-            ChangeChapter(-1); // 1 = next, -1 = previous
+            changeChapter(-1); // 1 = next, -1 = previous
             return;
         }
 
-        LoadImage();
+        loadImage();
     }
 
     @Override
-    public void ChangeChapter(int direction) {
+    public void changeChapter(int direction) {
         String temp = ReadValueHolder.currentChapter.url;
 
         int index = 0;
@@ -157,7 +154,7 @@ public class ReadClick implements Readmodes {
 
         new Thread(() -> {
 
-            ArrayList<String> images = SourceObjectHolder.getSources(this.data.activity).GetImages(newChapter,
+            ArrayList<String> images = SourceObjectHolder.getSources(this.data.activity).getImages(newChapter,
                     this.data.activity);
             images.removeAll(Collections.singleton(null));
             images.removeAll(Collections.singleton(""));
@@ -166,14 +163,14 @@ public class ReadClick implements Readmodes {
             this.page = 0;
 
             // Adds our chapter to the history
-            ListTracker.AddToList(this.data.activity, ReadValueHolder.currentChapter.url, "History");
+            ListTracker.addToList(this.data.activity, ReadValueHolder.currentChapter.url, "History");
 
             Settings settings = new Settings();
-            if (settings.ReturnValueBoolean(this.data.activity, "preference_Cache", false)) {
-                Read.Cache(this.data.activity, this.data.images, this.data.reqData);
+            if (settings.returnValueBoolean(this.data.activity, "preference_Cache", false)) {
+                Read.cache(this.data.activity, this.data.images, this.data.reqData);
             }
 
-            LoadImage();
+            loadImage();
 
         }).start();
 
@@ -201,7 +198,7 @@ public class ReadClick implements Readmodes {
         ReadValueHolder.currentChapter = ReadValueHolder.ChaptersActivityData.get(index);
 
         new Thread(() -> {
-            ListTracker.AddToList(this.dataDownload.activity, ReadValueHolder.currentChapter.url, "History");
+            ListTracker.addToList(this.dataDownload.activity, ReadValueHolder.currentChapter.url, "History");
 
             DownloadTracker downloadTracker = new DownloadTracker();
             ArrayList<DownloadedChapter> finalDownloads = new ArrayList<>();
@@ -221,7 +218,7 @@ public class ReadClick implements Readmodes {
 
 
     @Override
-    public void ChangePagesDownload(int direction) {
+    public void changePagesDownload(int direction) {
         page += direction;
 
         // We go to the next chapter

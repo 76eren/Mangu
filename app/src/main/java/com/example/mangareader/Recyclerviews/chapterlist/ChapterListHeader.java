@@ -62,11 +62,6 @@ public class ChapterListHeader extends RviewAdapterChapterlist.ViewHolder {
             favouriteStar.setVisibility(View.INVISIBLE);
         }
 
-        // I disabled this as I have no use for it anymore.
-        // See chapter_list_header.xml
-        download.setOnClickListener(view -> {
-            Log.d("lol", "YOU CLICKED ME");
-        });
 
         // Currently uses internet and does not take into account the downloading
         if (data.getReferer() == null) {

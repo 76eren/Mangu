@@ -3,7 +3,6 @@ package com.example.mangareader.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.Downloading.DownloadTracker;
 import com.example.mangareader.Downloading.DownloadedChapter;
 import com.example.mangareader.R;
-import com.example.mangareader.Recyclerviews.chapterlist.*;
+import com.example.mangareader.Recyclerviews.chapterlist.ChapterInfo;
+import com.example.mangareader.Recyclerviews.chapterlist.ChapterListButton;
+import com.example.mangareader.Recyclerviews.chapterlist.HeaderInfo;
+import com.example.mangareader.Recyclerviews.chapterlist.RviewAdapterChapterlist;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.SplashScreen;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
@@ -26,10 +28,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ChaptersActivity extends AppCompatActivity {
-    RviewAdapterChapterlist adapter;
     public static String url;
     public static ArrayList<Sources.ValuesForChapters> dataChapters = new ArrayList<>();
     public static boolean isDownloaded = false;
+    RviewAdapterChapterlist adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,17 +92,15 @@ public class ChaptersActivity extends AppCompatActivity {
 
             // This does the actual sorting
             try {
-                ArrayList<DownloadedChapter> sorted = sortingoptionOne(relevantDownloads);
+                ArrayList<DownloadedChapter> sorted = sortingOptionOne(relevantDownloads);
                 relevantDownloads.clear();
                 relevantDownloads.addAll(sorted);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 try {
                     ArrayList<DownloadedChapter> sorted = sortingOptionTwo(relevantDownloads);
                     relevantDownloads.clear();
                     relevantDownloads.addAll(sorted);
-                }
-                catch (Exception error) {
+                } catch (Exception error) {
 
                 }
 
@@ -133,19 +133,17 @@ public class ChaptersActivity extends AppCompatActivity {
             extraData.put("mangaStory", mangaStory);
             if (!finalDownloaded) {
                 try {
-                    dataChapters = sources.GetChapters(finalMangaUrl, activity, extraData);
+                    dataChapters = sources.getChapters(finalMangaUrl, activity, extraData);
                     ArrayList<String> chapterNamesDefaultOrderArraylist = new ArrayList<>();
                     for (Sources.ValuesForChapters i : dataChapters) {
                         chapterNamesDefaultOrderArraylist.add(i.name);
                     }
                     String[] chapterNamesDefaultOrder = chapterNamesDefaultOrderArraylist.toArray(new String[0]);
                     extraData.put("chapterNamesDefaultOrder", chapterNamesDefaultOrder);
-                }
-                catch (IOException | NoSuchAlgorithmException | InvalidKeyException | JSONException e) {
+                } catch (IOException | NoSuchAlgorithmException | InvalidKeyException | JSONException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            else {
+            } else {
                 for (DownloadedChapter i : relevantDownloads) {
                     Sources.ValuesForChapters valuesForChapters = new Sources.ValuesForChapters();
                     valuesForChapters.name = i.getChapterName();
@@ -233,7 +231,7 @@ public class ChaptersActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<DownloadedChapter> sortingoptionOne(ArrayList<DownloadedChapter> relevantDownloads) {
+    private ArrayList<DownloadedChapter> sortingOptionOne(ArrayList<DownloadedChapter> relevantDownloads) {
         // Now we sort the relevantDownloads
         // For example we want to sort this list from ["Chapter 1", "Chapter 3", "Chapter 1.1"] to ["Chapter 1", "Chapter 1.1", "Chapter 3"]
         ArrayList<String> relevantDownloadsChapterNames = null;

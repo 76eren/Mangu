@@ -32,11 +32,12 @@ public class Mangakakalot implements Sources {
     private static final Document.OutputSettings NO_PRETTY_PRINTING = new Document.OutputSettings().prettyPrint(false);
 
     // public Context context;
+    Document doc;
 
     // THIS IS FOR THE MAIN ACTIVITY
     // GETS THE INFO FOR THE PICTURE SCREEN
     @Override
-    public ArrayList<SearchValues> CollectDataPicScreen(String manga) {
+    public ArrayList<SearchValues> collectDataPicScreen(String manga) {
 
         manga = manga.replace(" ", "_");
         manga = manga.replace("'", "_");
@@ -79,8 +80,6 @@ public class Mangakakalot implements Sources {
         return null;
     }
 
-    Document doc;
-
     @Override
     public String getStory(String url) {
         try {
@@ -119,7 +118,7 @@ public class Mangakakalot implements Sources {
     // Collects data for the chapter list
     // We collect: chapter name + it's url
     @Override
-    public ArrayList<ValuesForChapters> GetChapters(String url, Context context, HashMap<String, Object> extraData) {
+    public ArrayList<ValuesForChapters> getChapters(String url, Context context, HashMap<String, Object> extraData) {
         try {
             ArrayList<ValuesForChapters> data = new ArrayList<>();
             ArrayList<String> links = new ArrayList<>();
@@ -226,13 +225,13 @@ public class Mangakakalot implements Sources {
     // THis part is in charge of getting the manga images
     // Mangakakalot has two servers
     @Override
-    public ArrayList<String> GetImages(ValuesForChapters object, Context context) {
+    public ArrayList<String> getImages(ValuesForChapters object, Context context) {
         Document doc;
 
         String url = object.url;
         try {
             Settings settings = new Settings();
-            Boolean server_two = settings.ReturnValueBoolean(context, "preference_ServerMangakakalot", false);
+            Boolean server_two = settings.returnValueBoolean(context, "preference_ServerMangakakalot", false);
 
             if (!server_two) {
                 doc = Jsoup.connect(url)
@@ -294,7 +293,7 @@ public class Mangakakalot implements Sources {
     }
 
     @Override
-    public HashMap<String, String> GetRequestData(String url) {
+    public HashMap<String, String> getRequestData(String url) {
         try {
             doc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
@@ -325,9 +324,9 @@ public class Mangakakalot implements Sources {
     }
 
     @Override
-    public void PrepareReadChapter(ReadActivity readActivity) {
+    public void prepareReadChapter(ReadActivity readActivity) {
         Settings settings = new Settings();
-        if (!settings.ReturnValueBoolean(readActivity.getApplicationContext(), "preference_mangakakalot_showButon",
+        if (!settings.returnValueBoolean(readActivity.getApplicationContext(), "preference_mangakakalot_showButon",
                 false)) {
             return;
         }
@@ -342,21 +341,21 @@ public class Mangakakalot implements Sources {
         SwitchCompat toggle = readActivity.findViewById(R.id.switchServer);
         toggle.setVisibility(View.VISIBLE);
 
-        Boolean server = settings.ReturnValueBoolean(readActivity.getApplicationContext(),
+        Boolean server = settings.returnValueBoolean(readActivity.getApplicationContext(),
                 "preference_ServerMangakakalot", false);
         toggle.setChecked(server); // true or false
         toggle.setOnClickListener(v -> {
-            settings.AssignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot",
+            settings.assignValueBoolean(readActivity.getApplicationContext(), "preference_ServerMangakakalot",
                     toggle.isChecked());
 
             // readActivity.read.LoadChapter(ReadValueHolder.currentChapter);
-            readActivity.read.ChangeChapter(0);
+            readActivity.read.changeChapter(0);
 
         });
     }
 
     @Override
-    public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) {
+    public HashMap<String, ArrayList<HomeMangaClass>> getDataHomeActivity(Context context) {
         String URL;
         // This has been changed to mangakakalot.com/bbl, but I don't know if they'll ever turn it back to mangakakalot.com so I added a check
         URL = "https://mangakakalot.com/";
@@ -432,7 +431,7 @@ public class Mangakakalot implements Sources {
     }
 
     @Override
-    public String GetSourceName() {
+    public String getSourceName() {
         return "mangakakalot";
     }
 

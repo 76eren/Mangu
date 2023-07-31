@@ -36,12 +36,12 @@ public class ReadActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         overridePendingTransition(0, 0);
 
-        ListTracker.AddToList(this, ReadValueHolder.getCurrentChapter(this).url, "History");
+        ListTracker.addToList(this, ReadValueHolder.getCurrentChapter(this).url, "History");
         Settings settings = new Settings();
         Intent readIntent = getIntent();
         boolean isDownloaded = readIntent.getBooleanExtra("downloaded", false);
 
-        if (!settings.ReturnValueBoolean(this, "preference_hardware_acceleration", false)) {
+        if (!settings.returnValueBoolean(this, "preference_hardware_acceleration", false)) {
             getWindow().setFlags(
                     // I have hardware acceleration turned off by default for this activity
                     // This'll enable it when the setting allows us to
@@ -56,7 +56,7 @@ public class ReadActivity extends AppCompatActivity {
         DownloadTracker downloadTracker = new DownloadTracker();
 
         // The default value MUST reflect the default value of the root proferences!!!!
-        switch (settings.ReturnValueString(this, "read_mode", "scroll")) {
+        switch (settings.returnValueString(this, "read_mode", "scroll")) {
             case "click":
                 read = new ReadClick();
                 break;
@@ -73,7 +73,7 @@ public class ReadActivity extends AppCompatActivity {
 
         read.inflate(this);
 
-        source.PrepareReadChapter(this); // Prepares the readchapter
+        source.prepareReadChapter(this); // Prepares the readchapter
 
         new Thread(() -> {
             TextView progress = findViewById(R.id.progress);
@@ -81,7 +81,7 @@ public class ReadActivity extends AppCompatActivity {
             // Allows hiding the progress bar
             progress.setOnClickListener(view -> {
                 if (progress.getAlpha() == 0) {
-                    progress.setAlpha(DesignValueHolder.ProgressBarAlphaWhenEnabled);
+                    progress.setAlpha(DesignValueHolder.progressBarAlphaWhenEnabled);
                 } else {
                     progress.setAlpha(0);
                 }
@@ -100,7 +100,7 @@ public class ReadActivity extends AppCompatActivity {
             if (!isDownloaded) {
                 // I am not really a big fan of calling ReadValueHolder rather than having a local variable.
                 // It's whatever though
-                imgs = SourceObjectHolder.getSources(this).GetImages(ReadValueHolder.getCurrentChapter(this), this);
+                imgs = SourceObjectHolder.getSources(this).getImages(ReadValueHolder.getCurrentChapter(this), this);
 
                 // This usually runs after inactivity.....
                 if (imgs == null) {
@@ -121,23 +121,23 @@ public class ReadActivity extends AppCompatActivity {
             imgs.removeAll(Collections.singleton(null));
             imgs.removeAll(Collections.singleton(""));
 
-            HashMap<String, String> reqData = source.GetRequestData(chapterUrl);
+            HashMap<String, String> reqData = source.getRequestData(chapterUrl);
 
             if (!isDownloaded) {
-                read.Start(this, imgs, source, reqData); // We assign our context to read
+                read.start(this, imgs, source, reqData); // We assign our context to read
 
                 // Caching
-                Boolean shouldCache = settings.ReturnValueBoolean(this, "preference_Cache", false);
+                Boolean shouldCache = settings.returnValueBoolean(this, "preference_Cache", false);
                 if (shouldCache) {
                     runOnUiThread(() -> cacheTV.setVisibility(View.VISIBLE));
-                    Read.Cache(this, imgs, reqData);
-                    read.LoadImage();
+                    Read.cache(this, imgs, reqData);
+                    read.loadImage();
                 } else {
                     runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
-                    read.LoadImage();
+                    read.loadImage();
                 }
             } else {
-                read.Start(this, imgs, source, reqData); // We assign our context to read
+                read.start(this, imgs, source, reqData); // We assign our context to read
                 read.startDownloads(this, finalDownloads, source, reqData);
                 read.loadImageDownload();
             }

@@ -66,7 +66,6 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
         holder.cardView.setOnClickListener(view -> {
             Intent intent = new Intent(data.context, ChaptersActivity.class);
             intent.putExtra("url", data.searchValues.url);
-            Log.d("lol", data.searchValues.url);
             intent.putExtra("downloaded", false);
             intent.putExtra("img", data.searchValues.image);
             intent.putExtra("mangaName", data.searchValues.name);
@@ -82,6 +81,23 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public static class Data {
+        Context context;
+        Sources.SearchValues searchValues;
+
+        public Data(Context context, Sources.SearchValues searchValues) {
+            this.context = context;
+            this.searchValues = searchValues;
+
+        }
+
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -104,23 +120,6 @@ public class RviewAdapterSearch extends RecyclerView.Adapter<RviewAdapterSearch.
             if (mClickListener != null)
                 mClickListener.onItemClick(view, getAdapterPosition());
         }
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public static class Data {
-        Context context;
-        Sources.SearchValues searchValues;
-
-        public Data(Context context, Sources.SearchValues searchValues) {
-            this.context = context;
-            this.searchValues = searchValues;
-
-        }
-
     }
 
 }

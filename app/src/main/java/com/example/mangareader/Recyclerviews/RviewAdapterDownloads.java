@@ -2,7 +2,6 @@ package com.example.mangareader.Recyclerviews;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,13 +81,13 @@ public class RviewAdapterDownloads extends RecyclerView.Adapter<RviewAdapterDown
                 Object obj = c.newInstance();
 
                 // Right now this just straight up changes the source :/
-                SourceObjectHolder.ChangeSource((Sources) obj, data.context);
+                SourceObjectHolder.changeSource((Sources) obj, data.context);
 
 
             } catch (Exception ex) {
                 // I dont't think our program is going to like kill itself if this here errors out
                 // This shouldn't throw an error though
-                Log.d("lol", ex.toString());
+
             }
 
             data.context.startActivity(intent);
@@ -101,6 +100,22 @@ public class RviewAdapterDownloads extends RecyclerView.Adapter<RviewAdapterDown
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public static class Data {
+        Context context;
+        DownloadedChapter downloadedChapter;
+
+        public Data(Context context, DownloadedChapter downloadedChapter) {
+            this.context = context;
+            this.downloadedChapter = downloadedChapter;
+        }
+
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -124,22 +139,6 @@ public class RviewAdapterDownloads extends RecyclerView.Adapter<RviewAdapterDown
             if (mClickListener != null)
                 mClickListener.onItemClick(view, getAdapterPosition());
         }
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public static class Data {
-        Context context;
-        DownloadedChapter downloadedChapter;
-
-        public Data(Context context, DownloadedChapter downloadedChapter) {
-            this.context = context;
-            this.downloadedChapter = downloadedChapter;
-        }
-
     }
 
 }

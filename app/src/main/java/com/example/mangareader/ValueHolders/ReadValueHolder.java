@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class ReadValueHolder {
 
     public static ArrayList<Sources.ValuesForChapters> ChaptersActivityData;
+    public static Sources.ValuesForChapters currentChapter;
 
     public static ArrayList<Sources.ValuesForChapters> getChaptersActivityData(Activity activity) {
         if (ChaptersActivityData != null) {
@@ -23,8 +24,6 @@ public class ReadValueHolder {
             return new ArrayList<Sources.ValuesForChapters>();
         }
     }
-
-    public static Sources.ValuesForChapters currentChapter;
 
     public static Sources.ValuesForChapters getCurrentChapter(Activity activity) {
         if (currentChapter != null) {

@@ -12,7 +12,7 @@ public class SourceObjectHolder {
 
     public static Sources getSources(Context context) {
         Settings settings = new Settings();
-        String src = settings.ReturnValueString(context, "source", "mangakakalot");
+        String src = settings.returnValueString(context, "source", "mangakakalot");
 
         // The default value MUST reflect the default value of the root proferences!!!!
         switch (src) {
@@ -30,9 +30,9 @@ public class SourceObjectHolder {
         }
     }
 
-    public static void ChangeSource(Sources source, Context context) {
+    public static void changeSource(Sources source, Context context) {
         Settings settings = new Settings();
         SourceObjectHolder.sources = source;
-        settings.AssignValueString(context, "source", source.GetSourceName());
+        settings.assignValueString(context, "source", source.getSourceName());
     }
 }

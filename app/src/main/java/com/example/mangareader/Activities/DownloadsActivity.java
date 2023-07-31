@@ -45,7 +45,7 @@ public class DownloadsActivity extends AppCompatActivity {
         Navigation navigation = new Navigation();
         NavigationView navigationView = findViewById(R.id.navMenu);
         Menu menu = navigationView.getMenu();
-        navigation.ItemClickSetup(this, menu);
+        navigation.itemClickSetup(this, menu);
 
 
         List<RviewAdapterDownloads.Data> data = new ArrayList<>();
@@ -72,7 +72,7 @@ public class DownloadsActivity extends AppCompatActivity {
         }
 
 
-        switch (settings.ReturnValueString(this, "preference_favourites_sort", "preference_favourites_sort_date_up")) {
+        switch (settings.returnValueString(this, "preference_favourites_sort", "preference_favourites_sort_date_up")) {
             case "preference_favourites_sort_date_down":
                 sortedDownloads.sort(Comparator.comparingInt(DownloadedChapter::returnDate));
                 break;
@@ -88,7 +88,7 @@ public class DownloadsActivity extends AppCompatActivity {
         }
 
         for (DownloadedChapter i : sortedDownloads) {
-            if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) {
+            if (!settings.returnValueBoolean(this, "preference_merge_manga_favourites", true)) {
                 // Checks whether we want to merge all sources or not
                 // Does not merge all sources together
                 if (i.getSource().equals(SourceObjectHolder.getSources(this).getClass().getName())) {

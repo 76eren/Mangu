@@ -57,16 +57,16 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
         if (data != null) {
             if (data.button.equals("")) {
                 holder.photoView.setVisibility(View.VISIBLE);
-                Read.LoadImage(data.url, holder.photoView, data.reqData, data.context);
+                Read.loadImage(data.url, holder.photoView, data.reqData, data.context);
             } else {
                 holder.button.setVisibility(View.VISIBLE);
                 holder.button.setText(data.button);
                 Data finalData = data;
                 holder.button.setOnClickListener(view -> {
                     if (finalData.button.equals("Next chapter")) {
-                        finalData.readScroll.ChangeChapter(1);
+                        finalData.readScroll.changeChapter(1);
                     } else if (finalData.button.equals("Previous chapter")) {
-                        finalData.readScroll.ChangeChapter(-1);
+                        finalData.readScroll.changeChapter(-1);
                     }
                 });
 
@@ -91,7 +91,7 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
             } else {
                 // The code for the actual image loading
                 holder.photoView.setVisibility(View.VISIBLE);
-                Read.LoadImageDownload(dataDownload.context, holder.photoView, dataDownload.imageName, dataDownload.path);
+                Read.loadImageDownload(dataDownload.context, holder.photoView, dataDownload.imageName, dataDownload.path);
 
             }
 
@@ -107,26 +107,6 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
             return mData.size();
         } else {
             return mDataDownload.size();
-        }
-    }
-
-    // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        PhotoView photoView;
-        Button button;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-            this.photoView = itemView.findViewById(R.id.read_photoview);
-            this.button = itemView.findViewById(R.id.button_scroll);
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null)
-                mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -169,6 +149,26 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
             this.button = button;
             this.readScroll = readScroll;
             this.downloadData = downloadData;
+        }
+    }
+
+    // stores and recycles views as they are scrolled off screen
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        PhotoView photoView;
+        Button button;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            this.photoView = itemView.findViewById(R.id.read_photoview);
+            this.button = itemView.findViewById(R.id.button_scroll);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mClickListener != null)
+                mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 

@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import java.util.LinkedHashSet;
 
 public class Favourites {
-    public static void AddToFavourites(Context context, FavouriteItem favouriteItem) {
+    public static void addToFavourites(Context context, FavouriteItem favouriteItem) {
 
         if (favouriteItem.url != null) {
             SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -34,7 +34,7 @@ public class Favourites {
 
     }
 
-    public static void RemoveFromFavourites(Context context, FavouriteItem favouriteItem) {
+    public static void removeFromFavourites(Context context, FavouriteItem favouriteItem) {
 
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -48,8 +48,7 @@ public class Favourites {
         // I can't just remove the already existing object because not all values are the same
         // e.g the time value will always be different because the time we're calling this function is different from the time the manga was added
         // Instead we can just check for urls
-        // Not all values are the same so we cannot just make an identical object and remove the identical object from the String array it is a bit annoying but hey it is what it is....
-        // Also I am dumb
+        // Not all values are the same, so we cannot just make an identical object and remove the identical object from the String array it is a bit annoying but hey it is what it is....
 
         for (String i : favsSetStrings) {
             if (gson.fromJson(i, FavouriteItem.class).url.equals(favouriteItem.url)) {
@@ -86,18 +85,18 @@ public class Favourites {
         }
 
         if (found) {
-            RemoveFromFavourites(context, favouriteItem);
+            removeFromFavourites(context, favouriteItem);
             Toast.makeText(context, "Removed manga from favourites", Toast.LENGTH_SHORT).show();
 
         } else {
-            AddToFavourites(context, favouriteItem);
+            addToFavourites(context, favouriteItem);
             Toast.makeText(context, "Added manga to favourites", Toast.LENGTH_SHORT).show();
 
         }
 
     }
 
-    public static LinkedHashSet<FavouriteItem> GetFavourites(Context context) {
+    public static LinkedHashSet<FavouriteItem> getFavourites(Context context) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         // This is our hashset with Strings

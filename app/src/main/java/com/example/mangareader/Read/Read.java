@@ -23,7 +23,7 @@ import java.util.Objects;
 
 public class Read {
 
-    public static void Cache(Activity activity, ArrayList<String> images, HashMap<String, String> reqData) {
+    public static void cache(Activity activity, ArrayList<String> images, HashMap<String, String> reqData) {
         // This function should cache all the images right before the reading starts
         // I have no idea whether this even works or not
 
@@ -54,14 +54,14 @@ public class Read {
         activity.runOnUiThread(() -> cacheStatusUpdate.setVisibility(PhotoView.GONE));
     }
 
-    public static void LoadImageDownload(Context context, PhotoView photoView, String imageName, String imagePath) {
+    public static void loadImageDownload(Context context, PhotoView photoView, String imageName, String imagePath) {
         // Glide is actually amazing
         // If you remove the downloaded image it'll try to find the removed image from the cache
         // and if it's not in the cache it'll just put the placeholder there.
         // Super neat of course
 
         Settings settings = new Settings();
-        if (!settings.ReturnValueBoolean(context, "preference_image_size", false)) {
+        if (!settings.returnValueBoolean(context, "preference_image_size", false)) {
             Glide.with(context)
                     .load(imagePath + "/" + imageName)
                     .placeholder(R.drawable.ic_launcher_background)
@@ -78,7 +78,7 @@ public class Read {
 
     }
 
-    public static void LoadImage(String url, PhotoView photoView, HashMap<String, String> reqData, Context context) {
+    public static void loadImage(String url, PhotoView photoView, HashMap<String, String> reqData, Context context) {
 
         GlideUrl glideUrl;
         if (reqData != null) {
@@ -93,7 +93,7 @@ public class Read {
         }
 
         Settings settings = new Settings();
-        if (!settings.ReturnValueBoolean(context, "preference_image_size", false)) {
+        if (!settings.returnValueBoolean(context, "preference_image_size", false)) {
             Glide.with(context)
                     .load(glideUrl)
                     .timeout(0)

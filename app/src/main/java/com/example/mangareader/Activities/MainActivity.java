@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Navigation navigation = new Navigation();
         NavigationView navigationView = findViewById(R.id.navMenu);
         Menu menu = navigationView.getMenu();
-        navigation.ItemClickSetup(this, menu);
+        navigation.itemClickSetup(this, menu);
 
         TextView search = findViewById(R.id.search);
         Context context = this;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             new Thread(() -> {
                 List<RviewAdapterSearch.Data> data = new ArrayList<>();
                 ArrayList<Sources.SearchValues> searchResults = SourceObjectHolder.getSources(this)
-                        .CollectDataPicScreen(search.getText().toString());
+                        .collectDataPicScreen(search.getText().toString());
 
 
                 if (searchResults != null) {

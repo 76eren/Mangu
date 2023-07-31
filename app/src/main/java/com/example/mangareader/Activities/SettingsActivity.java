@@ -51,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
         Navigation navigation = new Navigation();
         NavigationView navigationView = findViewById(R.id.navMenu);
         Menu menu = navigationView.getMenu();
-        navigation.ItemClickSetup(this, menu);
+        navigation.itemClickSetup(this, menu);
 
     }
 
@@ -62,6 +62,13 @@ public class SettingsActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Its kinda important we do this
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
@@ -107,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
             // This makes sure the right preference is checked
             // I am aware that the SettingsActivity keeps track of this by default however we need to add this
             // Because the favouritesActivity may change these sources without notifying the SettingsActivity
-            String src = settings.ReturnValueString(this.getActivity(), "source", "mangakakalot");
+            String src = settings.returnValueString(this.getActivity(), "source", "mangakakalot");
             switch (src) {
 
                 case "mangadex":
@@ -134,7 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
                 mangadex.setChecked(false);
                 mangakakalot.setChecked(false);
                 webtoons.setChecked(true);
-                SourceObjectHolder.ChangeSource(new Webtoons(), this.getActivity());
+                SourceObjectHolder.changeSource(new Webtoons(), this.getActivity());
 
                 return false;
             });
@@ -143,7 +150,7 @@ public class SettingsActivity extends AppCompatActivity {
                 mangadex.setChecked(false);
                 mangakakalot.setChecked(true);
                 webtoons.setChecked(false);
-                SourceObjectHolder.ChangeSource(new Mangakakalot(), this.getActivity());
+                SourceObjectHolder.changeSource(new Mangakakalot(), this.getActivity());
 
 
                 return false;
@@ -153,7 +160,7 @@ public class SettingsActivity extends AppCompatActivity {
                 mangadex.setChecked(true);
                 mangakakalot.setChecked(false);
                 webtoons.setChecked(false);
-                SourceObjectHolder.ChangeSource(new Mangadex(), this.getActivity());
+                SourceObjectHolder.changeSource(new Mangadex(), this.getActivity());
 
                 return false;
             });
@@ -168,7 +175,7 @@ public class SettingsActivity extends AppCompatActivity {
                 lightTheme.setChecked(false);
                 darkTheme.setChecked(false);
 
-                settings.AssignValueString(this.getActivity(), "theme", "default");
+                settings.assignValueString(this.getActivity(), "theme", "default");
 
                 return true;
             });
@@ -178,7 +185,7 @@ public class SettingsActivity extends AppCompatActivity {
                 lightTheme.setChecked(false);
                 darkTheme.setChecked(true);
 
-                settings.AssignValueString(this.getActivity(), "theme", "dark");
+                settings.assignValueString(this.getActivity(), "theme", "dark");
 
                 return true;
             });
@@ -188,7 +195,7 @@ public class SettingsActivity extends AppCompatActivity {
                 lightTheme.setChecked(true);
                 darkTheme.setChecked(false);
 
-                settings.AssignValueString(this.getActivity(), "theme", "light");
+                settings.assignValueString(this.getActivity(), "theme", "light");
 
                 return true;
 
@@ -212,14 +219,14 @@ public class SettingsActivity extends AppCompatActivity {
             click.setOnPreferenceClickListener(preference -> {
                 scroll.setChecked(false);
                 click.setChecked(true);
-                settings.AssignValueString(this.getActivity(), "read_mode", "click");
+                settings.assignValueString(this.getActivity(), "read_mode", "click");
                 return false;
             });
 
             scroll.setOnPreferenceClickListener(preference -> {
                 scroll.setChecked(true);
                 click.setChecked(false);
-                settings.AssignValueString(this.getActivity(), "read_mode", "scroll");
+                settings.assignValueString(this.getActivity(), "read_mode", "scroll");
 
                 return false;
             });
@@ -244,7 +251,7 @@ public class SettingsActivity extends AppCompatActivity {
                 preference_favourites_sort_date_up.setChecked(false);
                 alphabet.setChecked(true);
 
-                settings.AssignValueString(this.getActivity(), "preference_favourites_sort",
+                settings.assignValueString(this.getActivity(), "preference_favourites_sort",
                         "preference_favourites_sort_alphabet");
                 return false;
             });
@@ -253,7 +260,7 @@ public class SettingsActivity extends AppCompatActivity {
                 preference_favourites_sort_date_down.setChecked(true);
                 preference_favourites_sort_date_up.setChecked(false);
                 alphabet.setChecked(false);
-                settings.AssignValueString(this.getActivity(), "preference_favourites_sort",
+                settings.assignValueString(this.getActivity(), "preference_favourites_sort",
                         "preference_favourites_sort_date_down");
 
                 return false;
@@ -264,7 +271,7 @@ public class SettingsActivity extends AppCompatActivity {
                 alphabet.setChecked(false);
                 preference_favourites_sort_date_down.setChecked(false);
 
-                settings.AssignValueString(this.getActivity(), "preference_favourites_sort",
+                settings.assignValueString(this.getActivity(), "preference_favourites_sort",
                         "preference_favourites_sort_date_up");
                 return false;
             });
@@ -279,13 +286,6 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
         }
-    }
-
-    // Its kinda important we do this
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
     }
 
 }

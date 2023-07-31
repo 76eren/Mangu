@@ -9,6 +9,24 @@ import java.util.HashMap;
 
 public interface Readmodes {
 
+    void loadImageDownload();
+
+    void inflate(Activity activity); // Inflates the necessary widgets from a xml file
+
+    void start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData);
+
+    void startDownloads(Activity activity, ArrayList<DownloadedChapter> downlaods, Sources sources, HashMap<String, String> reqData);
+
+    void loadImage(); // 1 = next -1 = previous
+
+    void changePages(int direction); // 1 = next -1 = previous
+
+    void changeChapter(int direction);
+
+    void changeChapterDownloads(int direction);
+
+    void changePagesDownload(int direction);
+
     class Data {
         Activity activity;
         ArrayList<String> images;
@@ -37,23 +55,5 @@ public interface Readmodes {
 
         }
     }
-
-    void loadImageDownload();
-
-    void inflate(Activity activity); // Inflates the necessary widgets from a xml file
-
-    void Start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData);
-
-    void startDownloads(Activity activity, ArrayList<DownloadedChapter> downlaods, Sources sources, HashMap<String, String> reqData);
-
-    void LoadImage(); // 1 = next -1 = previous
-
-    void ChangePages(int direction); // 1 = next -1 = previous
-
-    void ChangeChapter(int direction);
-
-    void changeChapterDownloads(int direction);
-
-    void ChangePagesDownload(int direction);
 
 }

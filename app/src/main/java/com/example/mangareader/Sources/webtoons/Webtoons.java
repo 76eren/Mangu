@@ -37,14 +37,13 @@ public class Webtoons implements Sources {
                 return body;
             }
         } catch (Exception ex) {
-            Log.d("error", ex.toString());
             return null;
         }
 
     }
 
     @Override
-    public ArrayList<SearchValues> CollectDataPicScreen(String manga) {
+    public ArrayList<SearchValues> collectDataPicScreen(String manga) {
         manga = manga.trim();
         manga = manga.replace("\\s", "%20");
         String url = "https://www.webtoons.com/en/search?keyword=" + manga;
@@ -56,7 +55,6 @@ public class Webtoons implements Sources {
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0")
                     .get();
         } catch (Exception ex) {
-            Log.d("error", ex.toString());
             return null;
         }
 
@@ -110,7 +108,7 @@ public class Webtoons implements Sources {
     }
 
     @Override
-    public ArrayList<ValuesForChapters> GetChapters(String url, Context context, HashMap<String, Object> extraData) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, JSONException {
+    public ArrayList<ValuesForChapters> getChapters(String url, Context context, HashMap<String, Object> extraData) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, JSONException {
         // I am actually surprised this function works
         url = url.toLowerCase(Locale.ROOT);
         String old_url = url;
@@ -126,7 +124,7 @@ public class Webtoons implements Sources {
             // We first need to get the full url
 
             String body = "";
-            String apiUrl = WebtoonsMac.GetChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/titleList.json?v=2&platform=APP_ANDROID&language=en&locale=en&serviceZone=GLOBAL&query=un&startIndex=0&pageSize=1663334080258");
+            String apiUrl = WebtoonsMac.getChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/titleList.json?v=2&platform=APP_ANDROID&language=en&locale=en&serviceZone=GLOBAL&query=un&startIndex=0&pageSize=1663334080258");
             body = GetBody(apiUrl);
 
 
@@ -158,9 +156,9 @@ public class Webtoons implements Sources {
 
         String api_page;
         if (!old_url.contains("challenge")) {
-            api_page = WebtoonsMac.GetChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/episodeList.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + id + "&v=4&platform=APP_ANDROID&titleNo=95&startIndex=0&pageSize=100000");
+            api_page = WebtoonsMac.getChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/episodeList.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + id + "&v=4&platform=APP_ANDROID&titleNo=95&startIndex=0&pageSize=100000");
         } else {
-            api_page = WebtoonsMac.GetChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/challengeEpisodeList.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + id + "&v=4&platform=APP_ANDROID&titleNo=95&startIndex=0&pageSize=100000");
+            api_page = WebtoonsMac.getChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/challengeEpisodeList.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + id + "&v=4&platform=APP_ANDROID&titleNo=95&startIndex=0&pageSize=100000");
         }
 
         String body = GetBody(api_page);
@@ -209,7 +207,7 @@ public class Webtoons implements Sources {
     }
 
     @Override
-    public ArrayList<String> GetImages(ValuesForChapters object, Context context) {
+    public ArrayList<String> getImages(ValuesForChapters object, Context context) {
         ArrayList<String> images = new ArrayList<>();
 
         String titleNo = object.url.split("title_no=")[1];
@@ -226,9 +224,8 @@ public class Webtoons implements Sources {
 
         String apiPage = "";
         try {
-            apiPage = WebtoonsMac.GetChapterList(apiUrl);
-        } catch (Exception ex) {
-            Log.d("error", ex.toString());
+            apiPage = WebtoonsMac.getChapterList(apiUrl);
+        } catch (Exception ignored) {
         }
         String body = GetBody(apiPage);
 
@@ -246,8 +243,7 @@ public class Webtoons implements Sources {
                     images.add(url);
                 }
 
-            } catch (Exception ex) {
-                Log.d("error", ex.toString());
+            } catch (Exception ignored) {
             }
         }
 
@@ -255,7 +251,7 @@ public class Webtoons implements Sources {
     }
 
     @Override
-    public HashMap<String, String> GetRequestData(String url) {
+    public HashMap<String, String> getRequestData(String url) {
         HashMap<String, String> reqData = new HashMap<>();
         reqData.put("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0");
         reqData.put("Referer", "https://www.webtoons.com/");
@@ -264,12 +260,12 @@ public class Webtoons implements Sources {
     }
 
     @Override
-    public void PrepareReadChapter(ReadActivity readActivity) {
+    public void prepareReadChapter(ReadActivity readActivity) {
 
     }
 
     @Override
-    public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) throws InterruptedException {
+    public HashMap<String, ArrayList<HomeMangaClass>> getDataHomeActivity(Context context) throws InterruptedException {
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
 
         String latest_url = "https://www.webtoons.com/en/dailySchedule?sortOrder=UPDATE&webtoonCompleteType=ONGOING";
@@ -296,7 +292,7 @@ public class Webtoons implements Sources {
     }
 
     @Override
-    public String GetSourceName() {
+    public String getSourceName() {
         return "webtoons";
     }
 
@@ -307,8 +303,7 @@ public class Webtoons implements Sources {
             document = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0")
                     .get();
-        } catch (Exception ex) {
-            Log.d("error", ex.toString());
+        } catch (Exception ignored) {
             return null;
         }
 

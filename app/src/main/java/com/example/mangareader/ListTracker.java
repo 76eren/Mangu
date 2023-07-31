@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ListTracker {
-    public static void AddToList(Context context, String data, String setting) {
+    public static void addToList(Context context, String data, String setting) {
         if (data != null) {
             SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -30,7 +30,7 @@ public class ListTracker {
 
     }
 
-    public static void ChangeStatus(Context context, String data, String setting) {
+    public static void changeStatus(Context context, String data, String setting) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
@@ -53,7 +53,7 @@ public class ListTracker {
 
     }
 
-    public static ArrayList<String> GetFromList(Context context, String setting) {
+    public static ArrayList<String> getFromList(Context context, String setting) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> set = sharedpreferences.getStringSet(setting, Collections.emptySet());
 

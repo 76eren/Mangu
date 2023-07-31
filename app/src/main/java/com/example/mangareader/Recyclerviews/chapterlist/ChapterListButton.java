@@ -33,33 +33,26 @@ import java.util.stream.Collectors;
 public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
 
     public static final int TYPE = 1;
-
-    private final Button button;
-
+    private static final CopyOnWriteArrayList<ButtonValuesChapterScreen> values = new CopyOnWriteArrayList<>();
+    public static Button staticDownloadButton;
+    public static Button staticReadUnreadButton;
+    public static Button staticRemoveDownloadsWithImages;
     // I am aware that using a bunch of statics goes against the rules of OOP but in this case I kind of have to
     // Because I can't just access the object of this class from outside
     private static int buttonMode = 0; // 0 = click, 1 = select
+    private final Button button;
 
-
-    private static final CopyOnWriteArrayList<ButtonValuesChapterScreen> values = new CopyOnWriteArrayList<>();
-
-    public static Button staticDownloadButton;
-    public static Button staticReadUnreadButton;
-
-    public static Button staticRemoveDownloadsWithImages;
-
-    public static void setButtonMode(int buttonMode) {
-        ChapterListButton.buttonMode = buttonMode;
+    public ChapterListButton(LayoutInflater inflater, @NonNull ViewGroup parent, int layoutResource) {
+        super(inflater, parent, layoutResource);
+        this.button = this.itemView.findViewById(R.id.button);
     }
 
     public static int getButtonMode() {
         return buttonMode;
     }
 
-
-    public ChapterListButton(LayoutInflater inflater, @NonNull ViewGroup parent, int layoutResource) {
-        super(inflater, parent, layoutResource);
-        this.button = this.itemView.findViewById(R.id.button);
+    public static void setButtonMode(int buttonMode) {
+        ChapterListButton.buttonMode = buttonMode;
     }
 
     public static void resetButtons() {
@@ -76,6 +69,24 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
         buttonMode = 0;
     }
 
+    private static boolean inHistory(Context context, String url) {
+        return ListTracker.getFromList(context, "History").stream()
+                .anyMatch(s -> s.equals(url));
+    }
+
+    private static int getButtonColor(Button button, String url, boolean isClearing) {
+        if (!isClearing) {
+            for (ButtonValuesChapterScreen i : values) {
+                if (i.getSelectedButtonUrl().equals(url)) {
+                    return DesignValueHolder.buttonTextColorBlue;
+                }
+            }
+        }
+
+        return inHistory(button.getContext(), url)
+                ? DesignValueHolder.buttonTextColorRead
+                : DesignValueHolder.buttonTextColorNotRead;
+    }
 
     @SuppressLint("SetTextI18n")
     public void bind(ChapterInfo chapterInfo) {
@@ -85,7 +96,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
 
         staticReadUnreadButton.setOnClickListener(view -> {
             for (ButtonValuesChapterScreen i : values) {
-                ListTracker.ChangeStatus(i.getSelectedButton().getContext(), i.getSelectedButtonUrl(), "History");
+                ListTracker.changeStatus(i.getSelectedButton().getContext(), i.getSelectedButtonUrl(), "History");
                 button.setTextColor(getButtonColor(i.getSelectedButton(), i.getSelectedButtonUrl(), false));
 
             }
@@ -113,7 +124,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
             // We go back to the downloads activity
             // This is to prevent the user from pressing any buttons
             // For example the user shouldn't be able to press a button of a chapter that has been removed.
-            // Currently this has its flaws
+            // Currently, this has its flaws
             Intent downloadsActivityIntent = new Intent(button.getContext(), DownloadsActivity.class);
             downloadsActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             button.getContext().startActivity(downloadsActivityIntent);
@@ -159,7 +170,6 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
                     values.add(new ButtonValuesChapterScreen(button, chapterInfo.getValuesForChapters().url, chapterInfo.getValuesForChapters(), chapterInfo.getExtraData()));
                     this.button.setTextColor(Color.BLUE);
                 } else {
-                    Log.d("lol", "REMOVING CHAPTER URL " + chapterInfo.getValuesForChapters().url);
                     int index = 0;
                     for (ButtonValuesChapterScreen i : values) {
                         if (Objects.equals(i.getSelectedButtonUrl(), chapterInfo.getValuesForChapters().url)) {
@@ -195,25 +205,6 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
 
             return true;
         });
-    }
-
-    private static boolean inHistory(Context context, String url) {
-        return ListTracker.GetFromList(context, "History").stream()
-                .anyMatch(s -> s.equals(url));
-    }
-
-    private static int getButtonColor(Button button, String url, boolean isClearing) {
-        if (!isClearing) {
-            for (ButtonValuesChapterScreen i : values) {
-                if (i.getSelectedButtonUrl().equals(url)) {
-                    return DesignValueHolder.ButtonTextColorBlue;
-                }
-            }
-        }
-
-        return inHistory(button.getContext(), url)
-                ? DesignValueHolder.ButtonTextColorRead
-                : DesignValueHolder.ButtonTextColorNotRead;
     }
 
 

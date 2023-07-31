@@ -8,7 +8,7 @@ import com.example.mangareader.Activities.*;
 import com.example.mangareader.R;
 
 public class Navigation {
-    public void ItemClickSetup(Activity activity, Menu menu) {
+    public void itemClickSetup(Activity activity, Menu menu) {
 
         MenuItem settings = menu.findItem(R.id.nav_settings);
         settings.setOnMenuItemClickListener(item -> {

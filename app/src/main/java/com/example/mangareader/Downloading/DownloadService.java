@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.os.IBinder;
-import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -70,11 +69,11 @@ public class DownloadService extends Service {
 
             for (ButtonValuesChapterScreen i : myValues) {
 
-                ArrayList<String> images = source.GetImages(i.getValuesForChapters(), i.getSelectedButton().getContext());
+                ArrayList<String> images = source.getImages(i.getValuesForChapters(), i.getSelectedButton().getContext());
                 images.removeAll(Collections.singleton(""));
 
                 String chapterUrl = i.getSelectedButtonUrl();
-                HashMap<String, String> reqData = source.GetRequestData(chapterUrl);
+                HashMap<String, String> reqData = source.getRequestData(chapterUrl);
 
                 int index = 1;
                 String[] imageNames = new String[images.size()];
@@ -93,8 +92,7 @@ public class DownloadService extends Service {
                     URL url = null;
                     try {
                         url = new URL(imageUrl);
-                    }
-                    catch (MalformedURLException e) {
+                    } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
                     Bitmap bm = null;

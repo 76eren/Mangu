@@ -58,9 +58,8 @@ public class RemoveService extends Service {
                     if (y.getUrl().equals(i.getSelectedButtonUrl())) {
                         targetChapter = y;
                         break;
-                    } else {
-                        Log.d("lol", y.getUrl() + " != " + i.getSelectedButtonUrl());
                     }
+
                 }
 
                 // Thanks chatgpt, I truly love you

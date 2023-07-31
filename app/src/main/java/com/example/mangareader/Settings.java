@@ -6,14 +6,14 @@ import androidx.preference.PreferenceManager;
 
 public class Settings {
 
-    public String ReturnValueString(Context context, String value, String defaultVal) {
+    public String returnValueString(Context context, String value, String defaultVal) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         return sharedpreferences.getString(value, defaultVal);
 
     }
 
-    public void AssignValueString(Context context, String key, String value) {
+    public void assignValueString(Context context, String key, String value) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(key, value);
@@ -21,13 +21,13 @@ public class Settings {
 
     }
 
-    public Boolean ReturnValueBoolean(Context context, String value, boolean defaultVal) {
+    public Boolean returnValueBoolean(Context context, String value, boolean defaultVal) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedpreferences.getBoolean(value, defaultVal);
 
     }
 
-    public void AssignValueBoolean(Context context, String key, Boolean value) {
+    public void assignValueBoolean(Context context, String key, Boolean value) {
 
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedpreferences.edit();

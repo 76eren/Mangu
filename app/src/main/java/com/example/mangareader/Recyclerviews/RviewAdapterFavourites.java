@@ -76,13 +76,12 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
                 Object obj = c.newInstance();
 
                 // Right now this just straight up changes the source :/
-                SourceObjectHolder.ChangeSource((Sources) obj, data.context);
+                SourceObjectHolder.changeSource((Sources) obj, data.context);
 
 
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
                 // I dont't think our program is going to like kill itself if this here errors out
                 // This shouldn't throw an error though
-                Log.d("lol", ex.toString());
             }
 
             data.context.startActivity(intent);
@@ -95,6 +94,22 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public static class Data {
+        Context context;
+        FavouriteItem favouriteItem;
+
+        public Data(Context context, FavouriteItem favouriteItem) {
+            this.context = context;
+            this.favouriteItem = favouriteItem;
+        }
+
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -118,22 +133,6 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
             if (mClickListener != null)
                 mClickListener.onItemClick(view, getAdapterPosition());
         }
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public static class Data {
-        Context context;
-        FavouriteItem favouriteItem;
-
-        public Data(Context context, FavouriteItem favouriteItem) {
-            this.context = context;
-            this.favouriteItem = favouriteItem;
-        }
-
     }
 
 }

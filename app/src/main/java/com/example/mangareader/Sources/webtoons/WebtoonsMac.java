@@ -20,7 +20,7 @@ public class WebtoonsMac {
         return Base64.getEncoder().encodeToString(doFinal);
     }
 
-    public static String GetChapterList(String url) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
+    public static String getChapterList(String url) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
 
         String key = "gUtPzJFZch4ZyAGviiyH94P99lQ3pFdRTwpJWDlSGFfwgpr6ses5ALOxWHOIT7R1";
         SecretKeySpec spec = new SecretKeySpec(key.getBytes(), "HmacSHA1");

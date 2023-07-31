@@ -20,9 +20,8 @@ import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import java.util.*;
 
 public class ReadScroll implements Readmodes {
-    private Data data = null;
     public DownloadData dataDownload = null;
-
+    private Data data = null;
 
     @Override
     public void inflate(Activity activity) {
@@ -38,7 +37,7 @@ public class ReadScroll implements Readmodes {
     }
 
     @Override
-    public void Start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
+    public void start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
         this.data = new Data(activity, images, sources, reqData);
     }
 
@@ -77,7 +76,7 @@ public class ReadScroll implements Readmodes {
 
 
     @Override
-    public void LoadImage() {
+    public void loadImage() {
         TextView uwu = this.data.activity.findViewById(R.id.progress);
         this.data.activity.runOnUiThread(() -> uwu.setText(ReadValueHolder.getCurrentChapter(this.data.activity).name));
 
@@ -101,13 +100,13 @@ public class ReadScroll implements Readmodes {
     }
 
     @Override
-    public void ChangePages(int direction) {
+    public void changePages(int direction) {
         // We don't need this
 
     }
 
     @Override
-    public void ChangeChapter(int direction) {
+    public void changeChapter(int direction) {
         String temp = ReadValueHolder.currentChapter.url;
 
         int index = 0;
@@ -129,21 +128,21 @@ public class ReadScroll implements Readmodes {
 
         new Thread(() -> {
             Sources sources = SourceObjectHolder.getSources(this.data.activity);
-            ArrayList<String> images = sources.GetImages(newChapter, this.data.activity);
+            ArrayList<String> images = sources.getImages(newChapter, this.data.activity);
             images.removeAll(Collections.singleton(null));
             images.removeAll(Collections.singleton(""));
             // We want to edit a few values
             this.data.images = images;
 
             // Adds our chapter to the history
-            ListTracker.AddToList(this.data.activity, ReadValueHolder.currentChapter.url, "History");
+            ListTracker.addToList(this.data.activity, ReadValueHolder.currentChapter.url, "History");
 
             Settings settings = new Settings();
-            if (settings.ReturnValueBoolean(this.data.activity, "preference_Cache", false)) {
-                Read.Cache(this.data.activity, this.data.images, this.data.reqData);
+            if (settings.returnValueBoolean(this.data.activity, "preference_Cache", false)) {
+                Read.cache(this.data.activity, this.data.images, this.data.reqData);
             }
 
-            LoadImage();
+            loadImage();
 
         }).start();
 
@@ -171,7 +170,7 @@ public class ReadScroll implements Readmodes {
         ReadValueHolder.currentChapter = ReadValueHolder.ChaptersActivityData.get(index);
 
         new Thread(() -> {
-            ListTracker.AddToList(this.data.activity, ReadValueHolder.currentChapter.url, "History");
+            ListTracker.addToList(this.data.activity, ReadValueHolder.currentChapter.url, "History");
 
             DownloadTracker downloadTracker = new DownloadTracker();
             ArrayList<DownloadedChapter> finalDownloads = new ArrayList<>();
@@ -189,7 +188,7 @@ public class ReadScroll implements Readmodes {
     }
 
     @Override
-    public void ChangePagesDownload(int direction) {
+    public void changePagesDownload(int direction) {
 
     }
 }

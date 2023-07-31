@@ -77,6 +77,23 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
         return mData.size();
     }
 
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public static class Data {
+        Context context;
+        HomeMangaClass homeMangaClassObject;
+
+        public Data(Context context, HomeMangaClass homeMangaClassObject) {
+            this.context = context;
+            this.homeMangaClassObject = homeMangaClassObject;
+
+        }
+
+    }
+
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
@@ -95,23 +112,6 @@ public class RviewAdapterHome extends RecyclerView.Adapter<RviewAdapterHome.View
             if (mClickListener != null)
                 mClickListener.onItemClick(view, getAdapterPosition());
         }
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public static class Data {
-        Context context;
-        HomeMangaClass homeMangaClassObject;
-
-        public Data(Context context, HomeMangaClass homeMangaClassObject) {
-            this.context = context;
-            this.homeMangaClassObject = homeMangaClassObject;
-
-        }
-
     }
 
 }

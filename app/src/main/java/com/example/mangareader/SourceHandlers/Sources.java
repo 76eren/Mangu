@@ -20,16 +20,28 @@ public interface Sources {
     // - Go to the SettingsActivity, inside the onCreatePreferences function add a new add a new value to the switch statement inside the sources section
     // - - Go to the SettingsActivity, inside the onCreatePreferences function add a new setOnPreferenceClickListener that reflects the new source
 
+    ArrayList<SearchValues> collectDataPicScreen(String manga);
+
+    String getStory(String url);
+
+    ArrayList<ValuesForChapters> getChapters(String url, Context context, HashMap<String, Object> extraData) throws IOException, NoSuchAlgorithmException, InvalidKeyException, JSONException;
+
+    ArrayList<String> getImages(ValuesForChapters object, Context context);
+
+    HashMap<String, String> getRequestData(String url);
+
+    void prepareReadChapter(ReadActivity readActivity);
+
+    HashMap<String, ArrayList<HomeMangaClass>> getDataHomeActivity(Context context) throws InterruptedException;
+
+    String getSourceName();
+
     class SearchValues {
         public String image;
         public String url;
         public String name;
         public String referer = null; // Not every class needs this so we can just default this to null
     }
-
-    ArrayList<SearchValues> CollectDataPicScreen(String manga);
-
-    String getStory(String url);
 
     class ValuesForChapters {
         // Some of these data aren't necessary for each source
@@ -38,16 +50,4 @@ public interface Sources {
         public String name = "";
         public HashMap<String, Object> extraData = new HashMap<>();
     }
-
-    ArrayList<ValuesForChapters> GetChapters(String url, Context context, HashMap<String, Object> extraData) throws IOException, NoSuchAlgorithmException, InvalidKeyException, JSONException;
-
-    ArrayList<String> GetImages(ValuesForChapters object, Context context);
-
-    HashMap<String, String> GetRequestData(String url);
-
-    void PrepareReadChapter(ReadActivity readActivity);
-
-    HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) throws InterruptedException;
-
-    String GetSourceName();
 }

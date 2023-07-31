@@ -45,17 +45,17 @@ public class FavouritesActivity extends AppCompatActivity {
         Navigation navigation = new Navigation();
         NavigationView navigationView = findViewById(R.id.navMenu);
         Menu menu = navigationView.getMenu();
-        navigation.ItemClickSetup(this, menu);
+        navigation.itemClickSetup(this, menu);
 
         List<RviewAdapterFavourites.Data> data = new ArrayList<>();
 
-        LinkedHashSet<FavouriteItem> set = Favourites.GetFavourites(this);
+        LinkedHashSet<FavouriteItem> set = Favourites.getFavourites(this);
 
         // We sort the set with favourites however we want
         Settings settings = new Settings();
         ArrayList<FavouriteItem> sortedFavourites = new ArrayList<>(set);
 
-        switch (settings.ReturnValueString(this, "preference_favourites_sort", "preference_favourites_sort_date_up")) {
+        switch (settings.returnValueString(this, "preference_favourites_sort", "preference_favourites_sort_date_up")) {
             case "preference_favourites_sort_date_down":
                 sortedFavourites.sort(Comparator.comparingInt(FavouriteItem::returnDate));
                 break;
@@ -72,7 +72,7 @@ public class FavouritesActivity extends AppCompatActivity {
         }
 
         for (FavouriteItem i : sortedFavourites) {
-            if (!settings.ReturnValueBoolean(this, "preference_merge_manga_favourites", true)) {
+            if (!settings.returnValueBoolean(this, "preference_merge_manga_favourites", true)) {
                 // Checks whether we want to merge all sources or not
                 // Does not merge all sources together
                 if (i.source.equals(SourceObjectHolder.getSources(this).getClass().getName())) {

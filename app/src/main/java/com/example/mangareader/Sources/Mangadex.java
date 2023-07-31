@@ -1,7 +1,6 @@
 package com.example.mangareader.Sources;
 
 import android.content.Context;
-import android.util.Log;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.Home.HomeMangaClass;
 import com.example.mangareader.ListTracker;
@@ -39,14 +38,13 @@ public class Mangadex implements Sources {
                 return body;
             }
         } catch (Exception ex) {
-            Log.d("lol", ex.toString());
             return null;
         }
 
     }
 
     @Override
-    public ArrayList<SearchValues> CollectDataPicScreen(String manga) {
+    public ArrayList<SearchValues> collectDataPicScreen(String manga) {
         // We first need to call the API
         try {
             String URL = "https://api.mangadex.org/manga?title=" + manga
@@ -130,7 +128,7 @@ public class Mangadex implements Sources {
     private ArrayList<String> GetApiPageForChapters(String url, Context context) {
         String id = url.split("title/")[1];
         Settings settings = new Settings();
-        Boolean allow_multiple_languages = settings.ReturnValueBoolean(context, "mangadex_preference_languages", false);
+        Boolean allow_multiple_languages = settings.returnValueBoolean(context, "mangadex_preference_languages", false);
         ArrayList<String> links = new ArrayList<>();
 
         String initialPage = "";
@@ -166,7 +164,6 @@ public class Mangadex implements Sources {
         try (Response response = client.newCall(request).execute()) {
             body = response.body().string();
         } catch (Exception ex) {
-            Log.d("lol", ex.toString());
             return null;
         }
 
@@ -199,8 +196,7 @@ public class Mangadex implements Sources {
                 } else {
                     links.add(initialPage);
                 }
-            } catch (Exception ex) {
-                Log.d("lol", ex.toString());
+            } catch (Exception ignored) {
             }
         }
 
@@ -208,7 +204,7 @@ public class Mangadex implements Sources {
     }
 
     @Override
-    public ArrayList<ValuesForChapters> GetChapters(String url, Context context, HashMap<String, Object> extraData) {
+    public ArrayList<ValuesForChapters> getChapters(String url, Context context, HashMap<String, Object> extraData) {
 
         ArrayList<String> api_pages = GetApiPageForChapters(url, context);
         ArrayList<ValuesForChapters> data = new ArrayList<>();
@@ -218,7 +214,7 @@ public class Mangadex implements Sources {
                 String body = GetBody(apiPage);
 
                 Settings settings = new Settings();
-                Boolean allow_multiple_languages = settings.ReturnValueBoolean(context, "mangadex_preference_languages",
+                Boolean allow_multiple_languages = settings.returnValueBoolean(context, "mangadex_preference_languages",
                         false);
 
                 if (!"".equals(body) && body != null) {
@@ -242,13 +238,12 @@ public class Mangadex implements Sources {
 
                             valuesForChapters.url = "https://mangadex.org/chapter/" + ob.getString("id");
 
-                            // Fixing bugs? No couldn't be me. I work around these things
+                            // Fixing bugs? No, couldn't be me. I work around these things
                             if (!attributes.getString("chapter").toLowerCase(Locale.ROOT).equals("null")) {
                                 data.add(valuesForChapters);
                             }
                         }
-                    } catch (Exception ex) {
-                        Log.d("lol", ex.toString());
+                    } catch (Exception ignored) {
 
                     }
                 }
@@ -263,7 +258,7 @@ public class Mangadex implements Sources {
     }
 
     @Override
-    public ArrayList<String> GetImages(ValuesForChapters object, Context context) {
+    public ArrayList<String> getImages(ValuesForChapters object, Context context) {
         String weird_ass_id = object.url.split("/")[4]; // Yes I really am doing it this way. I shouldn't need to do it this way...
 
         String apiPage = "https://api.mangadex.org/at-home/server/" + weird_ass_id;
@@ -292,15 +287,14 @@ public class Mangadex implements Sources {
 
             return images;
 
-        } catch (Exception ex) {
-            Log.d("lol", ex.toString());
+        } catch (Exception ignored) {
         }
 
         return null;
     }
 
     @Override
-    public HashMap<String, String> GetRequestData(String url) {
+    public HashMap<String, String> getRequestData(String url) {
         HashMap<String, String> reqData = new HashMap<>();
         reqData.put("host", "uploads.mangadex.org");
         reqData.put("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0");
@@ -310,30 +304,27 @@ public class Mangadex implements Sources {
     }
 
     @Override
-    public void PrepareReadChapter(ReadActivity readActivity) {
-        // We don't really need to do anything so we can just leave this empty
+    public void prepareReadChapter(ReadActivity readActivity) {
+        // We don't really need to do anything, so we can just leave this empty
     }
 
     /*
      * I've been having a lot of trouble with mangadex
-     * Basically getting all of the data from the API is HELL
+     * Basically getting all the data from the API is HELL
      * It's just a very slow process because you have to get multiple APIs for all
      * the necessary data
      * Things I have implemented to make everything faster:
-     * I am so tired right now.
-     * - I added a cache that remember all of the manga that have been on the home
-     * screen before
-     * - I added an allow and deny list that remembers which manga have been
-     * blocked because they have no chapters
+     * - I added a cache that remember all the manga that have been on the home screen before
+     * - I added an allow and deny list that remembers which manga have been blocked because they have no chapters
      * - I added threading
      */
     @Override
 
-    public HashMap<String, ArrayList<HomeMangaClass>> GetDataHomeActivity(Context context) throws InterruptedException {
+    public HashMap<String, ArrayList<HomeMangaClass>> getDataHomeActivity(Context context) throws InterruptedException {
 
         HashMap<String, ArrayList<HomeMangaClass>> data = new HashMap<>();
 
-        // Mangadex hardcodes this and they use JS so I cannot webscrape either
+        // Mangadex hardcodes this and they use JS, so I cannot webscrape either
         // I guess I could use like a headless browser but I cba
         String URL_SEASONAL = "https://api.mangadex.org/list/7df1dabc-b1c5-4e8e-a757-de5a2a3d37e9?includes[]=user";
 
@@ -385,7 +376,6 @@ public class Mangadex implements Sources {
                 t1.start();
             }
         } catch (Exception exception) {
-            Log.d("lol", exception.toString());
             return null;
         }
 
@@ -419,8 +409,7 @@ public class Mangadex implements Sources {
                                     latestObjects.add(new HomeMangaClass(x.title, latestUrl, x.image, null));
                                 }
                             }
-                        } catch (Exception ex) {
-                            Log.d("lol", ex.toString());
+                        } catch (Exception ignored) {
                         }
 
                     });
@@ -443,24 +432,24 @@ public class Mangadex implements Sources {
     }
 
     @Override
-    public String GetSourceName() {
+    public String getSourceName() {
         return "mangadex";
     }
 
     // I am absolutely NOT happy with the way this is working right now
-    // I really really with to change this in the future but for now this will suffice
+    // I really really want to change this in the future but for now this will suffice
     GetDataHomeActivityImageAndTitle GetImageAndTitle(String id, String url, Context context) {
 
         Settings settings = new Settings();
-        boolean mangadex_preference_languages = settings.ReturnValueBoolean(context, "mangadex_preference_languages",
+        boolean mangadex_preference_languages = settings.returnValueBoolean(context, "mangadex_preference_languages",
                 false);
 
         ArrayList<String> stuff = new ArrayList<>();
 
         if (mangadex_preference_languages) {
-            stuff = ListTracker.GetFromList(context, "home_mangadex_cache_multilingual");
+            stuff = ListTracker.getFromList(context, "home_mangadex_cache_multilingual");
         } else {
-            stuff = ListTracker.GetFromList(context, "home_mangadex_cache_english");
+            stuff = ListTracker.getFromList(context, "home_mangadex_cache_english");
         }
 
         for (String i : stuff) {
@@ -470,8 +459,7 @@ public class Mangadex implements Sources {
                 if (manga.getString("url").equals(url)) {
                     return new GetDataHomeActivityImageAndTitle(manga.getString("name"), manga.getString("image"));
                 }
-            } catch (Exception exception) {
-                Log.d("lol", exception.toString());
+            } catch (Exception ignored) {
             }
         }
 
@@ -506,15 +494,13 @@ public class Mangadex implements Sources {
 
                 // ------------------------------------------------------------------------------------------------------------------------------------------------
                 // Let me explain what is going on here
-                // On mangadex some of the mangas might be empty (I don't know why), they do not
+                // On mangadex some mangas might be empty (I don't know why), they do not
                 // contain any chapters
                 // We can hide these "faulty" manga by getting the chapter list and checking the
                 // amount of chapters (we check if it's bigger than 0)
-                // The problem is that this is a very very slow process
-                // So I came up with the idea to remember which manga are faulty and which are
-                // not
-                // We also want to differentiate between the English manga and the non-English
-                // manga (see settings)
+                // The problem is that this is a very, very slow process
+                // So I came up with the idea to remember which manga are faulty and which are not
+                // We also want to differentiate between the English manga and the non-English manga (see settings)
                 // On top of that we want to keep a cache of manga we have already seen so next
                 // time we can zoom through the whole process.
                 // -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -524,11 +510,11 @@ public class Mangadex implements Sources {
                     ArrayList<String> denyList;
 
                     if (mangadex_preference_languages) {
-                        allowList = ListTracker.GetFromList(context, "allowList_multilingual_mangadex");
-                        denyList = ListTracker.GetFromList(context, "denyList_multilingual_mangadex");
+                        allowList = ListTracker.getFromList(context, "allowList_multilingual_mangadex");
+                        denyList = ListTracker.getFromList(context, "denyList_multilingual_mangadex");
                     } else {
-                        allowList = ListTracker.GetFromList(context, "allowList_english_mangadex");
-                        denyList = ListTracker.GetFromList(context, "denyList_english_mangadex");
+                        allowList = ListTracker.getFromList(context, "allowList_english_mangadex");
+                        denyList = ListTracker.getFromList(context, "denyList_english_mangadex");
                     }
 
                     if (allowList.contains(url)) {
@@ -539,7 +525,7 @@ public class Mangadex implements Sources {
                         return new GetDataHomeActivityImageAndTitle(title, imageUrl);
                     } else {
                         if (!denyList.contains(url)) {
-                            ArrayList<ValuesForChapters> y = GetChapters(url, context, null);
+                            ArrayList<ValuesForChapters> y = getChapters(url, context, null);
                             if (y.size() != 0) { // Makes sure there is nothing empty but makes the whole process A LOT
                                 // slower.
                                 String imageUrl = "https://mangadex.org/covers/" + id + "/"
@@ -548,10 +534,10 @@ public class Mangadex implements Sources {
                                 if (mangadex_preference_languages) {
                                     AddMangaToListtracker(true, context, title, id, imageUrl);
 
-                                    ListTracker.AddToList(context, url, "allowList_multilingual_mangadex");
+                                    ListTracker.addToList(context, url, "allowList_multilingual_mangadex");
 
                                 } else {
-                                    ListTracker.AddToList(context, url, "allowList_english_mangadex");
+                                    ListTracker.addToList(context, url, "allowList_english_mangadex");
                                     AddMangaToListtracker(false, context, title, id, imageUrl);
 
                                 }
@@ -560,9 +546,9 @@ public class Mangadex implements Sources {
 
                             } else {
                                 if (mangadex_preference_languages) {
-                                    ListTracker.AddToList(context, url, "denyList_multilingual_mangadex");
+                                    ListTracker.addToList(context, url, "denyList_multilingual_mangadex");
                                 } else {
-                                    ListTracker.AddToList(context, url, "denyList_english_mangadex");
+                                    ListTracker.addToList(context, url, "denyList_english_mangadex");
 
                                 }
 
@@ -579,16 +565,6 @@ public class Mangadex implements Sources {
         return null;
     }
 
-    static class GetDataHomeActivityImageAndTitle {
-        String image;
-        String title;
-
-        GetDataHomeActivityImageAndTitle(String title, String image) {
-            this.image = image;
-            this.title = title;
-        }
-    }
-
     void AddMangaToListtracker(boolean mangadex_preference_languages, Context context, String title, String id,
                                String imageUrl) {
         try {
@@ -599,14 +575,23 @@ public class Mangadex implements Sources {
                     .toString();
 
             if (mangadex_preference_languages) {
-                ListTracker.AddToList(context, jsonString, "home_mangadex_cache_multilingual");
+                ListTracker.addToList(context, jsonString, "home_mangadex_cache_multilingual");
             } else {
-                ListTracker.AddToList(context, jsonString, "home_mangadex_cache_english");
+                ListTracker.addToList(context, jsonString, "home_mangadex_cache_english");
             }
-        } catch (Exception ex) {
-            Log.d("lol", ex.toString());
+        } catch (Exception ignored) {
         }
 
+    }
+
+    static class GetDataHomeActivityImageAndTitle {
+        String image;
+        String title;
+
+        GetDataHomeActivityImageAndTitle(String title, String image) {
+            this.image = image;
+            this.title = title;
+        }
     }
 
 }
