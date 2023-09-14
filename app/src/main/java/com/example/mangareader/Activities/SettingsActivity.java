@@ -12,7 +12,8 @@ import androidx.preference.CheckBoxPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import com.example.mangareader.R;
-import com.example.mangareader.Settings;
+import com.example.mangareader.Settings.Settings;
+import com.example.mangareader.Settings.ExporterImporter.SharedprefsUpdater;
 import com.example.mangareader.Sources.Mangadex;
 import com.example.mangareader.Sources.Mangakakalot;
 import com.example.mangareader.Sources.webtoons.Webtoons;
@@ -282,6 +283,28 @@ public class SettingsActivity extends AppCompatActivity {
                     .findPreference("preference_hardware_acceleration");
             preference_image_size.setOnPreferenceChangeListener((preference, newValue) -> {
                 preference_image_size.setChecked(!preference_image_size.isChecked());
+                return false;
+            });
+
+
+
+            // ----------------------------------------------------------------------------------------
+            // Export/import saves
+            SwitchPreference preference_export = getPreferenceScreen()
+                    .findPreference("preference_export");
+            SwitchPreference preference_import = getPreferenceScreen()
+                    .findPreference("preference_import");
+
+            SharedprefsUpdater sharedprefsUpdater = new SharedprefsUpdater(this.getActivity());
+            preference_export.setOnPreferenceClickListener(preference -> {
+                preference_export.setChecked(false);
+                sharedprefsUpdater.exportSettings();
+                return false;
+            });
+
+            preference_import.setOnPreferenceClickListener(preference -> {
+                preference_import.setChecked(false);
+                sharedprefsUpdater.importSettings();
                 return false;
             });
 

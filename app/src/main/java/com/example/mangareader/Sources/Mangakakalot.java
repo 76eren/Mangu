@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.Home.HomeMangaClass;
 import com.example.mangareader.R;
-import com.example.mangareader.Settings;
+import com.example.mangareader.Settings.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

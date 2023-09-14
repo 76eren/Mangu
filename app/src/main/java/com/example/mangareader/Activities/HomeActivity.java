@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.Home.HomeMangaClass;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.RviewAdapterHome;
-import com.example.mangareader.Settings;
+import com.example.mangareader.Settings.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.navigation.Navigation;

@@ -4,7 +4,7 @@
 // Right now we don't have much "mobility", like we can only store Strings and not objects
 // For now it's not a problem but if I ever want to add a new feature that requites this class it might be a problem.
 
-package com.example.mangareader;
+package com.example.mangareader.Settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;

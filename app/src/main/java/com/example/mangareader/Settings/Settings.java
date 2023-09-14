@@ -1,4 +1,4 @@
-package com.example.mangareader;
+package com.example.mangareader.Settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;

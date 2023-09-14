@@ -3,6 +3,7 @@ package com.example.mangareader.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -112,7 +113,6 @@ public class ChaptersActivity extends AppCompatActivity {
         new Thread(() -> {
             Sources sources = SourceObjectHolder.getSources(this);
             String mangaStory;
-
             if (!finalDownloaded) {
                 mangaStory = sources.getStory(finalMangaUrl);
             } else {

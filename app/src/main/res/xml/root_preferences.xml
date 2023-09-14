@@ -81,6 +81,15 @@
                 android:title="Light mode" android:key="preference_theme_light"/>
     </PreferenceCategory>
     <PreferenceCategory
+            android:title="Export/import saves">
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="Import from clipboard" android:key="preference_import"/>
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="Export to clipboard" android:key="preference_export"/>
+    </PreferenceCategory>
+    <PreferenceCategory
             android:title="DANGER ZONE">
 
         <SwitchPreference

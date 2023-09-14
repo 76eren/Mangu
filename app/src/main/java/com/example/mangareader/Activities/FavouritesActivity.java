@@ -12,7 +12,7 @@ import com.example.mangareader.Favourites.FavouriteItem;
 import com.example.mangareader.Favourites.Favourites;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.RviewAdapterFavourites;
-import com.example.mangareader.Settings;
+import com.example.mangareader.Settings.Settings;
 import com.example.mangareader.ValueHolders.SourceObjectHolder;
 import com.example.mangareader.navigation.Navigation;
 import com.google.android.material.navigation.NavigationView;

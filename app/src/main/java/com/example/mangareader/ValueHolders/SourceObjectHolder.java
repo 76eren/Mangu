@@ -1,7 +1,7 @@
 package com.example.mangareader.ValueHolders;
 
 import android.content.Context;
-import com.example.mangareader.Settings;
+import com.example.mangareader.Settings.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.Sources.Mangadex;
 import com.example.mangareader.Sources.Mangakakalot;

@@ -14,7 +14,7 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.example.mangareader.R;
-import com.example.mangareader.Settings;
+import com.example.mangareader.Settings.Settings;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
