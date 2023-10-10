@@ -98,7 +98,15 @@ public class DownloadService extends Service {
                     Bitmap bm = null;
                     try {
                         URLConnection conn = url.openConnection();
-                        conn.setRequestProperty("Referer", reqData.get("Referer"));
+
+                        // On mangadex the Referer needs to be null to actually download images
+                        // The problem is that if we put the Referer as null in Mangadex.getRequestData it'll break some parts of the app
+                        if (reqData.get("noRefererWhenDownloading") == "true") { // noRefererWhenDownloading might be null, so we use == instead of .equals
+                            conn.setRequestProperty("Referer", null);
+                        }
+                        else {
+                            conn.setRequestProperty("Referer", reqData.get("Referer"));
+                        }
 
                         bm = BitmapFactory.decodeStream(conn.getInputStream());
                     } catch (IOException e) {

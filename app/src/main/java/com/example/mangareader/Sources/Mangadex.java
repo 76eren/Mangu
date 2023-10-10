@@ -299,6 +299,7 @@ public class Mangadex implements Sources {
         reqData.put("host", "uploads.mangadex.org");
         reqData.put("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0");
         reqData.put("Referer", "");
+        reqData.put("noRefererWhenDownloading", "true"); // When downloading an image we want the referer to be empty
 
         return reqData;
     }
