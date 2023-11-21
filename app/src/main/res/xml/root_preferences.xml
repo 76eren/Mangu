@@ -93,7 +93,7 @@
                 android:key="preference_image_size"/>
         <SwitchPreference
                 android:defaultValue="false"
-                android:title="[Import saves from clipboard]\n\nThis will import all of your saves like your favourites and read history from the clipboard." android:key="preference_import"
+                android:title="[Import saves from clipboard]\n\nThis will import all of your saves like your favourites and read history from the clipboard. Note that this is in the danger zone for a reason and if you tamper with the data you try to import you might corrupt the app and will have to reset the app data." android:key="preference_import"
                 app:isPreferenceVisible="true"/>
         <SwitchPreference
                 android:defaultValue="false"
