@@ -1,25 +1,12 @@
 package com.example.mangareader.Settings.ExporterImporter;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class SettingsToSave {
-    private String name;
-    private String type;
-    private String typeToReturnBy;
-
-    public SettingsToSave(String name, String type, String typeToReturnBy) {
-        this.name = name;
-        this.type = type;
-        this.typeToReturnBy = typeToReturnBy;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getTypeToReturnBy() {
-        return typeToReturnBy;
-    }
+    private final String name;
+    private final String type;
+    private final String typeToReturnBy;
 }

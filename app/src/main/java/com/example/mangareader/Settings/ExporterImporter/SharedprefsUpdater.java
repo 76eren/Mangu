@@ -33,10 +33,7 @@ public class SharedprefsUpdater {
         this.activity = activity;
     }
 
-
-
     public void exportSettings() {
-
         SettingsToSaveGrabber grabber = new SettingsToSaveGrabber();
         ArrayList<SettingsToSave> settings = grabber.getSettingsToSave();
         StringBuilder sb = new StringBuilder();
@@ -68,11 +65,84 @@ public class SharedprefsUpdater {
         ClipData clip = ClipData.newPlainText("data", this.encodedData);
         clipboard.setPrimaryClip(clip);
 
+        Toast.makeText(this.activity, "Settings have been exported", Toast.LENGTH_SHORT).show();
+
 
     }
 
     public void importSettings() {
-        
+        ClipboardManager clipboard = (ClipboardManager)activity.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+
+        String encodedData = item.getText().toString();
+
+        String decodedData;
+        try {
+            decodedData = new String(Base64.getDecoder().decode(encodedData), StandardCharsets.UTF_8);
+        }
+        catch (IllegalArgumentException ex) {
+            Toast.makeText(this.activity, "It appears your data you have copied is invalid", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        try {
+            String[] parts = decodedData.split("::");
+            HashMap<String, Set<String>> data = new HashMap<>();
+            ArrayList<String> keys = new ArrayList<>();
+            ArrayList<String> values = new ArrayList<>();
+
+            int index = 0;
+            for (String i : parts) {
+                if (index == parts.length) {
+                    break;
+                }
+
+                if (index % 2 == 0) {
+                    keys.add(i);
+                }
+                else {
+                    values.add(i);
+                }
+                index++;
+            }
+
+            for (String i : keys) {
+                Set<String> mySet = new HashSet<>();
+                String[] myValues = values.get(keys.indexOf(i)).split("__");
+                for (String y : myValues) {
+                    mySet.add(y.replace("__", ""));
+                }
+                data.put(i, mySet);
+            }
+
+            SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this.activity);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+
+            // We want to clear the sharedpreferences first before adding our new ones
+            SettingsToSaveGrabber grabber = new SettingsToSaveGrabber();
+            ArrayList<SettingsToSave> settingsToClear = grabber.getSettingsToSave();
+
+            for (String i : data.keySet()) {
+                // First we retrieve the initial data
+                Set<String> initialData = sharedpreferences.getStringSet(i, new HashSet<>());
+                Set<String> newData = data.get(i);
+
+                // Now we combine the two sets
+                Set<String> combinedSet = new HashSet<>();
+                combinedSet.addAll(initialData);
+                combinedSet.addAll(newData);
+
+                editor.putStringSet(i, combinedSet);
+                editor.apply();
+            }
+
+            Toast.makeText(this.activity, "Settings have been imported", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception ex) {
+            Toast.makeText(this.activity, "An unknown error has appeared whilst trying to import the settings", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 

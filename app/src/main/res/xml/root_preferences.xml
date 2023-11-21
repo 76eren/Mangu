@@ -81,18 +81,6 @@
                 android:title="Light mode" android:key="preference_theme_light"/>
     </PreferenceCategory>
     <PreferenceCategory
-            android:title="Export/import saves"
-            app:isPreferenceVisible="false">
-        <SwitchPreference
-                android:defaultValue="false"
-                android:title="Import from clipboard" android:key="preference_import"
-                app:isPreferenceVisible="false"/>
-        <SwitchPreference
-                android:defaultValue="false"
-                android:title="Export to clipboard" android:key="preference_export"
-                app:isPreferenceVisible="false"/>
-    </PreferenceCategory>
-    <PreferenceCategory
             android:title="DANGER ZONE">
 
         <SwitchPreference
@@ -103,6 +91,14 @@
                 android:defaultValue="false"
                 android:title="[Load image in original size]\n\nThis may be usefully if images in a manga a blurry.\n\nIn certain scenarios this may cause the app to crash when loading certain images. If this does happen try disabling hardware acceleration"
                 android:key="preference_image_size"/>
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="[Import saves from clipboard]\n\nThis will import all of your saves like your favourites and read history from the clipboard." android:key="preference_import"
+                app:isPreferenceVisible="true"/>
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="[Export to clipboard]\n\nThis will export all of your saves like your favourites and read history to your clipboard." android:key="preference_export"
+                app:isPreferenceVisible="true"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
