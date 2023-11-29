@@ -166,41 +166,6 @@ public class SettingsActivity extends AppCompatActivity {
                 return false;
             });
 
-            // ----------------------- THEME -------------------------
-            CheckBoxPreference defaultTheme = getPreferenceScreen().findPreference("preference_theme_default");
-            CheckBoxPreference darkTheme = getPreferenceScreen().findPreference("preference_theme_dark");
-            CheckBoxPreference lightTheme = getPreferenceScreen().findPreference("preference_theme_light");
-
-            defaultTheme.setOnPreferenceClickListener(preference -> {
-                defaultTheme.setChecked(true);
-                lightTheme.setChecked(false);
-                darkTheme.setChecked(false);
-
-                settings.assignValueString(this.getActivity(), "theme", "default");
-
-                return true;
-            });
-
-            darkTheme.setOnPreferenceClickListener(preference -> {
-                defaultTheme.setChecked(false);
-                lightTheme.setChecked(false);
-                darkTheme.setChecked(true);
-
-                settings.assignValueString(this.getActivity(), "theme", "dark");
-
-                return true;
-            });
-
-            lightTheme.setOnPreferenceClickListener(preference -> {
-                defaultTheme.setChecked(false);
-                lightTheme.setChecked(true);
-                darkTheme.setChecked(false);
-
-                settings.assignValueString(this.getActivity(), "theme", "light");
-
-                return true;
-
-            });
 
             // ------------------------------- MANGADEX LANGUAGES
             // ---------------------------------
