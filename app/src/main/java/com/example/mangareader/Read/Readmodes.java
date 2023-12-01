@@ -9,13 +9,9 @@ import java.util.HashMap;
 
 public interface Readmodes {
 
-    void loadImageDownload();
-
     void inflate(Activity activity); // Inflates the necessary widgets from a xml file
 
     void start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData);
-
-    void startDownloads(Activity activity, ArrayList<DownloadedChapter> downlaods, Sources sources, HashMap<String, String> reqData);
 
     void loadImage(); // 1 = next -1 = previous
 
@@ -23,9 +19,13 @@ public interface Readmodes {
 
     void changeChapter(int direction);
 
+    void loadImageDownload();
+
     void changeChapterDownloads(int direction);
 
     void changePagesDownload(int direction);
+
+    void startDownloads(Activity activity, ArrayList<DownloadedChapter> downlaods, Sources sources, HashMap<String, String> reqData);
 
     class Data {
         Activity activity;

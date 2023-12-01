@@ -1,5 +1,6 @@
 package com.example.mangareader.SourceHandlers;
 
+import android.app.Activity;
 import android.content.Context;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.Home.HomeMangaClass;
@@ -49,5 +50,6 @@ public interface Sources {
         public String url = "";
         public String name = "";
         public HashMap<String, Object> extraData = new HashMap<>();
+        public Activity activity;
     }
 }

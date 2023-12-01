@@ -13,17 +13,16 @@ import java.util.List;
 public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterChapterlist.ViewHolder> {
 
     private final LayoutInflater mInflater;
-    private final Context ctx;
     private final HeaderInfo headerInfo;
     private final List<ChapterInfo> items;
+    private final Context context;
 
     public RviewAdapterChapterlist(Context context, HeaderInfo headerInfo, List<ChapterInfo> items) {
         this.mInflater = LayoutInflater.from(context);
 
         this.headerInfo = headerInfo;
         this.items = items;
-        this.ctx = context;
-
+        this.context = context;
     }
 
     @Override

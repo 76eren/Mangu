@@ -27,19 +27,16 @@ public class ChapterListHeader extends RviewAdapterChapterlist.ViewHolder {
     private final ImageView favouriteStar;
     private final ImageView poster;
     private final TextView description;
-    private final ImageView download;
 
     public ChapterListHeader(LayoutInflater inflater, @NonNull @NotNull ViewGroup parent, int layoutResource) {
         super(inflater, parent, layoutResource);
         this.favouriteStar = this.itemView.findViewById(R.id.favourite_star);
         this.poster = this.itemView.findViewById(R.id.poster);
         this.description = this.itemView.findViewById(R.id.description_text);
-        this.download = this.itemView.findViewById(R.id.download_button);
     }
 
 
     public void bind(HeaderInfo data) {
-
         favouriteStar.setOnClickListener(v -> {
 
             String url = data.getMangaUrl();

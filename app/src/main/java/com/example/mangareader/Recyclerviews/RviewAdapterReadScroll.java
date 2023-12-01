@@ -75,27 +75,7 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
 
         // This means we did download the images
         else if (dataDownload != null) {
-            if (!dataDownload.button.equals("")) {
-                // The code for the next and previous button
-                holder.button.setVisibility(View.VISIBLE);
-                holder.button.setText(dataDownload.button);
-                DataDownload finalDataDownload = dataDownload;
-                holder.button.setOnClickListener(v -> {
-                    if (finalDataDownload.button.equals("Next chapter")) {
-                        finalDataDownload.readScroll.changeChapterDownloads(1);
-                    } else if (finalDataDownload.button.equals("Previous chapter")) {
-                        finalDataDownload.readScroll.changeChapterDownloads(-1);
-                    }
-                });
-
-            } else {
-                // The code for the actual image loading
-                holder.photoView.setVisibility(View.VISIBLE);
-                Read.loadImageDownload(dataDownload.context, holder.photoView, dataDownload.imageName, dataDownload.path);
-
-            }
-
-
+            // TODO: implement this
         }
 
     }
@@ -161,7 +141,6 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
             super(itemView);
             this.photoView = itemView.findViewById(R.id.read_photoview);
             this.button = itemView.findViewById(R.id.button_scroll);
-
             itemView.setOnClickListener(this);
         }
 

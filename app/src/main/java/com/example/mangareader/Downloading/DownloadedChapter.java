@@ -27,8 +27,6 @@ public class DownloadedChapter {
         this.imageNames = imageNames;
         this.imagesPath = imagesPath;
         this.chapterNamesDefaultOrder = chapterNamesDefaultOrder;
-
-
     }
 
     public String[] getChapterNamesDefaultOrder() {

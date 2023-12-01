@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.mangareader.Downloading.DownloadTracker;
 import com.example.mangareader.Downloading.DownloadedChapter;
 import com.example.mangareader.Settings.ListTracker;
 import com.example.mangareader.R;
@@ -53,8 +52,6 @@ public class ReadActivity extends AppCompatActivity {
 
         source = SourceObjectHolder.getSources(this);
 
-        DownloadTracker downloadTracker = new DownloadTracker();
-
         // The default value MUST reflect the default value of the root proferences!!!!
         switch (settings.returnValueString(this, "read_mode", "scroll")) {
             case "click":
@@ -85,7 +82,6 @@ public class ReadActivity extends AppCompatActivity {
                 } else {
                     progress.setAlpha(0);
                 }
-
             });
 
             String chapterUrl = ReadValueHolder.getCurrentChapter(this).url;
@@ -97,25 +93,16 @@ public class ReadActivity extends AppCompatActivity {
             ArrayList<String> imgs = new ArrayList<>();
             ArrayList<DownloadedChapter> finalDownloads = new ArrayList<>();
 
-            if (!isDownloaded) {
-                // I am not really a big fan of calling ReadValueHolder rather than having a local variable.
-                // It's whatever though
-                imgs = SourceObjectHolder.getSources(this).getImages(ReadValueHolder.getCurrentChapter(this), this);
+            // I am not really a big fan of calling ReadValueHolder rather than having a local variable.
+            // It's whatever though
+            imgs = SourceObjectHolder.getSources(this).getImages(ReadValueHolder.getCurrentChapter(this), this);
 
-                // This usually runs after inactivity.....
-                if (imgs == null) {
-                    Intent intent = new Intent(this, HomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    return;
-                }
-            } else {
-                LinkedHashSet<DownloadedChapter> tempDownloads = downloadTracker.getFromDownloads(this);
-                for (DownloadedChapter i : tempDownloads) {
-                    if (i.getUrl().equals(ReadValueHolder.getCurrentChapter(this).url)) {
-                        finalDownloads.add(i);
-                    }
-                }
+            // This usually runs after inactivity.....
+            if (imgs == null) {
+                Intent intent = new Intent(this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                return;
             }
 
             imgs.removeAll(Collections.singleton(null));
@@ -123,25 +110,19 @@ public class ReadActivity extends AppCompatActivity {
 
             HashMap<String, String> reqData = source.getRequestData(chapterUrl);
 
-            if (!isDownloaded) {
-                read.start(this, imgs, source, reqData); // We assign our context to read
+            read.start(this, imgs, source, reqData); // We assign our context to read
 
-                // Caching
-                Boolean shouldCache = settings.returnValueBoolean(this, "preference_Cache", false);
-                if (shouldCache) {
-                    runOnUiThread(() -> cacheTV.setVisibility(View.VISIBLE));
-                    Read.cache(this, imgs, reqData);
-                    read.loadImage();
-                } else {
-                    runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
-                    read.loadImage();
-                }
-            } else {
-                read.start(this, imgs, source, reqData); // We assign our context to read
-                read.startDownloads(this, finalDownloads, source, reqData);
-                read.loadImageDownload();
+            // Caching
+            Boolean shouldCache = settings.returnValueBoolean(this, "preference_Cache", false);
+            if (shouldCache) {
+                runOnUiThread(() -> cacheTV.setVisibility(View.VISIBLE));
+                Read.cache(this, imgs, reqData);
+                read.loadImage();
             }
-
+            else {
+                runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
+                read.loadImage();
+            }
 
         }).start();
 

@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.mangareader.Downloading.DownloadTracker;
 import com.example.mangareader.Downloading.DownloadedChapter;
 import com.example.mangareader.Settings.ListTracker;
 import com.example.mangareader.R;
@@ -39,39 +38,6 @@ public class ReadScroll implements Readmodes {
     @Override
     public void start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
         this.data = new Data(activity, images, sources, reqData);
-    }
-
-    @Override
-    public void startDownloads(Activity activity, ArrayList<DownloadedChapter> downloads, Sources sources, HashMap<String, String> reqData) {
-        this.dataDownload = new DownloadData(activity, downloads, sources, reqData);
-
-    }
-
-    @Override
-    public void loadImageDownload() {
-        TextView uwu = this.data.activity.findViewById(R.id.progress);
-        this.data.activity.runOnUiThread(() -> uwu.setText(ReadValueHolder.getCurrentChapter(this.data.activity).name));
-        List<RviewAdapterReadScroll.DataDownload> data = new ArrayList<>();
-        data.add(new RviewAdapterReadScroll.DataDownload(this.dataDownload.activity, "", "", "Previous chapter", this, this.dataDownload));
-        int index = 0;
-
-        for (String i : this.dataDownload.chapterDatas.get(0).getImageNames()) {
-            data.add(new RviewAdapterReadScroll.DataDownload(this.dataDownload.activity, i, this.dataDownload.chapterDatas.get(0).getImagesPath(), "", this, this.dataDownload));
-            index++;
-
-        }
-
-        data.add(new RviewAdapterReadScroll.DataDownload(this.dataDownload.activity, "", "", "Next chapter", this, this.dataDownload));
-        Activity activity = this.dataDownload.activity;
-        this.dataDownload.activity.runOnUiThread(() -> {
-            RecyclerView recyclerView = activity.findViewById(R.id.recyclerview_read);
-            recyclerView.setHasFixedSize(true);
-
-            RviewAdapterReadScroll adapter = new RviewAdapterReadScroll(activity, null, data);
-            recyclerView.setAdapter(adapter);
-        });
-
-
     }
 
 
@@ -149,46 +115,22 @@ public class ReadScroll implements Readmodes {
     }
 
     @Override
+    public void loadImageDownload() {
+
+    }
+
+    @Override
     public void changeChapterDownloads(int direction) {
-        String temp = ReadValueHolder.currentChapter.url;
 
-        int index = 0;
-        for (Sources.ValuesForChapters i : ReadValueHolder.ChaptersActivityData) {
-            if (temp.equals(i.url)) {
-                index = ReadValueHolder.ChaptersActivityData.indexOf(i);
-                break;
-            }
-        }
-
-        if (direction == 1 && index + 1 != ReadValueHolder.ChaptersActivityData.size()) {
-            index++;
-        } else if (direction == -1 && index - 1 > -1) {
-            index--;
-        }
-
-
-        ReadValueHolder.currentChapter = ReadValueHolder.ChaptersActivityData.get(index);
-
-        new Thread(() -> {
-            ListTracker.addToList(this.data.activity, ReadValueHolder.currentChapter.url, "History");
-
-            DownloadTracker downloadTracker = new DownloadTracker();
-            ArrayList<DownloadedChapter> finalDownloads = new ArrayList<>();
-            LinkedHashSet<DownloadedChapter> tempDownloads = downloadTracker.getFromDownloads(dataDownload.activity);
-            for (DownloadedChapter i : tempDownloads) {
-                if (i.getUrl().equals(ReadValueHolder.getCurrentChapter(this.dataDownload.activity).url)) {
-                    finalDownloads.add(i);
-                }
-            }
-
-            startDownloads(dataDownload.activity, finalDownloads, dataDownload.sources, dataDownload.reqData);
-            loadImageDownload();
-
-        }).start();
     }
 
     @Override
     public void changePagesDownload(int direction) {
+
+    }
+
+    @Override
+    public void startDownloads(Activity activity, ArrayList<DownloadedChapter> downlaods, Sources sources, HashMap<String, String> reqData) {
 
     }
 }
