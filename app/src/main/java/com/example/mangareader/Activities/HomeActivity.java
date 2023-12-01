@@ -1,7 +1,6 @@
 package com.example.mangareader.Activities;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,11 +35,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Overrides the dark mode setting to go to light mode, which is just material3 dark mode
-        // I want the app to only have material3 dark mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
         overridePendingTransition(0, 0);
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         drawerLayout = findViewById(R.id.my_drawer_layout);
@@ -75,6 +71,23 @@ public class HomeActivity extends AppCompatActivity {
         PopularManga.setVisibility(View.INVISIBLE);
         LatestManga.setVisibility(View.INVISIBLE);
 
+        // We set the correct theme
+        // This is very lazy
+        String theme = settings.returnValueString(this.getApplicationContext(), "theme", "default");
+        switch (theme) {
+
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+
+            default:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
+        }
 
         // Now we get all the data for the activity
         Sources source = SourceObjectHolder.getSources(this); // This both sets and gets the source

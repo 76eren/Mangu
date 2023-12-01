@@ -68,6 +68,19 @@
                 android:key="mangadex_preference_languages"/>
     </PreferenceCategory>
     <PreferenceCategory
+            android:title="App theme (reload app to take effect)">
+
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:title="System default" android:key="preference_theme_default"/>
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:title="Dark mode" android:key="preference_theme_dark"/>
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:title="Light mode" android:key="preference_theme_light"/>
+    </PreferenceCategory>
+    <PreferenceCategory
             android:title="DANGER ZONE">
 
         <SwitchPreference
