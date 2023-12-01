@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -31,7 +32,7 @@ public class ChaptersActivity extends AppCompatActivity {
     public static String url;
     public ArrayList<Sources.ValuesForChapters> dataChapters = new ArrayList<>();
     RviewAdapterChapterlist adapter;
-    ChapterListButton chapterListButton;
+    ArrayList<ChapterInfo> items = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,10 +116,9 @@ public class ChaptersActivity extends AppCompatActivity {
 
             ReadValueHolder.ChaptersActivityData = dataChapters; // LOL imagine assigning values statically lol
 
-            List<ChapterInfo> items = new ArrayList<>();
             for (Sources.ValuesForChapters chapterData : dataChapters) {
                 ChapterInfo chapterInfo = new ChapterInfo(chapterData, extraData, this);
-                items.add(chapterInfo);
+                this.items.add(chapterInfo);
             }
 
             activity.runOnUiThread(() -> {
@@ -134,7 +134,7 @@ public class ChaptersActivity extends AppCompatActivity {
                                 finalReferer, // may be null
                                 extraData
                         ),
-                        items,
+                        this.items,
                         getSupportFragmentManager()
                 );
                 recyclerView.setAdapter(adapter);
@@ -150,6 +150,24 @@ public class ChaptersActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (ChapterListButton.staticFramentIsEnabled) {
+
+            for (ChapterInfo chapterInfo : this.items) {
+                ChapterListButton chapterListButton = chapterInfo.getChapterListButton();
+                if (chapterListButton == null) {
+                    continue;
+                }
+                if (chapterListButton.enabledButtons == null) {
+                    continue;
+                }
+
+                for (Button i : chapterListButton.enabledButtons) {
+                    // Put back the default colour
+                    i.setTextColor(ChapterListButton.getButtonColor(i, chapterInfo.getValuesForChapters().url));
+
+                }
+                chapterListButton.enabledButtons.clear();
+            }
+
             ChapterListButton.staticFramentIsEnabled = false;
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.activity_chapters_fragment);
             if (fragment != null) {

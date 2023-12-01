@@ -27,7 +27,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
     private final Button button;
     public static boolean staticFramentIsEnabled = false;
 
-    private ArrayList<Button> enabledButtons = new ArrayList<>();
+    public ArrayList<Button> enabledButtons = new ArrayList<>();
 
     public ChapterListButton(LayoutInflater inflater, @NonNull ViewGroup parent, int layoutResource, FragmentManager fragmentManager) {
         super(inflater, parent, layoutResource);
@@ -47,7 +47,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
 
                 // We turn the button to the selected colour
                 this.setButtonColor(button, DesignValueHolder.buttonTextColorBlue);
-
+                this.enabledButtons.add(button);
 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 ChapterlistButtonsFragment fragment = new ChapterlistButtonsFragment();
@@ -106,7 +106,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
         return ListTracker.getFromList(context, "History").stream()
                 .anyMatch(s -> s.equals(url));
     }
-    private static int getButtonColor (Button button, String url) {
+    public static int getButtonColor (Button button, String url) {
         return inHistory(button.getContext(), url)
                 ? DesignValueHolder.buttonTextColorRead
                 : DesignValueHolder.buttonTextColorNotRead;

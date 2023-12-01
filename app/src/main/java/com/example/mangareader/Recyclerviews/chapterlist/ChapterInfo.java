@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 public class ChapterInfo {
     private final Sources.ValuesForChapters valuesForChapters;
+    private ChapterListButton chapterListButton;
+
 
     // We want to be able to access this extraData at all times
     // For now it is being used for the download feature but in the future if I ever add a new feature this HashMap might prove usefull.
@@ -24,4 +26,13 @@ public class ChapterInfo {
     public Sources.ValuesForChapters getValuesForChapters() {
         return this.valuesForChapters;
     }
+
+    public void setChapterListButton(ChapterListButton chapterListButton) {
+        this.chapterListButton = chapterListButton;
+    }
+
+    public ChapterListButton getChapterListButton() {
+        return chapterListButton;
+    }
+
 }

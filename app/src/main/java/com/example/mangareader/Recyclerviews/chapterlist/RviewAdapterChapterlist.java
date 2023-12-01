@@ -40,6 +40,7 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         switch (viewType) {
             case ChapterListHeader.TYPE:
                 return new ChapterListHeader(mInflater, parent, R.layout.chapter_list_header);
@@ -55,10 +56,15 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         if (position == 0) {
             ((ChapterListHeader) holder).bind(headerInfo);
             return;
+        }
+        else {
+            ChapterListButton chapterListButton = (ChapterListButton) holder;
+            ChapterInfo chapterInfo = items.get(position - 1);
+            chapterListButton.bind(chapterInfo);
+            chapterInfo.setChapterListButton(chapterListButton);
         }
 
         ((ChapterListButton) holder).bind(items.get(position - 1));
