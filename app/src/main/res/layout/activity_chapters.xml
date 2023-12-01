@@ -14,35 +14,19 @@
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.444"
             app:layout_constraintVertical_bias="0.41" android:foregroundGravity="center" android:gravity="center"
             android:textSize="24sp"/>
+
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/rviewDownloads"/>
-    <Button
-            android:text="Download"
-            android:backgroundTint="@color/teal_700"
-            android:layout_width="309dp"
-            android:layout_height="53dp" android:id="@+id/DownloadButton"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.952" app:layout_constraintHorizontal_bias="0.46"
-            app:iconTint="#000000" app:rippleColor="#000000" android:visibility="invisible" android:alpha="0.75"/>
-    <Button
-            android:text="Read/Unread"
-            android:backgroundTint="@color/teal_700"
-            android:layout_width="312dp"
-            android:layout_height="55dp" android:id="@+id/ReadUnreadButton"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.853" app:layout_constraintHorizontal_bias="0.495"
-            app:iconTint="#8A1212" app:rippleColor="#000000" android:visibility="invisible" android:alpha="0.75"/>
-    <Button
-            android:text="Remove downloads with images"
-            android:backgroundTint="@color/teal_700"
-            android:layout_width="308dp"
-            android:layout_height="67dp" android:id="@+id/removeDownloadsWithImages"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.742" app:layout_constraintHorizontal_bias="0.431"
-            app:iconTint="#8A1212" app:rippleColor="#000000" android:visibility="invisible" android:alpha="0.75"/>
+            android:id="@+id/rviewChapters" tools:layout_editor_absoluteY="-16dp" tools:layout_editor_absoluteX="16dp"/>
+    <FrameLayout
+            android:id="@+id/activity_chapters_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="1.0"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

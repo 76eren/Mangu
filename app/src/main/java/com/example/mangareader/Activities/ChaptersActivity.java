@@ -3,13 +3,17 @@ package com.example.mangareader.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.chapterlist.ChapterInfo;
+import com.example.mangareader.Recyclerviews.chapterlist.ChapterListButton;
 import com.example.mangareader.Recyclerviews.chapterlist.HeaderInfo;
 import com.example.mangareader.Recyclerviews.chapterlist.RviewAdapterChapterlist;
 import com.example.mangareader.SourceHandlers.Sources;
@@ -27,6 +31,7 @@ public class ChaptersActivity extends AppCompatActivity {
     public static String url;
     public ArrayList<Sources.ValuesForChapters> dataChapters = new ArrayList<>();
     RviewAdapterChapterlist adapter;
+    ChapterListButton chapterListButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,9 +121,8 @@ public class ChaptersActivity extends AppCompatActivity {
                 items.add(chapterInfo);
             }
 
-
             activity.runOnUiThread(() -> {
-                RecyclerView recyclerView = findViewById(R.id.rviewDownloads);
+                RecyclerView recyclerView = findViewById(R.id.rviewChapters);
                 recyclerView.setLayoutManager(new LinearLayoutManager(activity));
                 adapter = new RviewAdapterChapterlist(
                         activity,
@@ -130,7 +134,8 @@ public class ChaptersActivity extends AppCompatActivity {
                                 finalReferer, // may be null
                                 extraData
                         ),
-                        items
+                        items,
+                        getSupportFragmentManager()
                 );
                 recyclerView.setAdapter(adapter);
                 Splashscreen.setVisibility(View.INVISIBLE);
@@ -144,7 +149,18 @@ public class ChaptersActivity extends AppCompatActivity {
     // I hate working with statics like this A LOT, but this seemed like the least pain in the ass.
     @Override
     public void onBackPressed() {
-        this.finish();
+        if (ChapterListButton.staticFramentIsEnabled) {
+            ChapterListButton.staticFramentIsEnabled = false;
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.activity_chapters_fragment);
+            if (fragment != null) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.remove(fragment);
+                fragmentTransaction.commit();
+            }
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 
 
