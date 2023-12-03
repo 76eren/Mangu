@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class ChapterInfo {
     private final Sources.ValuesForChapters valuesForChapters;
     private ChapterListButton chapterListButton;
+    public Activity activity;
 
 
     // We want to be able to access this extraData at all times
@@ -17,6 +18,7 @@ public class ChapterInfo {
     public ChapterInfo(Sources.ValuesForChapters valuesForChapters, HashMap<String, Object> extraData, Activity activity) {
         this.valuesForChapters = valuesForChapters;
         this.extraData = extraData;
+        this.activity = activity;
     }
 
     public HashMap<String, Object> getExtraData() {

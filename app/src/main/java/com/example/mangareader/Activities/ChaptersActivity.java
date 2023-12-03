@@ -1,15 +1,17 @@
 package com.example.mangareader.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.R;
@@ -17,6 +19,7 @@ import com.example.mangareader.Recyclerviews.chapterlist.ChapterInfo;
 import com.example.mangareader.Recyclerviews.chapterlist.ChapterListButton;
 import com.example.mangareader.Recyclerviews.chapterlist.HeaderInfo;
 import com.example.mangareader.Recyclerviews.chapterlist.RviewAdapterChapterlist;
+import com.example.mangareader.Settings.ListTracker;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.SplashScreen;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
@@ -33,24 +36,24 @@ public class ChaptersActivity extends AppCompatActivity {
     public ArrayList<Sources.ValuesForChapters> dataChapters = new ArrayList<>();
     RviewAdapterChapterlist adapter;
     ArrayList<ChapterInfo> items = new ArrayList<>();
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_chapters);
 
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
         overridePendingTransition(0, 0);
 
         // First we retrieve the url
         Intent intent = getIntent();
-
 
         String mangaUrl = "";
         String imageUrl = "";
         String mangaName = "";
         String referer = null;
         boolean downloaded = false;
+
         try {
             // Make sure these are not null
             mangaUrl = intent.getStringExtra("url");
@@ -58,7 +61,8 @@ public class ChaptersActivity extends AppCompatActivity {
             imageUrl = intent.getStringExtra("img");
             mangaName = intent.getStringExtra("mangaName");
             referer = intent.getStringExtra("referer");
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Intent x = new Intent(this, HomeActivity.class);
             startActivity(x);
         }
@@ -70,15 +74,13 @@ public class ChaptersActivity extends AppCompatActivity {
         TextView Splashscreen = findViewById(R.id.Splashscreen);
         Splashscreen.setText(SplashScreen.returnQuote());
 
-        Activity activity = this;
-
         String finalMangaUrl = mangaUrl;
         String finalMangaName = mangaName;
         String finalImageUrl = imageUrl;
         String finalReferer = referer;
         String finalMangaName1 = mangaName;
 
-
+        Activity activity = this;
         new Thread(() -> {
             Sources sources = SourceObjectHolder.getSources(this);
             String mangaStory;
@@ -117,7 +119,7 @@ public class ChaptersActivity extends AppCompatActivity {
             ReadValueHolder.ChaptersActivityData = dataChapters; // LOL imagine assigning values statically lol
 
             for (Sources.ValuesForChapters chapterData : dataChapters) {
-                ChapterInfo chapterInfo = new ChapterInfo(chapterData, extraData, this);
+                ChapterInfo chapterInfo = new ChapterInfo(chapterData, extraData, activity);
                 this.items.add(chapterInfo);
             }
 
@@ -134,8 +136,7 @@ public class ChaptersActivity extends AppCompatActivity {
                                 finalReferer, // may be null
                                 extraData
                         ),
-                        this.items,
-                        getSupportFragmentManager()
+                        this.items
                 );
                 recyclerView.setAdapter(adapter);
                 Splashscreen.setVisibility(View.INVISIBLE);
@@ -145,39 +146,73 @@ public class ChaptersActivity extends AppCompatActivity {
 
     }
 
-    // I decided to do things statically because the chapterListButton object isn't in this activity
-    // I hate working with statics like this A LOT, but this seemed like the least pain in the ass.
+
+    private void resetButtons() {
+        for (ChapterInfo chapterInfo : this.items) {
+            ChapterListButton chapterListButton = chapterInfo.getChapterListButton();
+            if (chapterListButton == null) {
+                continue;
+            }
+            if (chapterListButton.enabledButtons == null) {
+                continue;
+            }
+
+            for (Button i : chapterListButton.enabledButtons) {
+                // Put back the default colour
+                i.setTextColor(ChapterListButton.getButtonColor(i, chapterInfo.getValuesForChapters().url));
+
+            }
+            chapterListButton.enabledButtons.clear();
+            chapterListButton.enabledButtonsUrls.clear();
+
+        }
+        ChapterListButton.staticShouldEnableToolbar = false;
+    }
+
+
     @Override
     public void onBackPressed() {
-        if (ChapterListButton.staticFramentIsEnabled) {
-
-            for (ChapterInfo chapterInfo : this.items) {
-                ChapterListButton chapterListButton = chapterInfo.getChapterListButton();
-                if (chapterListButton == null) {
-                    continue;
-                }
-                if (chapterListButton.enabledButtons == null) {
-                    continue;
-                }
-
-                for (Button i : chapterListButton.enabledButtons) {
-                    // Put back the default colour
-                    i.setTextColor(ChapterListButton.getButtonColor(i, chapterInfo.getValuesForChapters().url));
-
-                }
-                chapterListButton.enabledButtons.clear();
-            }
-
-            ChapterListButton.staticFramentIsEnabled = false;
-            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.activity_chapters_fragment);
-            if (fragment != null) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.remove(fragment);
-                fragmentTransaction.commit();
-            }
+        if (ChapterListButton.staticShouldEnableToolbar) {
+            resetButtons();
         }
         else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chaptersactivity_toolbar_menu, menu);
+        return true;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.chaptersactivity_action_toolbar_download:
+
+                return true;
+
+            case R.id.chaptersactivity_action_toolbar_read_unread:
+                for (ChapterInfo chapterInfo : this.items) {
+                    ChapterListButton chapterListButton = chapterInfo.getChapterListButton();
+                    if (chapterListButton == null) {
+                        continue;
+                    }
+                    if (chapterListButton.enabledButtons == null) {
+                        continue;
+                    }
+
+                    for (String i : chapterListButton.enabledButtonsUrls) {
+                        ListTracker.changeStatus(this, i, "History");
+                    }
+                }
+                resetButtons();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

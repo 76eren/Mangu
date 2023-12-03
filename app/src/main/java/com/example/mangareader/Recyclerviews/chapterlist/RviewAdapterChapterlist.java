@@ -18,15 +18,13 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
     private final HeaderInfo headerInfo;
     private final List<ChapterInfo> items;
     private final Context context;
-    private final FragmentManager fragmentManager;
 
-    public RviewAdapterChapterlist(Context context, HeaderInfo headerInfo, List<ChapterInfo> items, FragmentManager fragmentManager) {
+    public RviewAdapterChapterlist(Context context, HeaderInfo headerInfo, List<ChapterInfo> items) {
         this.mInflater = LayoutInflater.from(context);
 
         this.headerInfo = headerInfo;
         this.items = items;
         this.context = context;
-        this.fragmentManager = fragmentManager;
     }
 
     @Override
@@ -45,8 +43,7 @@ public class RviewAdapterChapterlist extends RecyclerView.Adapter<RviewAdapterCh
             case ChapterListHeader.TYPE:
                 return new ChapterListHeader(mInflater, parent, R.layout.chapter_list_header);
             case ChapterListButton.TYPE:
-                Log.d("lol", "THIS RAN");
-                return new ChapterListButton(mInflater, parent, R.layout.chapter_list_button, this.fragmentManager);
+                return new ChapterListButton(mInflater, parent, R.layout.chapter_list_button);
             default:
                 throw new IllegalArgumentException("viewType does not match any known types");
         }
