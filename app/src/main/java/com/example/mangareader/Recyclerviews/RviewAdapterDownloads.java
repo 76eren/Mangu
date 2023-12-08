@@ -64,14 +64,14 @@ public class RviewAdapterDownloads extends RecyclerView.Adapter<RviewAdapterDown
                     .into(holder.cardImage);
         }
 
-        holder.cardText.setText(data.downloadedChapter.getMangaName());
+        holder.cardText.setText(data.downloadedChapter.getName());
 
         holder.card.setOnClickListener(v -> {
             Intent intent = new Intent(data.context, ChaptersActivity.class);
             intent.putExtra("downloaded", true);
             intent.putExtra("url", data.downloadedChapter.getUrl());
             intent.putExtra("img", data.downloadedChapter.getImage());
-            intent.putExtra("mangaName", data.downloadedChapter.getMangaName());
+            intent.putExtra("mangaName", data.downloadedChapter.getName());
             intent.putExtra("referer", data.downloadedChapter.getReferer());
 
             // Sets the correct source

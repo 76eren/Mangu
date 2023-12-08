@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.R;
 import com.example.mangareader.Settings.ListTracker;
+import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.DesignValueHolder;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
     // ------------------------------------------------------------------------------------------
     // These 2 are tied to each other. If you touch one of them you have to touch the other one as well
     public ArrayList<Button> enabledButtons = new ArrayList<>();
-    public ArrayList<String> enabledButtonsUrls = new ArrayList<>();
+    public ArrayList<Sources.ValuesForChapters> valuesForChaptersList = new ArrayList<>();
     // ------------------------------------------------------------------------------------------
 
     public ChapterListButton(LayoutInflater inflater, @NonNull ViewGroup parent, int layoutResource) {
@@ -45,7 +46,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
 
                 // For the first elements we need to add them to the list manually
                 this.enabledButtons.add(button);
-                this.enabledButtonsUrls.add(chapterInfo.getValuesForChapters().url);
+                this.valuesForChaptersList.add(chapterInfo.getValuesForChapters());
             }
 
             return true;
@@ -55,12 +56,12 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
             if (staticShouldEnableToolbar) {
                 if (enabledButtons.contains(button)) {
                     enabledButtons.remove(button);
-                    enabledButtonsUrls.remove(chapterInfo.getValuesForChapters().url);
+                    valuesForChaptersList.remove(chapterInfo.getValuesForChapters());
                     this.setButtonColor(button, getButtonColor(button, chapterInfo.getValuesForChapters().url));
                 }
                 else {
                     enabledButtons.add(button);
-                    enabledButtonsUrls.add(chapterInfo.getValuesForChapters().url);
+                    valuesForChaptersList.add(chapterInfo.getValuesForChapters());
                     this.setButtonColor(button, DesignValueHolder.buttonTextColorBlue);
                 }
             }

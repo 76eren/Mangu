@@ -6,6 +6,7 @@
 package com.example.mangareader.Sources;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import androidx.appcompat.widget.SwitchCompat;
@@ -31,11 +32,9 @@ public class Mangakakalot implements Sources {
 
     private static final Document.OutputSettings NO_PRETTY_PRINTING = new Document.OutputSettings().prettyPrint(false);
 
-    // public Context context;
     Document doc;
 
-    // THIS IS FOR THE MAIN ACTIVITY
-    // GETS THE INFO FOR THE PICTURE SCREEN
+
     @Override
     public ArrayList<SearchValues> collectDataPicScreen(String manga) {
 
@@ -222,7 +221,6 @@ public class Mangakakalot implements Sources {
 
     }
 
-    // THis part is in charge of getting the manga images
     // Mangakakalot has two servers
     @Override
     public ArrayList<String> getImages(ValuesForChapters object, Context context) {
@@ -234,9 +232,11 @@ public class Mangakakalot implements Sources {
             Boolean server_two = settings.returnValueBoolean(context, "preference_ServerMangakakalot", false);
 
             if (!server_two) {
+                Log.d("lol", "A");
                 doc = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                         .get();
+                Log.d("lol", "SUcces bruh");
             } else {
                 String CookieSiteLocation = "";
 
@@ -287,7 +287,7 @@ public class Mangakakalot implements Sources {
             return images;
 
         } catch (Exception ex) {
-            return null;
+            return new ArrayList<>();
         }
 
     }

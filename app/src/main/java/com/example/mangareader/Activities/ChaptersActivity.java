@@ -4,16 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.mangareader.Downloading.Downloader;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.chapterlist.ChapterInfo;
 import com.example.mangareader.Recyclerviews.chapterlist.ChapterListButton;
@@ -29,14 +28,15 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ChaptersActivity extends AppCompatActivity {
     public static String url;
     public ArrayList<Sources.ValuesForChapters> dataChapters = new ArrayList<>();
     RviewAdapterChapterlist adapter;
     ArrayList<ChapterInfo> items = new ArrayList<>();
-    private Toolbar toolbar;
+    private final HashMap<String, Object> extraData = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,6 @@ public class ChaptersActivity extends AppCompatActivity {
         try {
             // Make sure these are not null
             mangaUrl = intent.getStringExtra("url");
-            downloaded = intent.getBooleanExtra("downloaded", false);
             imageUrl = intent.getStringExtra("img");
             mangaName = intent.getStringExtra("mangaName");
             referer = intent.getStringExtra("referer");
@@ -91,20 +90,22 @@ public class ChaptersActivity extends AppCompatActivity {
             // I made this hashmap in case we ever come across a situation where we need any of these values
             // e.g for now the only value being used is the mangaName, this is being used by the Webtoons source
             // I don't really like the way this works too much, but it is what it is.
-            HashMap<String, Object> extraData = new HashMap<>();
-            extraData.put("mangaName", finalMangaName1);
-            extraData.put("imageUrl", finalImageUrl);
-            extraData.put("referer", finalReferer);
-            extraData.put("mangaUrl", finalMangaUrl);
-            extraData.put("mangaStory", mangaStory);
+
+            this.extraData.put("mangaName", finalMangaName1);
+            this.extraData.put("imageUrl", finalImageUrl);
+            this.extraData.put("referer", finalReferer);
+            this.extraData.put("mangaUrl", finalMangaUrl);
+            this.extraData.put("mangaStory", mangaStory);
             try {
-                dataChapters = sources.getChapters(finalMangaUrl, activity, extraData);
+                dataChapters = sources.getChapters(finalMangaUrl, activity, this.extraData);
+
                 ArrayList<String> chapterNamesDefaultOrderArraylist = new ArrayList<>();
                 for (Sources.ValuesForChapters i : dataChapters) {
                     chapterNamesDefaultOrderArraylist.add(i.name);
                 }
                 String[] chapterNamesDefaultOrder = chapterNamesDefaultOrderArraylist.toArray(new String[0]);
                 extraData.put("chapterNamesDefaultOrder", chapterNamesDefaultOrder);
+
             } catch (IOException | NoSuchAlgorithmException | InvalidKeyException | JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -163,7 +164,7 @@ public class ChaptersActivity extends AppCompatActivity {
 
             }
             chapterListButton.enabledButtons.clear();
-            chapterListButton.enabledButtonsUrls.clear();
+            chapterListButton.valuesForChaptersList.clear();
 
         }
         ChapterListButton.staticShouldEnableToolbar = false;
@@ -191,6 +192,28 @@ public class ChaptersActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.chaptersactivity_action_toolbar_download:
+                ArrayList<Sources.ValuesForChapters> thingsToDownload = new ArrayList<>();
+
+                for (ChapterInfo chapterInfo : this.items) {
+                    ChapterListButton chapterListButton = chapterInfo.getChapterListButton();
+                    if (chapterListButton == null) {
+                        continue;
+                    }
+                    if (chapterListButton.enabledButtons == null) {
+                        continue;
+                    }
+                    thingsToDownload.addAll(chapterListButton.valuesForChaptersList);
+                }
+                resetButtons();
+
+                for (Sources.ValuesForChapters i : thingsToDownload) {
+                    i.extraData = this.extraData;
+                    i.activity = this;
+                }
+
+                Downloader downloader = new Downloader();
+                downloader.download(thingsToDownload, this);
+
 
                 return true;
 
@@ -204,8 +227,8 @@ public class ChaptersActivity extends AppCompatActivity {
                         continue;
                     }
 
-                    for (String i : chapterListButton.enabledButtonsUrls) {
-                        ListTracker.changeStatus(this, i, "History");
+                    for (Sources.ValuesForChapters i : chapterListButton.valuesForChaptersList) {
+                        ListTracker.changeStatus(this, i.url, "History");
                     }
                 }
                 resetButtons();
