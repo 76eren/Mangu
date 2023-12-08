@@ -59,7 +59,7 @@ class DownloadTracker {
             (values.extraData["imageUrl"] as String),
             (values.extraData["mangaName"] as String),
             Instant.now().epochSecond.toInt(),
-            values.extraData["referer"] as String,
+            values.extraData["referer"] as String?,
             (values.extraData["mangaStory"] as String),
             values.name,
             imageNames,

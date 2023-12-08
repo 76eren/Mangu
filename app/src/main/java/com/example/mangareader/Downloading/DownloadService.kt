@@ -52,7 +52,7 @@ class DownloadService : Service() {
         // We set up the neccesary variables to start the downloading process
         val source = SourceObjectHolder.getSources(applicationContext) // We get the source object
         val thingsToDownload = ArrayList(thingsToDownload) // We make a copy of the list, so we can remove items from it
-        val downloadTracker: DownloadTracker
+        val downloadTracker: DownloadTracker = DownloadTracker()
 
         // We clear the static list
         DownloadService.thingsToDownload.clear()
@@ -144,21 +144,15 @@ class DownloadService : Service() {
                     }
                     catch (_: Exception) { }
                     index++
-
-
                 }
+                downloadTracker.addToDownloads(i, applicationContext, imageNames as Array<String>, imagesPath)
+
 
             }
+            builder.setContentTitle("Downloads: " + thingsToDownload.size + " out of " + thingsToDownload.size)
         }
 
-        for (i in thingsToDownload) {
-            // First we get all the images for the chapter
-            val images: ArrayList<String> = source?.getImages(i, i.activity as Context) as ArrayList<String>
 
-            if (images.isEmpty()) {
-                continue
-            }
-        }
 
 
         return START_STICKY
