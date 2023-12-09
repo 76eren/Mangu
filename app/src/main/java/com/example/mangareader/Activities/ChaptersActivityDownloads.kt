@@ -119,7 +119,7 @@ class ChaptersActivityDownloads : AppCompatActivity() {
 
             val items: MutableList<ChapterInfo> = java.util.ArrayList()
             for (chapterData in dataChapters) {
-                val chapterInfo = ChapterInfo(chapterData, extraData, activity)
+                val chapterInfo = ChapterInfo(chapterData, extraData, activity, true)
                 items.add(chapterInfo)
             }
 

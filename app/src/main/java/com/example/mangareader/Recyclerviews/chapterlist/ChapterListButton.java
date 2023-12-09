@@ -3,12 +3,9 @@ package com.example.mangareader.Recyclerviews.chapterlist;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toolbar;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import com.example.mangareader.Activities.ReadActivity;
 import com.example.mangareader.R;
 import com.example.mangareader.Settings.ListTracker;
@@ -68,8 +65,14 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
             else {
                 ReadValueHolder.currentChapter = chapterInfo.getValuesForChapters();
                 Intent readIntent = new Intent(button.getContext(), ReadActivity.class);
-                readIntent.putExtra("downloaded", false);
+                if (!chapterInfo.isDownloaded()) {
+                    readIntent.putExtra("downloaded", chapterInfo.isDownloaded()); // This will be false
+                }
+                else {
+                    readIntent.putExtra("downloaded", chapterInfo.isDownloaded()); // This will be true
+                }
                 button.getContext().startActivity(readIntent);
+
             }
         });
     }

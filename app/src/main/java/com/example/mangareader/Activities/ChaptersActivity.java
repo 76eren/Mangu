@@ -115,7 +115,7 @@ public class ChaptersActivity extends AppCompatActivity {
             ReadValueHolder.ChaptersActivityData = dataChapters; // LOL imagine assigning values statically lol
 
             for (Sources.ValuesForChapters chapterData : dataChapters) {
-                ChapterInfo chapterInfo = new ChapterInfo(chapterData, extraData, activity);
+                ChapterInfo chapterInfo = new ChapterInfo(chapterData, extraData, activity, false);
                 this.items.add(chapterInfo);
             }
 

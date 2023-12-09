@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 public class ChapterInfo {
     private final Sources.ValuesForChapters valuesForChapters;
+    private final boolean isDownloaded;
     private ChapterListButton chapterListButton;
     public Activity activity;
 
@@ -15,10 +16,11 @@ public class ChapterInfo {
     // For now it is being used for the download feature but in the future if I ever add a new feature this HashMap might prove usefull.
     private final HashMap<String, Object> extraData;
 
-    public ChapterInfo(Sources.ValuesForChapters valuesForChapters, HashMap<String, Object> extraData, Activity activity) {
+    public ChapterInfo(Sources.ValuesForChapters valuesForChapters, HashMap<String, Object> extraData, Activity activity, boolean isDownloaded) {
         this.valuesForChapters = valuesForChapters;
         this.extraData = extraData;
         this.activity = activity;
+        this.isDownloaded = isDownloaded;
     }
 
     public HashMap<String, Object> getExtraData() {
@@ -37,4 +39,7 @@ public class ChapterInfo {
         return chapterListButton;
     }
 
+    public boolean isDownloaded() {
+        return isDownloaded;
+    }
 }

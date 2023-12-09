@@ -1,4 +1,4 @@
-package com.example.mangareader.Recyclerviews;
+package com.example.mangareader.Recyclerviews.Read;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import com.example.mangareader.R;
 import com.example.mangareader.Read.Read;
 import com.example.mangareader.Read.ReadScroll;
 import com.example.mangareader.Read.Readmodes;
+import com.example.mangareader.Recyclerviews.RviewAdapterFavourites;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.HashMap;
@@ -40,6 +41,10 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        // With these we can check if we have downloaded the images or not
+        // This way we can handle both cases separately
+        // Alternatively I could make a recyclerview for each separately
         Data data = null;
         if (mData != null) {
             data = mData.get(position);
@@ -53,12 +58,13 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
         holder.button.setVisibility(View.GONE);
         holder.photoView.setVisibility(View.GONE);
 
-        // This means we didn't download anything
+        // This means we didn't download and we want to load the images normally
         if (data != null) {
             if (data.button.equals("")) {
                 holder.photoView.setVisibility(View.VISIBLE);
                 Read.loadImage(data.url, holder.photoView, data.reqData, data.context);
-            } else {
+            }
+            else {
                 holder.button.setVisibility(View.VISIBLE);
                 holder.button.setText(data.button);
                 Data finalData = data;
@@ -73,11 +79,29 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
             }
         }
 
-        // This means we did download the images
+        // This means we did download the images, and we want to load the images locally
         else if (dataDownload != null) {
-            // TODO: implement this
-        }
+            if (!dataDownload.button.equals("")) {
 
+                holder.button.setVisibility(View.VISIBLE);
+                holder.button.setText(dataDownload.button);
+                DataDownload finalDataDownload = dataDownload;
+                holder.button.setOnClickListener(v -> {
+                    if (finalDataDownload.button.equals("Next chapter")) {
+                        finalDataDownload.readScroll.changeChapterDownloads(1);
+                    }
+                    else if (finalDataDownload.button.equals("Previous chapter")) {
+                        finalDataDownload.readScroll.changeChapterDownloads(-1);
+                    }
+                });
+
+            }
+            else {
+                // The code for the actual image loading
+                holder.photoView.setVisibility(View.VISIBLE);
+                Read.loadImageDownload(dataDownload.context, holder.photoView, dataDownload.imageName, dataDownload.path);
+            }
+        }
     }
 
     // total number of rows
@@ -111,7 +135,6 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
             this.readScroll = readScroll;
             this.downloadData = downloadData;
         }
-
     }
 
     public static class DataDownload {
@@ -141,6 +164,7 @@ public class RviewAdapterReadScroll extends RecyclerView.Adapter<RviewAdapterRea
             super(itemView);
             this.photoView = itemView.findViewById(R.id.read_photoview);
             this.button = itemView.findViewById(R.id.button_scroll);
+
             itemView.setOnClickListener(this);
         }
 

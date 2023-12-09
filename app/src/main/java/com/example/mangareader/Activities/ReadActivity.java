@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.mangareader.Downloading.DownloadTracker;
 import com.example.mangareader.Downloading.DownloadedChapter;
 import com.example.mangareader.Settings.ListTracker;
 import com.example.mangareader.R;
@@ -52,6 +53,8 @@ public class ReadActivity extends AppCompatActivity {
 
         source = SourceObjectHolder.getSources(this);
 
+        DownloadTracker downloadTracker = new DownloadTracker();
+
         // The default value MUST reflect the default value of the root proferences!!!!
         switch (settings.returnValueString(this, "read_mode", "scroll")) {
             case "click":
@@ -69,8 +72,7 @@ public class ReadActivity extends AppCompatActivity {
 
 
         read.inflate(this);
-
-        source.prepareReadChapter(this); // Prepares the readchapter
+        source.prepareReadChapter(this);
 
         new Thread(() -> {
             TextView progress = findViewById(R.id.progress);
@@ -79,50 +81,66 @@ public class ReadActivity extends AppCompatActivity {
             progress.setOnClickListener(view -> {
                 if (progress.getAlpha() == 0) {
                     progress.setAlpha(DesignValueHolder.progressBarAlphaWhenEnabled);
-                } else {
+                }
+                else {
                     progress.setAlpha(0);
                 }
+
             });
 
             String chapterUrl = ReadValueHolder.getCurrentChapter(this).url;
 
-            // THIS DOESN'T BELONG HERE
             TextView cacheTV = findViewById(R.id.cache);
             cacheTV.setVisibility(View.INVISIBLE);
 
+
             ArrayList<String> imgs = new ArrayList<>();
             ArrayList<DownloadedChapter> finalDownloads = new ArrayList<>();
-
-            // I am not really a big fan of calling ReadValueHolder rather than having a local variable.
-            // It's whatever though
-            imgs = SourceObjectHolder.getSources(this).getImages(ReadValueHolder.getCurrentChapter(this), this);
-
-            // This usually runs after inactivity.....
-            if (imgs == null) {
-                Intent intent = new Intent(this, HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                return;
-            }
-
-            imgs.removeAll(Collections.singleton(null));
-            imgs.removeAll(Collections.singleton(""));
-
             HashMap<String, String> reqData = source.getRequestData(chapterUrl);
 
-            read.start(this, imgs, source, reqData); // We assign our context to read
+            if (!isDownloaded) {
+                imgs = SourceObjectHolder.getSources(this).getImages(ReadValueHolder.getCurrentChapter(this), this);
 
-            // Caching
-            Boolean shouldCache = settings.returnValueBoolean(this, "preference_Cache", false);
-            if (shouldCache) {
-                runOnUiThread(() -> cacheTV.setVisibility(View.VISIBLE));
-                Read.cache(this, imgs, reqData);
-                read.loadImage();
+                // This usually runs after inactivity.....
+                if (imgs == null) {
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    return;
+                }
+
+                imgs.removeAll(Collections.singleton(null));
+                imgs.removeAll(Collections.singleton(""));
+
+                read.start(this, imgs, source, reqData);
+
+                // This decides if we should cache the images while reading
+                Boolean shouldCache = settings.returnValueBoolean(this, "preference_Cache", false);
+                if (shouldCache) {
+                    runOnUiThread(() -> cacheTV.setVisibility(View.VISIBLE));
+                    Read.cache(this, imgs, reqData);
+                    read.loadImage();
+                }
+                else {
+                    runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
+                    read.loadImage();
+                }
             }
+
             else {
-                runOnUiThread(() -> cacheTV.setVisibility(View.INVISIBLE));
-                read.loadImage();
+                LinkedHashSet<DownloadedChapter> tempDownloads = downloadTracker.getFromDownloads(this);
+                for (DownloadedChapter i : tempDownloads) {
+                    if (i.getUrl().equals(ReadValueHolder.getCurrentChapter(this).url)) {
+                        finalDownloads.add(i);
+                    }
+                }
+
+                read.start(this, imgs, source, reqData);
+                read.startDownloads(this, finalDownloads, source, reqData);
+                read.loadImageDownload();
             }
+
+
 
         }).start();
 

@@ -54,6 +54,30 @@ public class Read {
         activity.runOnUiThread(() -> cacheStatusUpdate.setVisibility(PhotoView.GONE));
     }
 
+    public static void loadImageDownload(Context context, PhotoView photoView, String imageName, String imagePath) {
+        // Glide is actually amazing
+        // If you remove the downloaded image it'll try to find the removed image from the cache
+        // and if it's not in the cache it'll just put the placeholder there.
+        // Super neat of course
+
+        Settings settings = new Settings();
+        if (!settings.returnValueBoolean(context, "preference_image_size", false)) {
+            Glide.with(context)
+                    .load(imagePath + "/" + imageName)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .fitCenter()
+                    .into(photoView);
+        } else {
+            Glide.with(context)
+                    .load(imagePath + "/" + imageName)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .fitCenter()
+                    .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .into(photoView);
+        }
+
+    }
+
     public static void loadImage(String url, PhotoView photoView, HashMap<String, String> reqData, Context context) {
 
         GlideUrl glideUrl;
