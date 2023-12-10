@@ -1,10 +1,12 @@
 package com.example.mangareader.Activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,15 +23,15 @@ import com.example.mangareader.SourceHandlers.Sources.ValuesForChapters
 import com.example.mangareader.SplashScreen
 import com.example.mangareader.ValueHolders.ReadValueHolder
 
+
 class ChaptersActivityDownloads : AppCompatActivity() {
     var adapter: RviewAdapterChapterlist? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chapters_downloads)
+        setContentView(R.layout.activity_chapters_view)
 
-        // TODO: Make the activity_chapters_downloads and activity_chapters read the same layout file instead of copying the same layout twice
         // TODO: Fix toolbar for this activity
 
         supportActionBar!!.setDisplayShowTitleEnabled(true)

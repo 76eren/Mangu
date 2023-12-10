@@ -42,7 +42,7 @@ public class ChaptersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_chapters);
+        this.setContentView(R.layout.activity_chapters_view);
 
         overridePendingTransition(0, 0);
 
