@@ -53,7 +53,6 @@ public class ChaptersActivity extends AppCompatActivity {
         String imageUrl = "";
         String mangaName = "";
         String referer = null;
-        boolean downloaded = false;
 
         try {
             // Make sure these are not null

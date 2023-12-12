@@ -9,7 +9,7 @@ import java.time.Instant
 import java.util.concurrent.CopyOnWriteArrayList
 
 class DownloadTracker {
-    fun removeFromDownloads(values: CopyOnWriteArrayList<ValuesForChapters>, context: Context?) {
+    fun removeFromDownloads(values: ArrayList<ValuesForChapters>, context: Context?) {
         // we need to remove these from
         val toRemove = ArrayList<DownloadedChapter>()
         val downloadedChapters = getFromDownloads(context)

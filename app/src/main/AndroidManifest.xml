@@ -27,6 +27,11 @@
                 android:enabled="true"
                 android:exported="true"/>
 
+        <service
+                android:name=".Downloading.RemoveService"
+                android:enabled="true"
+                android:exported="true"/>
+
         <activity
                 android:name=".Activities.HomeActivity"
                 android:exported="true">
@@ -43,8 +48,8 @@
                 android:label="@string/title_activity_settings">
         </activity>
         <!--
-          I am not ustre how happy I am with this tbh
-          The hardware accelaration is needed for the Read code, it's situational though
+          I am not sure how happy I am with this tbh
+          The hardware acceleration is needed for the Read code, it's situational though
           LIke only when a very large image is being loaded, this'll prevent a crash
         -->
         <activity

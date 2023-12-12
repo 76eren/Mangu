@@ -232,11 +232,9 @@ public class Mangakakalot implements Sources {
             Boolean server_two = settings.returnValueBoolean(context, "preference_ServerMangakakalot", false);
 
             if (!server_two) {
-                Log.d("lol", "A");
                 doc = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                         .get();
-                Log.d("lol", "SUcces bruh");
             } else {
                 String CookieSiteLocation = "";
 

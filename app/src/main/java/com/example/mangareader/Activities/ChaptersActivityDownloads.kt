@@ -1,24 +1,29 @@
 package com.example.mangareader.Activities
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mangareader.Downloading.DownloadTracker
 import com.example.mangareader.Downloading.DownloadedChapter
+import com.example.mangareader.Downloading.Downloader
 import com.example.mangareader.Downloading.RelevantDownloadsSorter
 import com.example.mangareader.GenerateExtraData
 import com.example.mangareader.R
 import com.example.mangareader.Recyclerviews.chapterlist.ChapterInfo
+import com.example.mangareader.Recyclerviews.chapterlist.ChapterListButton
 import com.example.mangareader.Recyclerviews.chapterlist.HeaderInfo
 import com.example.mangareader.Recyclerviews.chapterlist.RviewAdapterChapterlist
+import com.example.mangareader.Settings.ListTracker
 import com.example.mangareader.SourceHandlers.Sources.ValuesForChapters
 import com.example.mangareader.SplashScreen
 import com.example.mangareader.ValueHolders.ReadValueHolder
@@ -26,6 +31,7 @@ import com.example.mangareader.ValueHolders.ReadValueHolder
 
 class ChaptersActivityDownloads : AppCompatActivity() {
     var adapter: RviewAdapterChapterlist? = null
+    val items = java.util.ArrayList<ChapterInfo>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +42,6 @@ class ChaptersActivityDownloads : AppCompatActivity() {
 
         supportActionBar!!.setDisplayShowTitleEnabled(true)
         overridePendingTransition(0, 0)
-
-        Log.d("lol", "kekw")
 
         val intent = intent
         var mangaUrl = ""
@@ -119,10 +123,9 @@ class ChaptersActivityDownloads : AppCompatActivity() {
 
             ReadValueHolder.ChaptersActivityData = dataChapters // LOL imagine assigning values statically lol
 
-            val items: MutableList<ChapterInfo> = java.util.ArrayList()
             for (chapterData in dataChapters) {
                 val chapterInfo = ChapterInfo(chapterData, extraData, activity, true)
-                items.add(chapterInfo)
+                this.items.add(chapterInfo)
             }
 
             activity.runOnUiThread {
@@ -152,6 +155,69 @@ class ChaptersActivityDownloads : AppCompatActivity() {
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.chaptersactivitydownloads_toolbar_menu, menu)
+        return true
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.chaptersactivitydownload_action_toolbar_removedownloads -> {
+                val chaptersToRemove: MutableList<ValuesForChapters> = ArrayList()
+                for (chapterInfo in items) {
+                    val chapterListButton = chapterInfo.chapterListButton ?: continue
+                    if (chapterListButton.enabledButtons == null) {
+                        continue
+                    }
+                    for (i in chapterListButton.valuesForChaptersList) {
+                        chaptersToRemove.add(i)
+                    }
+                }
+
+                val downloader = Downloader()
+                downloader.remove(chaptersToRemove as ArrayList<ValuesForChapters>, this)
+                resetButtons()
+
+                val x = Intent(this, DownloadsActivity::class.java)
+                startActivity(x)
+
+                return true
+            }
+
+            R.id.chaptersactivity_action_toolbar_read_unread -> {
+                for (chapterInfo in items) {
+                    val chapterListButton = chapterInfo.chapterListButton ?: continue
+                    if (chapterListButton.enabledButtons == null) {
+                        continue
+                    }
+                    for (i in chapterListButton.valuesForChaptersList) {
+                        ListTracker.changeStatus(this, i.url, "History")
+                    }
+                }
+                resetButtons()
+                return true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun resetButtons() {
+        for (chapterInfo in items) {
+            val chapterListButton = chapterInfo.chapterListButton ?: continue
+            if (chapterListButton.enabledButtons == null) {
+                continue
+            }
+            for (i in chapterListButton.enabledButtons) {
+                // Put back the default colour
+                i.setTextColor(ChapterListButton.getButtonColor(i, chapterInfo.valuesForChapters.url))
+            }
+            chapterListButton.enabledButtons.clear()
+            chapterListButton.valuesForChaptersList.clear()
+        }
+        ChapterListButton.staticShouldEnableToolbar = false
+    }
 
 
 }

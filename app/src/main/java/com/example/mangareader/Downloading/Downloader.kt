@@ -10,12 +10,30 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.mangareader.SourceHandlers.Sources.ValuesForChapters
-import java.util.ArrayList
 
 class Downloader {
 
-    fun remove() {
+    fun remove(values: ArrayList<ValuesForChapters>, context: Context) {
+        if (values.isEmpty()) {
+            return
+        }
 
+        val permissionsMet = checkPermissions(context)
+        if (permissionsMet == -1) {
+            return
+        }
+
+        val downloadTracker = DownloadTracker()
+        val downloadsHashSet: LinkedHashSet<DownloadedChapter> = downloadTracker.getFromDownloads(context)
+
+        val downloads = ArrayList(downloadsHashSet)
+        RemoveService.staticValues = values
+        RemoveService.staticDownloads = downloads
+
+        val serviceIntent = Intent(context, RemoveService::class.java)
+        context.startService(serviceIntent)
+
+        downloadTracker.removeFromDownloads(values, context)
     }
 
     fun download(valuesForChapters: ArrayList<ValuesForChapters>, context: Context) {
