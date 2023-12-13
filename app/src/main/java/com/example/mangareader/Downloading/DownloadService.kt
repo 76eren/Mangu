@@ -111,12 +111,11 @@ class DownloadService : Service() {
                         e.printStackTrace()
                     }
 
-                    //Create Path to save Image
                     val pathFormatter = PathFormatter()
                     var name = "Mangu_" + i.extraData["mangaName"] + "_" + i.name
                     name = pathFormatter.getPath(name)
                     val path =
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/" + name)
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/mangu/" + name)
                     imagesPath = path.path
                     imagesPath = pathFormatter.getPath(imagesPath)
 
