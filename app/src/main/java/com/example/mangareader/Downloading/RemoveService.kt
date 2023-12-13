@@ -53,16 +53,30 @@ class RemoveService : Service() {
                         break
                     }
                 }
-                if (targetChapter != null) {
-                    val directory = File(targetChapter.imagesPath)
-                    val files = directory.listFiles()
-                    if (files != null) {
+
+                targetChapter?.let {
+                    val directory = File(it.imagesPath)
+                    directory.listFiles()?.let { files ->
                         for (file in files) {
-                            if (file == null) continue
                             file.delete()
                         }
                     }
+                    directory.delete()
                 }
+                // We loop over all directories in the DownloadService.downloadLocation directory and check for empty directories
+                // if a directory is empty we delete it
+                File(DownloadService.downloadLocation).listFiles()?.let { files ->
+                    for (file in files) {
+                        if (file.isDirectory) {
+                            file.listFiles()?.let { innerFiles ->
+                                if (innerFiles.isEmpty()) {
+                                    file.delete()
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
         }
         stopSelf()

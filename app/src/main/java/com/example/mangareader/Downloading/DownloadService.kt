@@ -27,6 +27,7 @@ import java.util.concurrent.Executors
 class DownloadService : Service() {
     companion object {
         var thingsToDownload = ArrayList<ValuesForChapters>()
+        var downloadLocation = Environment.DIRECTORY_PICTURES + "/mangu";
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -115,7 +116,7 @@ class DownloadService : Service() {
                     var name = "Mangu_" + i.extraData["mangaName"] + "_" + i.name
                     name = pathFormatter.getPath(name)
                     val path =
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/mangu/" + name)
+                        Environment.getExternalStoragePublicDirectory("$downloadLocation/$name")
                     imagesPath = path.path
                     imagesPath = pathFormatter.getPath(imagesPath)
 
