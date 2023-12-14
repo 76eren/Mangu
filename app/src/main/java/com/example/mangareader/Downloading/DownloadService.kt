@@ -113,12 +113,11 @@ class DownloadService : Service() {
                     }
 
                     val pathFormatter = PathFormatter()
-                    var name = "Mangu_" + i.extraData["mangaName"] + "_" + i.name
-                    name = pathFormatter.getPath(name)
+                    var name = "Mangu_" + pathFormatter.getPath(i.extraData["mangaName"] as String) + "_" + pathFormatter.getPath(i.name) + "_" + pathFormatter.getPath(i.url)
+
                     val path =
                         Environment.getExternalStoragePublicDirectory("$downloadLocation/$name")
                     imagesPath = path.path
-                    imagesPath = pathFormatter.getPath(imagesPath)
 
                     if (!path.exists()) {
                         path.mkdirs()

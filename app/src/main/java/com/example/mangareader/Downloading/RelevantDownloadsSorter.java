@@ -9,29 +9,34 @@ import java.util.stream.Collectors;
 public class RelevantDownloadsSorter {
 
     public ArrayList<DownloadedChapter> sortingOptionOne(ArrayList<DownloadedChapter> relevantDownloads) {
-        // Now we sort the relevantDownloads
-        // For example we want to sort this list from ["Chapter 1", "Chapter 3", "Chapter 1.1"] to ["Chapter 1", "Chapter 1.1", "Chapter 3"]
-        ArrayList<String> relevantDownloadsChapterNames = null;
-        relevantDownloadsChapterNames = (ArrayList<String>) relevantDownloads.stream()
+        // Get the chapter names from the relevant downloads
+        ArrayList<String> relevantDownloadsChapterNames = (ArrayList<String>) relevantDownloads.stream()
                 .map(DownloadedChapter::getChapterName)
                 .collect(Collectors.toList());
 
-        // This gets the latest relevantDownloadsChapterNamesArray there is available
-        // Because the relevantDownloadsChapterNamesArray for each object never gets updated
-        // It'll mess up if a new manga chapter every comes out
-        // In order to fix this we'll always target the relevantDownloadsChapterNamesArray with the latest object DownloadedChapter object creation (so the highest int date)
+        // Get the latest download
         DownloadedChapter latestDownload = relevantDownloads.stream()
                 .max(Comparator.comparingInt(DownloadedChapter::getDate))
                 .orElse(null);
+
+        // Get the default order of chapter names from the latest download
         String[] relevantDownloadsChapterNamesArray = latestDownload.getChapterNamesDefaultOrder();
 
-        Collections.sort(relevantDownloadsChapterNames, Comparator.comparingInt(s -> Arrays.asList(relevantDownloadsChapterNamesArray).indexOf(s))); // magic
+        // Sort the chapter names based on the default order
+        Collections.sort(relevantDownloadsChapterNames, Comparator.comparingInt(s -> Arrays.asList(relevantDownloadsChapterNamesArray).indexOf(s)));
         ArrayList<DownloadedChapter> sortedRelevantDownloads = new ArrayList<>();
         for (String i : relevantDownloadsChapterNames) {
-            relevantDownloads.stream()
+            // Find the chapter that matches the current chapter name
+            DownloadedChapter matchedChapter = relevantDownloads.stream()
                     .filter(DownloadedChapter -> i.equals(DownloadedChapter.getChapterName()))
                     .findFirst()
-                    .ifPresent(sortedRelevantDownloads::add);
+                    .orElse(null);
+            if (matchedChapter != null) {
+                // Add the matched chapter to the sorted list
+                sortedRelevantDownloads.add(matchedChapter);
+                // Remove the matched chapter from the list of relevant downloads
+                relevantDownloads.remove(matchedChapter);
+            }
         }
 
         return sortedRelevantDownloads;

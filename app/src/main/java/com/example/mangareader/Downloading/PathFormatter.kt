@@ -11,6 +11,10 @@ class PathFormatter {
         path = path.replace("![^/]*".toRegex(), "") // Remove exclamation marks and everything that follows, up to the next forward slash
         path = path.replace(";|\\\\|\\*|\\?|<|>|\\|".toRegex(), "_") // Replace semicolons, backslashes, asterisks, question marks, less than, greater than, and pipe characters with underscores
         path = path.replace(":".toRegex(), "_") // Replace colons with underscores
+        path = path.replace("/".toRegex(), "_") // Replaces / with _
+        path = path.replace("//".toRegex(), "_")
+        path = path.replace("___".toRegex(), "_")
+        path = path.replace("__".toRegex(), "_")
         return path
     }
 }

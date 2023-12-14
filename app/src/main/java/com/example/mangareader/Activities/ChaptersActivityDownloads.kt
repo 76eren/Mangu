@@ -109,18 +109,11 @@ class ChaptersActivityDownloads : AppCompatActivity() {
                 valuesForChapters.url = i.url
                 valuesForChapters.extraData = extraData
 
-                var canAdd = true
-                for (y in dataChapters) {
-                    if (y.url == valuesForChapters.url) {
-                        canAdd = false
-                        break
-                    }
-                }
-                if (canAdd) {
+                if (dataChapters.none { it.url == valuesForChapters.url }) {
                     dataChapters.add(valuesForChapters)
                 }
-            }
 
+            }
             ReadValueHolder.ChaptersActivityData = dataChapters // LOL imagine assigning values statically lol
 
             for (chapterData in dataChapters) {
