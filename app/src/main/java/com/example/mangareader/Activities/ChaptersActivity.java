@@ -155,7 +155,7 @@ public class ChaptersActivity extends AppCompatActivity {
 
             for (Button i : chapterListButton.enabledButtons) {
                 // Put back the default colour
-                i.setTextColor(ChapterListButton.getButtonColor(i, chapterInfo.getValuesForChapters().url));
+                i.setTextColor(ChapterListButton.getButtonColor(chapterInfo.getValuesForChapters().url, this));
 
             }
             chapterListButton.enabledButtons.clear();

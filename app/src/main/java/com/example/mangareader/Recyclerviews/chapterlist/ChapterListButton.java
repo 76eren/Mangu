@@ -33,7 +33,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
 
     public void bind (ChapterInfo chapterInfo) {
         button.setText(chapterInfo.getValuesForChapters().name);
-        button.setTextColor(getButtonColor(button, chapterInfo.getValuesForChapters().url));
+        button.setTextColor(getButtonColor(chapterInfo.getValuesForChapters().url, chapterInfo.activity));
 
 
         button.setOnLongClickListener(v -> {
@@ -54,7 +54,7 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
                 if (enabledButtons.contains(button)) {
                     enabledButtons.remove(button);
                     valuesForChaptersList.remove(chapterInfo.getValuesForChapters());
-                    this.setButtonColor(button, getButtonColor(button, chapterInfo.getValuesForChapters().url));
+                    this.setButtonColor(button, getButtonColor(chapterInfo.getValuesForChapters().url, chapterInfo.activity));
                 }
                 else {
                     enabledButtons.add(button);
@@ -64,14 +64,14 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
             }
             else {
                 ReadValueHolder.currentChapter = chapterInfo.getValuesForChapters();
-                Intent readIntent = new Intent(button.getContext(), ReadActivity.class);
+                Intent readIntent = new Intent(chapterInfo.activity, ReadActivity.class);
                 if (!chapterInfo.isDownloaded()) {
                     readIntent.putExtra("downloaded", chapterInfo.isDownloaded()); // This will be false
                 }
                 else {
                     readIntent.putExtra("downloaded", chapterInfo.isDownloaded()); // This will be true
                 }
-                button.getContext().startActivity(readIntent);
+                chapterInfo.activity.startActivity(readIntent);
 
             }
         });
@@ -81,8 +81,8 @@ public class ChapterListButton extends RviewAdapterChapterlist.ViewHolder {
         return ListTracker.getFromList(context, "History").stream()
                 .anyMatch(s -> s.equals(url));
     }
-    public static int getButtonColor (Button button, String url) {
-        return inHistory(button.getContext(), url)
+    public static int getButtonColor (String url, Context context) {
+        return inHistory(context, url)
                 ? DesignValueHolder.buttonTextColorRead
                 : DesignValueHolder.buttonTextColorNotRead;
     }

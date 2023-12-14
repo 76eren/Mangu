@@ -204,7 +204,7 @@ class ChaptersActivityDownloads : AppCompatActivity() {
             }
             for (i in chapterListButton.enabledButtons) {
                 // Put back the default colour
-                i.setTextColor(ChapterListButton.getButtonColor(i, chapterInfo.valuesForChapters.url))
+                i.setTextColor(ChapterListButton.getButtonColor(chapterInfo.valuesForChapters.url, this))
             }
             chapterListButton.enabledButtons.clear()
             chapterListButton.valuesForChaptersList.clear()

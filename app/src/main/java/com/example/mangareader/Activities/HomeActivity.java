@@ -35,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         overridePendingTransition(0, 0);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -70,24 +71,6 @@ public class HomeActivity extends AppCompatActivity {
 
         PopularManga.setVisibility(View.INVISIBLE);
         LatestManga.setVisibility(View.INVISIBLE);
-
-        // We set the correct theme
-        // This is very lazy
-        String theme = settings.returnValueString(this.getApplicationContext(), "theme", "default");
-        switch (theme) {
-
-            case "dark":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-
-            case "light":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-
-            default:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                break;
-        }
 
         // Now we get all the data for the activity
         Sources source = SourceObjectHolder.getSources(this); // This both sets and gets the source
