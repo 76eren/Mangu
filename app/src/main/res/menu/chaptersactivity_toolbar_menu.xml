@@ -9,5 +9,10 @@
           android:title="Download"
           app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/chaptersactivity_action_toolbar_favourite"
+          android:icon="@drawable/ic_baseline_star_24"
+          android:title="Favourite"
+          app:showAsAction="ifRoom"/>
+
 
 </menu>

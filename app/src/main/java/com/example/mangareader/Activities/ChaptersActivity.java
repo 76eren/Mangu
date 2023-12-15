@@ -2,6 +2,7 @@ package com.example.mangareader.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mangareader.Downloading.Downloader;
+import com.example.mangareader.Favourites.FavouriteItem;
+import com.example.mangareader.Favourites.Favourites;
 import com.example.mangareader.GenerateExtraData;
 import com.example.mangareader.R;
 import com.example.mangareader.Recyclerviews.chapterlist.ChapterInfo;
@@ -29,11 +32,12 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ChaptersActivity extends AppCompatActivity {
-    public static String url;
     public ArrayList<Sources.ValuesForChapters> dataChapters = new ArrayList<>();
     RviewAdapterChapterlist adapter;
     ArrayList<ChapterInfo> items = new ArrayList<>();
@@ -227,6 +231,23 @@ public class ChaptersActivity extends AppCompatActivity {
                     }
                 }
                 resetButtons();
+                return true;
+
+            case R.id.chaptersactivity_action_toolbar_favourite:
+                Object referer = extraData.get("referer");
+                String refererString = null;
+                if (referer != null) {
+                    refererString = referer.toString();
+                }
+
+                FavouriteItem favouriteItem = new FavouriteItem(
+                        SourceObjectHolder.getSources(this).getClass().getName()
+                        , this.extraData.get("mangaUrl").toString()
+                        , this.extraData.get("imageUrl").toString()
+                        , this.extraData.get("mangaName").toString()
+                        , (int) Instant.now().getEpochSecond()
+                        , refererString);
+                Favourites.checkWhatNeedsToHappen(this, favouriteItem);
                 return true;
 
             default:

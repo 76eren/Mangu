@@ -9,6 +9,4 @@
           android:title="Remove Download"
           app:showAsAction="ifRoom"/>
 
-
-
 </menu>
