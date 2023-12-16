@@ -24,6 +24,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -91,24 +92,22 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             if (homeData != null) {
-                ArrayList<HomeMangaClass> latest = homeData.get("latest");
+                CopyOnWriteArrayList<HomeMangaClass> latest = new CopyOnWriteArrayList<>(homeData.get("latest"));
 
                 // Does the latest
-                if (latest != null) {
-                    // We first start with the latest
-                    List<RviewAdapterHome.Data> data = new ArrayList<>();
-                    for (HomeMangaClass i : latest) {
-                        data.add(new RviewAdapterHome.Data(context, i));
-                    }
-
-                    runOnUiThread(() -> {
-                        RecyclerView recyclerView = findViewById(R.id.RecyclerViewHomeLatest);
-
-                        RviewAdapterHome adapter = new RviewAdapterHome(context, data, "imageview");
-                        recyclerView.setAdapter(adapter);
-
-                    });
+                // We first start with the latest
+                List<RviewAdapterHome.Data> data = new ArrayList<>();
+                for (HomeMangaClass i : latest) {
+                    data.add(new RviewAdapterHome.Data(context, i));
                 }
+
+                runOnUiThread(() -> {
+                    RecyclerView recyclerView = findViewById(R.id.RecyclerViewHomeLatest);
+
+                    RviewAdapterHome adapter = new RviewAdapterHome(context, data, "imageview");
+                    recyclerView.setAdapter(adapter);
+
+                });
 
                 // Does the popular
                 ArrayList<HomeMangaClass> popular = homeData.get("popular");
