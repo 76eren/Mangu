@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ChaptersActivity extends AppCompatActivity {
     public ArrayList<Sources.ValuesForChapters> dataChapters = new ArrayList<>();
@@ -204,6 +206,7 @@ public class ChaptersActivity extends AppCompatActivity {
                     thingsToDownload.addAll(chapterListButton.valuesForChaptersList);
                 }
                 resetButtons();
+                thingsToDownload = (ArrayList<Sources.ValuesForChapters>) thingsToDownload.stream().distinct().collect(Collectors.toList()); // Clears the duplicates
 
                 for (Sources.ValuesForChapters i : thingsToDownload) {
                     i.extraData = this.extraData;

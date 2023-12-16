@@ -51,16 +51,17 @@ class DownloadService : Service() {
         startForeground(123, builder.build())
 
         // We set up the neccesary variables to start the downloading process
-        val source = SourceObjectHolder.getSources(applicationContext) // We get the source object
-        val thingsToDownload = ArrayList(thingsToDownload) // We make a copy of the list, so we can remove items from it
-        val downloadTracker: DownloadTracker = DownloadTracker()
+        val source = SourceObjectHolder.getSources(applicationContext)
+        val downloadTracker = DownloadTracker()
+
+        val thingsToDownloadLocal = ArrayList(DownloadService.thingsToDownload) // We make a copy of the list, so we can remove items from it
 
         // We clear the static list
-        DownloadService.thingsToDownload.clear()
+         DownloadService.thingsToDownload.clear()
 
         val executor = Executors.newSingleThreadExecutor()
         executor.execute {
-            for (i in thingsToDownload) {
+            for (i in thingsToDownloadLocal) {
                 // First we get all the images for the chapter
                 val images: ArrayList<String> = source?.getImages(i, i.activity as Context) as ArrayList<String>
 
@@ -83,7 +84,7 @@ class DownloadService : Service() {
 
                     builder.setProgress(100, progress.toInt(), false)
                     notifications.notify(123, builder.build())
-                    builder.setContentTitle("Downloads: " + (thingsToDownload.indexOf(i) + 1) + " out of " + thingsToDownload.size)
+                    builder.setContentTitle("Downloads: " + (thingsToDownloadLocal.indexOf(i) + 1) + " out of " + thingsToDownloadLocal.size)
                     imageNames[index - 1] = imageUrl
 
 
@@ -148,7 +149,8 @@ class DownloadService : Service() {
 
 
             }
-            builder.setContentTitle("Downloads: " + thingsToDownload.size + " out of " + thingsToDownload.size)
+            builder.setContentTitle("Downloads: " + thingsToDownloadLocal.size + " out of " + thingsToDownloadLocal.size)
+            stopSelf()
         }
 
 

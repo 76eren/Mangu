@@ -78,8 +78,8 @@ class RemoveService : Service() {
                 }
 
             }
+            stopSelf()
         }
-        stopSelf()
         return START_STICKY
     }
 
