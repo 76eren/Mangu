@@ -32,19 +32,6 @@ public class ReadClick implements Readmodes {
     private TextView progress;
 
 
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void loadImageDownload() {
-        this.dataDownload.activity.runOnUiThread(() -> {
-
-            Read.loadImageDownload(dataDownload.activity, this.photoView, this.dataDownload.chapterDatas.get(0).getImageNames()[page], this.dataDownload.chapterDatas.get(0).getImagesPath());
-
-            this.progress.setText(this.page + 1 + "/" + this.dataDownload.chapterDatas.get(0).getImageNames().length + " - "
-                    + ReadValueHolder.getCurrentChapter(this.data.activity).name);
-
-        });
-    }
-
     @Override
     public void inflate(Activity activity) {
         LayoutInflater inflater = (LayoutInflater) activity.getApplicationContext()
@@ -77,28 +64,6 @@ public class ReadClick implements Readmodes {
 
     }
 
-
-    @Override
-    public void startDownloads(Activity activity, ArrayList<DownloadedChapter> downloads, Sources sources, HashMap<String, String> reqData) {
-        this.dataDownload = new DownloadData(activity, downloads, sources, reqData);
-        this.photoView = activity.findViewById(R.id.photo_view);
-
-
-        Button next = activity.findViewById(R.id.nextPage);
-        Button previous = activity.findViewById(R.id.prevPage);
-        this.progress = activity.findViewById(R.id.progress);
-
-        // Controls the page switching
-        next.setOnClickListener(view -> changePagesDownload(1));
-        previous.setOnClickListener(view -> changePagesDownload(-1));
-
-        activity.runOnUiThread(() -> {
-            previous.setBackgroundColor(Color.TRANSPARENT);
-            previous.setAlpha(0);
-            next.setBackgroundColor(Color.TRANSPARENT);
-            next.setAlpha(0);
-        });
-    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -176,6 +141,46 @@ public class ReadClick implements Readmodes {
 
     }
 
+
+
+
+    // ------------- DOWNLOADS ----------------
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void loadImageDownload() {
+        this.dataDownload.activity.runOnUiThread(() -> {
+
+            Read.loadImageDownload(dataDownload.activity, this.photoView, this.dataDownload.chapterDatas.get(0).getImageNames()[page], this.dataDownload.chapterDatas.get(0).getImagesPath());
+
+            this.progress.setText(this.page + 1 + "/" + this.dataDownload.chapterDatas.get(0).getImageNames().length + " - "
+                    + ReadValueHolder.getCurrentChapter(this.data.activity).name);
+
+        });
+    }
+
+    @Override
+    public void startDownloads(Activity activity, ArrayList<DownloadedChapter> downloads, Sources sources, HashMap<String, String> reqData) {
+        this.dataDownload = new DownloadData(activity, downloads, sources, reqData);
+        this.photoView = activity.findViewById(R.id.photo_view);
+
+
+        Button next = activity.findViewById(R.id.nextPage);
+        Button previous = activity.findViewById(R.id.prevPage);
+        this.progress = activity.findViewById(R.id.progress);
+
+        // Controls the page switching
+        next.setOnClickListener(view -> changePagesDownload(1));
+        previous.setOnClickListener(view -> changePagesDownload(-1));
+
+        activity.runOnUiThread(() -> {
+            previous.setBackgroundColor(Color.TRANSPARENT);
+            previous.setAlpha(0);
+            next.setBackgroundColor(Color.TRANSPARENT);
+            next.setAlpha(0);
+        });
+    }
+
     @Override
     public void changeChapterDownloads(int direction) {
         String temp = ReadValueHolder.currentChapter.url;
@@ -216,7 +221,6 @@ public class ReadClick implements Readmodes {
         }).start();
     }
 
-
     @Override
     public void changePagesDownload(int direction) {
         page += direction;
@@ -235,5 +239,7 @@ public class ReadClick implements Readmodes {
 
         loadImageDownload();
     }
+
+
 
 }

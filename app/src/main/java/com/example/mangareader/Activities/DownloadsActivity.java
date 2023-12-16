@@ -47,7 +47,6 @@ public class DownloadsActivity extends AppCompatActivity {
         Menu menu = navigationView.getMenu();
         navigation.itemClickSetup(this, menu);
 
-
         List<RviewAdapterDownloads.Data> data = new ArrayList<>();
         DownloadTracker downloadTracker = new DownloadTracker();
         LinkedHashSet<DownloadedChapter> set = downloadTracker.getFromDownloads(this);
@@ -74,11 +73,11 @@ public class DownloadsActivity extends AppCompatActivity {
 
         switch (settings.returnValueString(this, "preference_favourites_sort", "preference_favourites_sort_date_up")) {
             case "preference_favourites_sort_date_down":
-                sortedDownloads.sort(Comparator.comparingInt(DownloadedChapter::returnDate));
+                sortedDownloads.sort(Comparator.comparingInt(DownloadedChapter::getDate));
                 break;
 
             case "preference_favourites_sort_date_up":
-                sortedDownloads.sort(Comparator.comparingInt(DownloadedChapter::returnDate));
+                sortedDownloads.sort(Comparator.comparingInt(DownloadedChapter::getDate));
                 Collections.reverse(sortedDownloads);
                 break;
 
@@ -103,7 +102,6 @@ public class DownloadsActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rviewDownloads);
         RviewAdapterDownloads adapter = new RviewAdapterDownloads(this, data, "imageview");
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override

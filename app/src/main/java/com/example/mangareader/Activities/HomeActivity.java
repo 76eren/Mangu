@@ -24,6 +24,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -35,6 +36,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         overridePendingTransition(0, 0);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -71,24 +73,6 @@ public class HomeActivity extends AppCompatActivity {
         PopularManga.setVisibility(View.INVISIBLE);
         LatestManga.setVisibility(View.INVISIBLE);
 
-        // We set the correct theme
-        // This is very lazy
-        String theme = settings.returnValueString(this.getApplicationContext(), "theme", "default");
-        switch (theme) {
-
-            case "dark":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-
-            case "light":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-
-            default:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                break;
-        }
-
         // Now we get all the data for the activity
         Sources source = SourceObjectHolder.getSources(this); // This both sets and gets the source
 
@@ -108,24 +92,22 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             if (homeData != null) {
-                ArrayList<HomeMangaClass> latest = homeData.get("latest");
+                CopyOnWriteArrayList<HomeMangaClass> latest = new CopyOnWriteArrayList<>(homeData.get("latest"));
 
                 // Does the latest
-                if (latest != null) {
-                    // We first start with the latest
-                    List<RviewAdapterHome.Data> data = new ArrayList<>();
-                    for (HomeMangaClass i : latest) {
-                        data.add(new RviewAdapterHome.Data(context, i));
-                    }
-
-                    runOnUiThread(() -> {
-                        RecyclerView recyclerView = findViewById(R.id.RecyclerViewHomeLatest);
-
-                        RviewAdapterHome adapter = new RviewAdapterHome(context, data, "imageview");
-                        recyclerView.setAdapter(adapter);
-
-                    });
+                // We first start with the latest
+                List<RviewAdapterHome.Data> data = new ArrayList<>();
+                for (HomeMangaClass i : latest) {
+                    data.add(new RviewAdapterHome.Data(context, i));
                 }
+
+                runOnUiThread(() -> {
+                    RecyclerView recyclerView = findViewById(R.id.RecyclerViewHomeLatest);
+
+                    RviewAdapterHome adapter = new RviewAdapterHome(context, data, "imageview");
+                    recyclerView.setAdapter(adapter);
+
+                });
 
                 // Does the popular
                 ArrayList<HomeMangaClass> popular = homeData.get("popular");

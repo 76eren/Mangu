@@ -84,7 +84,7 @@ public class FavouritesActivity extends AppCompatActivity {
             }
         }
 
-        RecyclerView recyclerView = findViewById(R.id.rviewDownloads);
+        RecyclerView recyclerView = findViewById(R.id.rviewFavourites);
         RviewAdapterFavourites adapter = new RviewAdapterFavourites(this, data, "imageview");
         recyclerView.setAdapter(adapter);
 

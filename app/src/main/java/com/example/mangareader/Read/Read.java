@@ -6,6 +6,7 @@ package com.example.mangareader.Read;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -13,6 +14,7 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.example.mangareader.Downloading.PathFormatter;
 import com.example.mangareader.R;
 import com.example.mangareader.Settings.Settings;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -59,7 +61,7 @@ public class Read {
         // If you remove the downloaded image it'll try to find the removed image from the cache
         // and if it's not in the cache it'll just put the placeholder there.
         // Super neat of course
-
+        String url = imagePath + "/" + imageName;
         Settings settings = new Settings();
         if (!settings.returnValueBoolean(context, "preference_image_size", false)) {
             Glide.with(context)

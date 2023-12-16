@@ -101,7 +101,6 @@ public class Webtoons implements Sources {
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0")
                     .get();
         } catch (Exception ex) {
-            Log.d("lol", ex.toString());
             return "A problem occured whilst trying to get the description";
         }
 
@@ -158,12 +157,9 @@ public class Webtoons implements Sources {
         String api_page;
         if (!old_url.contains("canvas")) {
             api_page = WebtoonsMac.getChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/episodeList.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + id + "&v=4&platform=APP_ANDROID&titleNo=95&startIndex=0&pageSize=100000");
-            Log.d("lol", "a");
         } else {
-            Log.d("lol", "b");
             api_page = WebtoonsMac.getChapterList("https://apis.webtoons.com/lineWebtoon/webtoon/challengeEpisodeList.json?language=en&locale=en&serviceZone=GLOBAL&titleNo=" + id + "&v=4&platform=APP_ANDROID&titleNo=95&startIndex=0&pageSize=100000");
         }
-        Log.d("lol", api_page);
         String body = GetBody(api_page);
         ArrayList<ValuesForChapters> data = new ArrayList<>();
 

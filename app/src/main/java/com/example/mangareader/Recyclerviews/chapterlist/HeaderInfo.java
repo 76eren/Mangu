@@ -10,15 +10,17 @@ public class HeaderInfo {
     private final String description;
     private final String referer;
     private HashMap<String, Object> extraData = null;
+    private boolean isDownloaded;
 
 
-    public HeaderInfo(String mangaName, String mangaUrl, String mangaImageUrl, String description, String referer, HashMap<String, Object> extraData) {
+    public HeaderInfo(String mangaName, String mangaUrl, String mangaImageUrl, String description, String referer, HashMap<String, Object> extraData, boolean isDownloaded) {
         this.mangaName = mangaName;
         this.mangaUrl = mangaUrl;
         this.mangaImageUrl = mangaImageUrl;
         this.description = description;
         this.referer = referer;
         this.extraData = extraData;
+        this.isDownloaded = isDownloaded;
     }
 
     public String getMangaName() {

@@ -22,7 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:spanCount="1"
-            android:id="@+id/rviewDownloads"/>
+            android:id="@+id/rviewFavourites"/>
 
     <com.google.android.material.navigation.NavigationView
             android:layout_width="wrap_content"

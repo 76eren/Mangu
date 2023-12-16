@@ -11,7 +11,7 @@ import com.example.mangareader.Downloading.DownloadTracker;
 import com.example.mangareader.Downloading.DownloadedChapter;
 import com.example.mangareader.Settings.ListTracker;
 import com.example.mangareader.R;
-import com.example.mangareader.Recyclerviews.RviewAdapterReadScroll;
+import com.example.mangareader.Recyclerviews.Read.RviewAdapterReadScroll;
 import com.example.mangareader.Settings.Settings;
 import com.example.mangareader.SourceHandlers.Sources;
 import com.example.mangareader.ValueHolders.ReadValueHolder;
@@ -39,39 +39,6 @@ public class ReadScroll implements Readmodes {
     @Override
     public void start(Activity activity, ArrayList<String> images, Sources sources, HashMap<String, String> reqData) {
         this.data = new Data(activity, images, sources, reqData);
-    }
-
-    @Override
-    public void startDownloads(Activity activity, ArrayList<DownloadedChapter> downloads, Sources sources, HashMap<String, String> reqData) {
-        this.dataDownload = new DownloadData(activity, downloads, sources, reqData);
-
-    }
-
-    @Override
-    public void loadImageDownload() {
-        TextView uwu = this.data.activity.findViewById(R.id.progress);
-        this.data.activity.runOnUiThread(() -> uwu.setText(ReadValueHolder.getCurrentChapter(this.data.activity).name));
-        List<RviewAdapterReadScroll.DataDownload> data = new ArrayList<>();
-        data.add(new RviewAdapterReadScroll.DataDownload(this.dataDownload.activity, "", "", "Previous chapter", this, this.dataDownload));
-        int index = 0;
-
-        for (String i : this.dataDownload.chapterDatas.get(0).getImageNames()) {
-            data.add(new RviewAdapterReadScroll.DataDownload(this.dataDownload.activity, i, this.dataDownload.chapterDatas.get(0).getImagesPath(), "", this, this.dataDownload));
-            index++;
-
-        }
-
-        data.add(new RviewAdapterReadScroll.DataDownload(this.dataDownload.activity, "", "", "Next chapter", this, this.dataDownload));
-        Activity activity = this.dataDownload.activity;
-        this.dataDownload.activity.runOnUiThread(() -> {
-            RecyclerView recyclerView = activity.findViewById(R.id.recyclerview_read);
-            recyclerView.setHasFixedSize(true);
-
-            RviewAdapterReadScroll adapter = new RviewAdapterReadScroll(activity, null, data);
-            recyclerView.setAdapter(adapter);
-        });
-
-
     }
 
 
@@ -148,6 +115,40 @@ public class ReadScroll implements Readmodes {
 
     }
 
+    // ------------------ DOWNLOADS ------------------
+
+    @Override
+    public void startDownloads(Activity activity, ArrayList<DownloadedChapter> downloads, Sources sources, HashMap<String, String> reqData) {
+        this.dataDownload = new DownloadData(activity, downloads, sources, reqData);
+
+    }
+
+    @Override
+    public void loadImageDownload() {
+        TextView uwu = this.data.activity.findViewById(R.id.progress);
+        this.data.activity.runOnUiThread(() -> uwu.setText(ReadValueHolder.getCurrentChapter(this.data.activity).name));
+        List<RviewAdapterReadScroll.DataDownload> data = new ArrayList<>();
+        data.add(new RviewAdapterReadScroll.DataDownload(this.dataDownload.activity, "", "", "Previous chapter", this, this.dataDownload));
+        int index = 0;
+
+        for (String i : this.dataDownload.chapterDatas.get(0).getImageNames()) {
+            data.add(new RviewAdapterReadScroll.DataDownload(this.dataDownload.activity, i, this.dataDownload.chapterDatas.get(0).getImagesPath(), "", this, this.dataDownload));
+            index++;
+
+        }
+
+        data.add(new RviewAdapterReadScroll.DataDownload(this.dataDownload.activity, "", "", "Next chapter", this, this.dataDownload));
+        Activity activity = this.dataDownload.activity;
+        this.dataDownload.activity.runOnUiThread(() -> {
+            RecyclerView recyclerView = activity.findViewById(R.id.recyclerview_read);
+            recyclerView.setHasFixedSize(true);
+
+            RviewAdapterReadScroll adapter = new RviewAdapterReadScroll(activity, null, data);
+            recyclerView.setAdapter(adapter);
+        });
+    }
+
+
     @Override
     public void changeChapterDownloads(int direction) {
         String temp = ReadValueHolder.currentChapter.url;
@@ -191,4 +192,6 @@ public class ReadScroll implements Readmodes {
     public void changePagesDownload(int direction) {
 
     }
+
+
 }

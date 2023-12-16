@@ -1,0 +1,12 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/chaptersactivity_action_toolbar_read_unread"
+          android:icon="@drawable/ic_baseline_mark_as_unread_24"
+          android:title="Read/Unread"
+          app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/chaptersactivitydownload_action_toolbar_removedownloads"
+          android:icon="@drawable/ic_baseline_delete_24"
+          android:title="Remove Download"
+          app:showAsAction="ifRoom"/>
+
+</menu>

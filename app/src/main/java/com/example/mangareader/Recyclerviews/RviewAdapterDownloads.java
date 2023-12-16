@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.mangareader.Activities.ChaptersActivity;
+import com.example.mangareader.Activities.ChaptersActivityDownloads;
+import com.example.mangareader.Activities.DownloadsActivity;
 import com.example.mangareader.Downloading.DownloadedChapter;
 import com.example.mangareader.R;
 import com.example.mangareader.SourceHandlers.Sources;
@@ -64,14 +66,14 @@ public class RviewAdapterDownloads extends RecyclerView.Adapter<RviewAdapterDown
                     .into(holder.cardImage);
         }
 
-        holder.cardText.setText(data.downloadedChapter.getMangaName());
+        holder.cardText.setText(data.downloadedChapter.getName());
 
         holder.card.setOnClickListener(v -> {
-            Intent intent = new Intent(data.context, ChaptersActivity.class);
+            Intent intent = new Intent(data.context, ChaptersActivityDownloads.class);
             intent.putExtra("downloaded", true);
             intent.putExtra("url", data.downloadedChapter.getUrl());
             intent.putExtra("img", data.downloadedChapter.getImage());
-            intent.putExtra("mangaName", data.downloadedChapter.getMangaName());
+            intent.putExtra("mangaName", data.downloadedChapter.getName());
             intent.putExtra("referer", data.downloadedChapter.getReferer());
 
             // Sets the correct source
