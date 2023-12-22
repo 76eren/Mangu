@@ -37,7 +37,8 @@ public class Webtoons implements Sources {
                 return body;
             }
         } catch (Exception ex) {
-            return null;
+            Log.d("lol", ex.toString());
+            return "";
         }
 
     }
@@ -150,7 +151,7 @@ public class Webtoons implements Sources {
                 }
 
             } else {
-                return null;
+                return new ArrayList<>();
             }
         }
 
