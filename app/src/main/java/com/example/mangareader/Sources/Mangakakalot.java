@@ -3,6 +3,10 @@
 // From what I can tell this si supposed to be a replacement for the already existing "readmanganato" source, however I decided to keep all the references for readmanganato just in case
 // From now on I will treat chapmanganato and readmanganato the same, just with different names (except for the referer!!!)
 
+// UPDATE 22-12-2023
+// From what I can tell mangakakalot got rid of readmanganato and makes it redirect to manganato now.
+// A better solution now is to completely rewrite all of this to use the source "manganato.com" instead of "mangakakalot.com" because with manganato there is only one domain
+
 package com.example.mangareader.Sources;
 
 import android.content.Context;
@@ -86,15 +90,14 @@ public class Mangakakalot implements Sources {
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                     .get();
 
-            // MANGAKAKLOT USES MULTIPLE WEBSITES
             Elements x = null;
-            if (url.toLowerCase().contains("readmanganato.com") || url.toLowerCase().contains("chapmanganato.com")) { // Recently mangakakalot added a new (replacement?) domain for readmanganato
+
+            if (url.toLowerCase().contains("readmanganato.to") || url.toLowerCase().contains("chapmanganato.to")) {
                 x = doc.getElementsByClass("panel-story-info-description"); // This also contains data we don't need
             } else if (url.toLowerCase().contains("mangakakalot.com")) {
                 x = doc.select("div#noidungm");
             }
 
-            // I stole this from somewhere on stackoverflow
             if (x != null) {
                 Document document = Jsoup.parse(x.html());
                 document.outputSettings(NO_PRETTY_PRINTING); // makes html() preserve
@@ -124,9 +127,10 @@ public class Mangakakalot implements Sources {
             ArrayList<String> names = new ArrayList<>();
 
             Elements ul = null;
-            if (url.toLowerCase().contains("readmanganato.com") || url.toLowerCase().contains("chapmanganato.com")) { // mangakakalot added a new (replacement) domain called chapmanganato
+            if (url.toLowerCase().contains("readmanganato.to") || url.toLowerCase().contains("chapmanganato.to")) { // mangakakalot added a new (replacement) domain called chapmanganato
                 ul = doc.getElementsByClass("row-content-chapter");
-            } else if (url.toLowerCase().contains("mangakakalot.com")) {
+            }
+            else if (url.toLowerCase().contains("mangakakalot.com")) {
                 ul = doc.getElementsByClass("chapter-list");
             }
 
@@ -140,11 +144,12 @@ public class Mangakakalot implements Sources {
 
                 Elements li;
 
-                if (url.toLowerCase().contains("readmanganato.com") || url.toLowerCase().contains("readmanganato.com")) {
+                if (url.toLowerCase().contains("readmanganato.com") || url.toLowerCase().contains("chapmanganato.to")) {
                     li = i.getElementsByClass("chapter-name text-nowrap");
                     title = li.attr("title"); // This is the chapter title
                     link = li.attr("href"); // This is the url
-                } else if (url.toLowerCase().contains("mangakakalot.com")) {
+                }
+                else if (url.toLowerCase().contains("mangakakalot.com")) {
                     li = i.getElementsByClass("row");
                     title = li.text();
                     Elements p = li.select("a");
@@ -240,13 +245,11 @@ public class Mangakakalot implements Sources {
 
                 // To get to server two, we need certain cookies
                 // There are cookie sites based on whether the url is mangakakalot or readmanganato or chapmanganato
-
-                // This isn't broken
                 if (url.toLowerCase().contains("readmanganato")) {
                     CookieSiteLocation = "https://readmanganato.com/content_server_s2";
                 }
                 if (url.toLowerCase().contains("chapmanganato")) {
-                    CookieSiteLocation = "https://chapmanganato.com/content_server_s2";
+                    CookieSiteLocation = "https://chapmanganato.to/content_server_s2";
                 }
 
                 // This is broken for some reason
@@ -311,8 +314,8 @@ public class Mangakakalot implements Sources {
         }
 
         // mangakakalot decided to add a new domain called "chapmanganato"
-        else if (url.toLowerCase().contains("chapmanganato.com")) {
-            referer = "https://chapmanganato.com/";
+        else if (url.toLowerCase().contains("chapmanganato.to")) {
+            referer = "https://chapmanganato.to/";
         }
 
         reqData.put("Referer", referer);
