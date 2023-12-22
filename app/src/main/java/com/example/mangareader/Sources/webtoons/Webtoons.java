@@ -25,7 +25,10 @@ import java.util.*;
 
 public class Webtoons implements Sources {
     private String GetBody(String url) {
+        url = removeUnwantedParams(url);
+        url = url.replace("apis.webtoons.com", "apis.naver.com");
         try {
+            url = WebtoonsMac.getChapterList(url);
             Request request = new Request.Builder()
                     .url(url)
                     .build();
@@ -38,9 +41,31 @@ public class Webtoons implements Sources {
             }
         } catch (Exception ex) {
             Log.d("lol", ex.toString());
+            return null;
+        }
+
+    }
+
+
+    private String removeUnwantedParams(String query) {
+        // This method gets rid of the md and msgpad params because it messes with the WebtoonsMac class
+        if (query == null || query.isEmpty()) {
             return "";
         }
 
+        String[] pairs = query.split("&");
+        StringBuilder newQuery = new StringBuilder();
+
+        for (String pair : pairs) {
+            if (!pair.toLowerCase().startsWith("md=") && !pair.toLowerCase().startsWith("msgpad=")) {
+                if (newQuery.length() > 0) {
+                    newQuery.append("&");
+                }
+                newQuery.append(pair);
+            }
+        }
+
+        return newQuery.toString();
     }
 
     @Override
@@ -151,7 +176,7 @@ public class Webtoons implements Sources {
                 }
 
             } else {
-                return new ArrayList<>();
+                return null;
             }
         }
 
