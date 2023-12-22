@@ -117,8 +117,7 @@ public class Mangakakalot implements Sources {
         }
     }
 
-    // Collects data for the chapter list
-    // We collect: chapter name + it's url
+
     @Override
     public ArrayList<ValuesForChapters> getChapters(String url, Context context, HashMap<String, Object> extraData) {
         try {
@@ -226,56 +225,16 @@ public class Mangakakalot implements Sources {
 
     }
 
-    // Mangakakalot has two servers
     @Override
     public ArrayList<String> getImages(ValuesForChapters object, Context context) {
         Document doc;
 
         String url = object.url;
         try {
-            Settings settings = new Settings();
-            Boolean server_two = settings.returnValueBoolean(context, "preference_ServerMangakakalot", false);
+            doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
+                    .get();
 
-            if (!server_two) {
-                doc = Jsoup.connect(url)
-                        .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
-                        .get();
-            } else {
-                String CookieSiteLocation = "";
-
-                // To get to server two, we need certain cookies
-                // There are cookie sites based on whether the url is mangakakalot or readmanganato or chapmanganato
-                if (url.toLowerCase().contains("readmanganato")) {
-                    CookieSiteLocation = "https://readmanganato.com/content_server_s2";
-                }
-                if (url.toLowerCase().contains("chapmanganato")) {
-                    CookieSiteLocation = "https://chapmanganato.to/content_server_s2";
-                }
-
-                // This is broken for some reason
-                // It used to work but right now it doesn't, and I am not sure why because it should be working :/
-                if (url.toLowerCase().contains("mangakakalot")) {
-                    CookieSiteLocation = "https://mangakakalot.com/change_content_s2";
-                }
-                if (CookieSiteLocation.equals("")) {
-                    CookieSiteLocation = "https://mangakakalot.com/change_content_s2";
-                }
-
-                // This'll get us the neccessary cookies.
-                Connection.Response res = Jsoup.connect(CookieSiteLocation)
-                        .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
-                        .method(Connection.Method.GET)
-                        .execute();
-
-                Map<String, String> coookies = res.cookies(); // The cookies (what a surprise)
-
-                doc = Jsoup.connect(url)
-                        .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
-                        .cookies(coookies)
-                        .get();
-            }
-
-            // Here we do the webscraping
             ArrayList<String> images = new ArrayList<>();
             Elements ImagesHtml = doc.getElementsByClass("container-chapter-reader");
             for (Element i : ImagesHtml.first().children()) {
@@ -284,10 +243,10 @@ public class Mangakakalot implements Sources {
                 images.add(img);
             }
 
-
             return images;
 
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             return new ArrayList<>();
         }
 
@@ -313,7 +272,6 @@ public class Mangakakalot implements Sources {
             referer = "https://mangakakalot.com/";
         }
 
-        // mangakakalot decided to add a new domain called "chapmanganato"
         else if (url.toLowerCase().contains("chapmanganato.to")) {
             referer = "https://chapmanganato.to/";
         }
@@ -338,7 +296,6 @@ public class Mangakakalot implements Sources {
         ConstraintLayout constraintLayout = readActivity.findViewById(R.id.layout_readactivity);
         constraintLayout.addView(vieww);
 
-        // We do the epic code here for our not so epic switch
         SwitchCompat toggle = readActivity.findViewById(R.id.switchServer);
         toggle.setVisibility(View.VISIBLE);
 
@@ -396,7 +353,6 @@ public class Mangakakalot implements Sources {
 
             data.put("latest", latest);
 
-            // This gets the most popular manga
             ArrayList<HomeMangaClass> popular = new ArrayList<>();
             Elements owl_wrapper = doc.getElementsByClass("owl-carousel");
             for (Element i : owl_wrapper) {

@@ -1,3 +1,25 @@
+<!DOCTYPE PreferenceScreen [
+        <!ELEMENT PreferenceScreen (PreferenceCategory)*>
+        <!ATTLIST PreferenceScreen
+                xmlns:tools CDATA #REQUIRED
+                xmlns:android CDATA #REQUIRED
+                xmlns:app CDATA #REQUIRED>
+        <!ELEMENT PreferenceCategory (SwitchPreference|PreferenceCategory|CheckBoxPreference)*>
+        <!ATTLIST PreferenceCategory
+                android:title CDATA #IMPLIED
+                app:title CDATA #IMPLIED>
+        <!ELEMENT SwitchPreference (#PCDATA)>
+        <!ATTLIST SwitchPreference
+                android:defaultValue CDATA #REQUIRED
+                android:key CDATA #REQUIRED
+                android:title CDATA #REQUIRED
+                app:isPreferenceVisible CDATA #IMPLIED>
+        <!ELEMENT CheckBoxPreference (#PCDATA)>
+        <!ATTLIST CheckBoxPreference
+                android:defaultValue CDATA #REQUIRED
+                android:key CDATA #REQUIRED
+                android:title CDATA #REQUIRED>
+        ]>
 <PreferenceScreen
         xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -49,16 +71,6 @@
         <CheckBoxPreference
                 android:defaultValue="false"
                 android:title="Sort alphabetical (a-z)" android:key="preference_favourites_sort_alphabet"/>
-    </PreferenceCategory>
-    <PreferenceCategory
-            android:title="Mangakakalot settings">
-
-        <SwitchPreference
-                android:defaultValue="false"
-                android:title="Use server two" android:key="preference_ServerMangakakalot"/>
-        <SwitchPreference
-                android:defaultValue="false"
-                android:title="Show server switch button when reading" android:key="preference_mangakakalot_showButon"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Mangadex settings">

@@ -85,20 +85,6 @@ public class SettingsActivity extends AppCompatActivity {
                 return false;
             });
 
-            SwitchPreference preference_ServerMangakakalot = getPreferenceScreen()
-                    .findPreference("preference_ServerMangakakalot");
-            preference_ServerMangakakalot.setOnPreferenceChangeListener((preference, newValue) -> {
-                preference_ServerMangakakalot.setChecked(!preference_ServerMangakakalot.isChecked());
-                return false;
-            });
-
-            SwitchPreference preference_mangakakalot_showButon = getPreferenceScreen()
-                    .findPreference("preference_mangakakalot_showButon");
-            preference_mangakakalot_showButon.setOnPreferenceChangeListener((preference, newValue) -> {
-                preference_mangakakalot_showButon.setChecked(!preference_mangakakalot_showButon.isChecked());
-                return false;
-            });
-
             SwitchPreference preference_cache = getPreferenceScreen().findPreference("preference_Cache");
             preference_cache.setOnPreferenceChangeListener((preference, newValue) -> {
                 preference_cache.setChecked(!preference_cache.isChecked());
