@@ -217,6 +217,7 @@ public class ChaptersActivity extends AppCompatActivity {
                 return true;
 
             case R.id.chaptersactivity_action_toolbar_read_unread:
+                ArrayList<Sources.ValuesForChapters> thingsToReadUnread = new ArrayList<>();
                 for (ChapterInfo chapterInfo : this.items) {
                     ChapterListButton chapterListButton = chapterInfo.getChapterListButton();
                     if (chapterListButton == null) {
@@ -227,9 +228,15 @@ public class ChaptersActivity extends AppCompatActivity {
                     }
 
                     for (Sources.ValuesForChapters i : chapterListButton.valuesForChaptersList) {
-                        ListTracker.changeStatus(this, i.url, "History");
+                        thingsToReadUnread.add(i);
                     }
                 }
+
+                thingsToReadUnread = (ArrayList<Sources.ValuesForChapters>) thingsToReadUnread.stream().distinct().collect(Collectors.toList());
+                for (Sources.ValuesForChapters i : thingsToReadUnread) {
+                    ListTracker.changeStatus(this, i.url, "History");
+                }
+
                 resetButtons();
                 return true;
 
