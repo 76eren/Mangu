@@ -2,6 +2,7 @@ package com.example.mangareader.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -217,26 +218,7 @@ public class ChaptersActivity extends AppCompatActivity {
                 return true;
 
             case R.id.chaptersactivity_action_toolbar_read_unread:
-                ArrayList<Sources.ValuesForChapters> thingsToReadUnread = new ArrayList<>();
-                for (ChapterInfo chapterInfo : this.items) {
-                    ChapterListButton chapterListButton = chapterInfo.getChapterListButton();
-                    if (chapterListButton == null) {
-                        continue;
-                    }
-                    if (chapterListButton.enabledButtons == null) {
-                        continue;
-                    }
-
-                    for (Sources.ValuesForChapters i : chapterListButton.valuesForChaptersList) {
-                        thingsToReadUnread.add(i);
-                    }
-                }
-
-                thingsToReadUnread = (ArrayList<Sources.ValuesForChapters>) thingsToReadUnread.stream().distinct().collect(Collectors.toList());
-                for (Sources.ValuesForChapters i : thingsToReadUnread) {
-                    ListTracker.changeStatus(this, i.url, "History");
-                }
-
+                read_unread_action(this.items, this);
                 resetButtons();
                 return true;
 
@@ -245,6 +227,7 @@ public class ChaptersActivity extends AppCompatActivity {
                 String refererString = null;
                 if (referer != null) {
                     refererString = referer.toString();
+
                 }
 
                 FavouriteItem favouriteItem = new FavouriteItem(
@@ -263,7 +246,25 @@ public class ChaptersActivity extends AppCompatActivity {
     }
 
 
+    public static void read_unread_action(ArrayList<ChapterInfo> items, Context context) {
+        ArrayList<Sources.ValuesForChapters> thingsToReadUnread = new ArrayList<>();
+        for (ChapterInfo chapterInfo : items) {
+            ChapterListButton chapterListButton = chapterInfo.getChapterListButton();
+            if (chapterListButton == null) {
+                continue;
+            }
+            if (chapterListButton.enabledButtons == null) {
+                continue;
+            }
 
+            thingsToReadUnread.addAll(chapterListButton.valuesForChaptersList);
+        }
+
+        thingsToReadUnread = (ArrayList<Sources.ValuesForChapters>) thingsToReadUnread.stream().distinct().collect(Collectors.toList());
+        for (Sources.ValuesForChapters i : thingsToReadUnread) {
+            ListTracker.changeStatus(context, i.url, "History");
+        }
+    }
 
 
 }

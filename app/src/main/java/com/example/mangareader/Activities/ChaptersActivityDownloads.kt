@@ -179,15 +179,7 @@ class ChaptersActivityDownloads : AppCompatActivity() {
             }
 
             R.id.chaptersactivity_action_toolbar_read_unread -> {
-                for (chapterInfo in items) {
-                    val chapterListButton = chapterInfo.chapterListButton ?: continue
-                    if (chapterListButton.enabledButtons == null) {
-                        continue
-                    }
-                    for (i in chapterListButton.valuesForChaptersList) {
-                        ListTracker.changeStatus(this, i.url, "History")
-                    }
-                }
+                ChaptersActivity.read_unread_action(items, this)
                 resetButtons()
                 return true
             }
