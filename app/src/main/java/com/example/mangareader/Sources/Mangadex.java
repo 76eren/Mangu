@@ -38,7 +38,7 @@ public class Mangadex implements Sources {
                 return body;
             }
         } catch (Exception ex) {
-            return null;
+            return "";
         }
 
     }
@@ -92,11 +92,11 @@ public class Mangadex implements Sources {
                 return values;
             }
 
-            return null;
+            return new ArrayList<>();
         } catch (Exception ignored) {
         }
 
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -164,7 +164,7 @@ public class Mangadex implements Sources {
         try (Response response = client.newCall(request).execute()) {
             body = response.body().string();
         } catch (Exception ex) {
-            return null;
+            return new ArrayList<>();
         }
 
         if (!body.equals("")) {
@@ -250,7 +250,7 @@ public class Mangadex implements Sources {
             }
 
         } else {
-            return null;
+            return new ArrayList<>();
         }
 
         return data;
@@ -266,7 +266,7 @@ public class Mangadex implements Sources {
         String body = GetBody(apiPage);
 
         if (body == null || "".equals(body)) {
-            return null;
+            return new ArrayList<>();
         }
 
         try {
@@ -290,7 +290,7 @@ public class Mangadex implements Sources {
         } catch (Exception ignored) {
         }
 
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -377,7 +377,7 @@ public class Mangadex implements Sources {
                 t1.start();
             }
         } catch (Exception exception) {
-            return null;
+            return new HashMap<>();
         }
 
         //NOW WE GET THE LATEST MANGA
@@ -420,7 +420,7 @@ public class Mangadex implements Sources {
                 }
             }
         } catch (Exception ex) {
-            return null;
+            return new HashMap<>();
         }
 
         t1.join();

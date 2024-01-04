@@ -51,7 +51,7 @@ public class Mangakakalot implements Sources {
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                     .get();
         } catch (Exception ex) {
-            return null;
+            return new ArrayList<>();
         }
 
         Elements elems = doc.getElementsByClass("panel_story_list");
@@ -80,11 +80,14 @@ public class Mangakakalot implements Sources {
 
         }
 
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public String getStory(String url) {
+        url = url.replace("readmanganato.to", "chapmanganato.to");
+        url = url.replace("readmanganato.com", "chapmanganato.to");
+
         try {
             doc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
@@ -110,7 +113,7 @@ public class Mangakakalot implements Sources {
 
             }
 
-            return null;
+            return "No story";
 
         } catch (Exception ex) {
             return "No story";
@@ -126,7 +129,14 @@ public class Mangakakalot implements Sources {
             ArrayList<String> names = new ArrayList<>();
 
             Elements ul = null;
-            if (url.toLowerCase().contains("readmanganato.to") || url.toLowerCase().contains("chapmanganato.to")) { // mangakakalot added a new (replacement) domain called chapmanganato
+            url = url.replace("readmanganato.to", "chapmanganato.to");
+            url = url.replace("readmanganato.com", "chapmanganato.to");
+
+            doc = Jsoup.connect(url).followRedirects(true)
+                    .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
+                    .get();
+
+            if (url.toLowerCase().contains("readmanganato.to") || url.toLowerCase().contains("chapmanganato.to")) {
                 ul = doc.getElementsByClass("row-content-chapter");
             }
             else if (url.toLowerCase().contains("mangakakalot.com")) {
@@ -134,7 +144,7 @@ public class Mangakakalot implements Sources {
             }
 
             if (ul == null) {
-                return null;
+                return new ArrayList<>();
             }
 
             for (Element i : ul.first().children()) {
@@ -259,7 +269,7 @@ public class Mangakakalot implements Sources {
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0")
                     .get();
         } catch (Exception ex) {
-            return null;
+            return new HashMap<>();
         }
 
         HashMap<String, String> reqData = new HashMap<>();
@@ -381,7 +391,7 @@ public class Mangakakalot implements Sources {
             data.put("popular", popular);
 
         } catch (Exception exception) {
-            return null;
+            return new HashMap<>();
         }
 
         return data;

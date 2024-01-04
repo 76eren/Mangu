@@ -40,8 +40,7 @@ public class Webtoons implements Sources {
                 return body;
             }
         } catch (Exception ex) {
-            Log.d("lol", ex.toString());
-            return null;
+            return "";
         }
 
     }
@@ -81,7 +80,7 @@ public class Webtoons implements Sources {
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0")
                     .get();
         } catch (Exception ex) {
-            return null;
+            return new ArrayList<>();
         }
 
         ArrayList<SearchValues> data = new ArrayList<>();
@@ -176,7 +175,7 @@ public class Webtoons implements Sources {
                 }
 
             } else {
-                return null;
+                return new ArrayList<>();
             }
         }
 
@@ -329,7 +328,7 @@ public class Webtoons implements Sources {
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0")
                     .get();
         } catch (Exception ignored) {
-            return null;
+            return new ArrayList<>();
         }
 
         // We get the latest first
