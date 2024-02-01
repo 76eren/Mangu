@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.mangareader.Activities.ChaptersActivity;
@@ -50,13 +51,17 @@ public class RviewAdapterFavourites extends RecyclerView.Adapter<RviewAdapterFav
         if (data.favouriteItem.referer == null) {
             Glide.with(data.context)
                     .load(data.favouriteItem.image)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.cardImage);
         } else {
             GlideUrl url = new GlideUrl(data.favouriteItem.image, new LazyHeaders.Builder()
                     .addHeader("Referer", data.favouriteItem.referer)
                     .build());
 
-            Glide.with(data.context).load(url).into(holder.cardImage);
+            Glide.with(data.context)
+                    .load(url)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.cardImage);
         }
 
         holder.cardText.setText(data.favouriteItem.mangaName);
