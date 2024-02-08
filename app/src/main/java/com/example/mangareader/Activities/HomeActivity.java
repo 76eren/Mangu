@@ -73,13 +73,7 @@ public class HomeActivity extends AppCompatActivity {
         PopularManga.setVisibility(View.INVISIBLE);
         LatestManga.setVisibility(View.INVISIBLE);
 
-        // Now we get all the data for the activity
-        Sources source = SourceObjectHolder.getSources(this); // This both sets and gets the source
-
-        // This shouldn't be here.
-        if (source.getClass().getName().equals("com.example.mangareader.Sources.Mangadex")) {
-            waitTV.setText("Loading the home screen. This may take a while the first time");
-        }
+        Sources source = SourceObjectHolder.getSources(this);
 
         Context context = this;
         new Thread(() -> {
@@ -87,11 +81,14 @@ public class HomeActivity extends AppCompatActivity {
 
             try {
                 homeData = source.getDataHomeActivity(this);
-            } catch (InterruptedException e) {
-                homeData = null;
-            }
+            } catch (InterruptedException ignored) {}
 
             if (homeData != null) {
+                if (homeData.isEmpty()) {
+                    waitTV.setText("Failed to load home page");
+                    return;
+                }
+
                 CopyOnWriteArrayList<HomeMangaClass> latest = new CopyOnWriteArrayList<>(homeData.get("latest"));
 
                 // Does the latest
