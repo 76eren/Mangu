@@ -350,8 +350,7 @@ public class Mangakakalot implements Sources {
                 Elements x = i.getElementsByClass("itemupdate first");
                 for (Element y : x) {
                     Elements tooltip = y.getElementsByClass("tooltip");
-                    Elements tooltip_cover = y.getElementsByClass("tooltip cover");
-                    Elements img = tooltip_cover.select("img");
+                    Elements img = tooltip.select("img");
 
                     String name = tooltip.text(); // THE NAME OF THE MANGA
                     String url = tooltip.attr("href"); // The url to the manga
@@ -376,7 +375,6 @@ public class Mangakakalot implements Sources {
                     Elements img = item.select("img");
                     image = img.attr("src"); // The image
 
-                    // Do I really have to fucking iterate like this?
                     for (Element p : item) {
                         Elements slide_caption = p.getElementsByClass("slide-caption");
                         name = slide_caption.text().split("Chapter")[0]; // The title; we use .split to get rid of the chapter in the title
